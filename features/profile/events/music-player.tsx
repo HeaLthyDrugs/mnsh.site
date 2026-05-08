@@ -392,8 +392,9 @@ export function MusicPlayer({ className }: { className?: string }) {
                             className={cn(
                                 "absolute bottom-0 right-0 rounded-none overflow-hidden transition-all duration-300 origin-bottom-right",
                                 GLASS,
-                                genreOpen ? "w-[160px] h-[128px] bg-white/20 border-white/30 backdrop-blur-xl shadow-lg" : "w-8 h-8"
+                                genreOpen ? "w-[160px] bg-white/20 border-white/30 backdrop-blur-xl shadow-lg" : "w-8 h-8"
                             )}
+                            style={{ height: genreOpen ? `${shuffledGenres.length * 32}px` : '32px' }}
                         >
                             {/* Genere Selectors (only visible when open) */}
                             <div
@@ -412,7 +413,7 @@ export function MusicPlayer({ className }: { className?: string }) {
                                                 handleGenreChange(i);
                                             }}
                                             className={cn(
-                                                "flex items-center gap-2.5 w-full h-8 px-3 text-left",
+                                                "flex items-center gap-2.5 w-full h-8 pl-3 pr-8 text-left",
                                                 "transition-colors duration-200 hover:bg-white/10",
                                                 i === genreIdx
                                                     ? "text-white bg-white/10"

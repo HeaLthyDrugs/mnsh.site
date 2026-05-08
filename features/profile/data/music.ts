@@ -20,7 +20,7 @@ export interface Genre {
 
 export const GENRES: Genre[] = [
     {
-        label: "International Pulse",
+        label: "#2",
         icon: Globe,
         tracks: [
             {
@@ -74,7 +74,7 @@ export const GENRES: Genre[] = [
         ],
     },
     {
-        label: "Soulful Indian",
+        label: "#1",
         icon: Flame,
         tracks: [
             {
