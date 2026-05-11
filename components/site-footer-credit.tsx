@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { SOURCE_CODE_GITHUB_URL } from "@/config/site";
 
 const BUILD_VIDEO_URL = "https://youtube.com/@HeaLthyDrugs";
-const INSPIRATION_URL = "https://chanhdai.com/";
+const INSPIRATION_URL = "https://mnsh.online/";
 
 export function SiteFooterCredit() {
   return (

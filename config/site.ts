@@ -2,10 +2,25 @@ import { USER } from "@/features/profile/data/user";
 import { NavItem } from "@/types/nav";
 ;
 
+function normalizeSiteUrl(url: string) {
+  const parsedUrl = new URL(url);
+
+  // Keep a single canonical host to avoid crawler redirect ambiguity.
+  if (parsedUrl.hostname === "mnsh.online") {
+    parsedUrl.hostname = "www.mnsh.online";
+  }
+
+  return parsedUrl.toString().replace(/\/$/, "");
+}
+
+const FALLBACK_SITE_URL = "https://www.mnsh.online";
+const RESOLVED_SITE_URL = normalizeSiteUrl(process.env.APP_URL || FALLBACK_SITE_URL);
+const DEFAULT_OG_IMAGE_PATH = "/og/og-main.png";
+
 export const SITE_INFO = {
   name: USER.displayName,
-  url: process.env.APP_URL || "https://mnsh.online",
-  ogImage: USER.ogImage,
+  url: RESOLVED_SITE_URL,
+  ogImage: `${RESOLVED_SITE_URL}${DEFAULT_OG_IMAGE_PATH}`,
   description: USER.bio,
   keywords: USER.keywords,
 };
