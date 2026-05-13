@@ -1,14 +1,71 @@
 ---
 title: JustWrite
-description: Minimalist offline-first notepad.
-image: https://assets.mnsh.online/work/justwrite/home.png
-status: Working
-index: 6
-gallery: []
+description: Offline First Local Notepad
+image: https://assets.mnsh.online/work/justwrite/light-mode-home.png
+status: Iterating
+index: 5
+liveUrl: https://justwrite.app
+repoUrl: https://github.com/anomalyco/justwrite
+gallery:
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/light-mode-home.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/dark-mode-home.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/notes-drawer.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/settings-drawer.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/notebook-lines.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/disclaimer.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/cookie-policy.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/terms.png
+  - type: image
+    url: https://assets.mnsh.online/work/justwrite/privacy-policy.png
 ---
 
-# Overview
+## Overview
 
-A simple, offline-first notepad designed for speed. No distractions, no complex formatting—just a clean space to write. Works entirely in the browser and saves locally for instant access.
+Most notepad apps already have great individual features, but they’re usually scattered across different products. JustWrite was built to bring the useful parts together into a single local-first writing app that stays simple and fast. The project is actively evolving and new features are continuously being added and refined.
 
+## What I Built
 
+A browser-based offline notepad with local-first storage and customizable writing tools.
+
+- Notes stored locally using localStorage
+- Full offline support with PWA support
+- Multi-note workflow with pin/delete support
+- Focus Mode for cleaner writing sessions
+- Markdown shortcuts for faster formatting
+- Export notes as TXT, Markdown, or JSON
+- Customization options for fonts, lines, spellcheck, sounds, and more
+- Light/Dark theme with system preference detection
+
+## Development
+
+Built incrementally by shipping core features first and expanding based on usability and iteration.
+
+- Editor and autosave system
+- Multi-note management
+- Focus Mode and exports
+- Settings and personalization
+- Offline support and installable PWA setup
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Radix UI
+- Framer Motion
+- Heroui
+- LocalStorage API
+- Service Worker
+
+## Current Status
+
+JustWrite is still being iterated on. The goal is to keep improving the writing experience by combining useful features into one clean and reliable local-first app without unnecessary complexity.
