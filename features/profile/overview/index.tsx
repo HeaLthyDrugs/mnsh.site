@@ -23,6 +23,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useLoop } from "@/lib/animation/useLoop";
 import { ClockIcon } from "@/components/animated-icons/clock";
 import { Markdown } from "@/components/markdown";
+import Link from "next/link";
 
 
 // Local time component
@@ -225,6 +226,15 @@ function GreetingAboutSection() {
             {USER.about}
           </Markdown>
         </div>
+        <p className="text-sm">
+          Want to know more about me?{" "}
+          <Link
+            href="/blog/lifelog"
+            className="underline-offset-4 hover:underline text-foreground/90"
+          >
+            Read my life log
+          </Link>
+        </p>
       </div>
 
     </div>
