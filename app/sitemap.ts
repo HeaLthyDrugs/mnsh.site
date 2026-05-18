@@ -1,30 +1,42 @@
 import { MetadataRoute } from 'next'
+import { getAllBlogs } from '@/features/blog/lib/blogs';
+import { SITE_INFO } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const blogs = getAllBlogs();
+
+  const blogUrls: MetadataRoute.Sitemap = blogs.map((blog) => ({
+    url: `${SITE_INFO.url}/blog/${blog.slug}`,
+    lastModified: new Date(blog.metadata.updatedAt),
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  }));
+
   return [
     {
-      url: 'https://yoursite.com',
+      url: SITE_INFO.url,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'daily',
       priority: 1,
     },
     {
-      url: 'https://yoursite.com/about',
+      url: `${SITE_INFO.url}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: 'https://yoursite.com/blog',
+      url: `${SITE_INFO.url}/work`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.5,
+      priority: 0.9,
     },
     {
-      url: 'https://yoursite.com/work',
+      url: `${SITE_INFO.url}/blog`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
+      changeFrequency: 'daily',
+      priority: 0.9,
     },
+    ...blogUrls,
   ]
 }

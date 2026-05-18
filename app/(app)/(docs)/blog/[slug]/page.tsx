@@ -82,7 +82,9 @@ export async function generateMetadata({
             canonical: postUrl,
         },
         openGraph: {
-            url: postUrl,
+            title,
+            description,
+            url: `${SITE_INFO.url}${postUrl}`,
             type: "article",
             publishedTime: dayjs(createdAt).toISOString(),
             modifiedTime: dayjs(updatedAt).toISOString(),
@@ -94,9 +96,14 @@ export async function generateMetadata({
                     alt: title,
                 },
             ],
+            siteName: SITE_INFO.name,
         },
         twitter: {
             card: "summary_large_image",
+            site: "@iammnsh",
+            creator: "@iammnsh",
+            title,
+            description,
             images: [ogImage],
         },
     };
