@@ -322,12 +322,12 @@ export default async function Page({
                 {/* Fallback title when no image */}
                 {!blog.metadata.image && (
                     <>
-                        <h1 className="border-b border-edge pb-4 mb-4 font-semibold">
+                        <h1 className="border-b border-edge pb-2 mb-2 font-semibold text-lg">
                             {blog.metadata.title}
                         </h1>
-                        <p className="lead mt-2 mb-4 text-muted-foreground">{blog.metadata.description}</p>
+                        <p className="mt-1 mb-3 text-muted-foreground text-sm">{blog.metadata.description}</p>
                         {/* Meta info for non-image posts */}
-                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-6 not-prose">
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-4 not-prose">
                             {blog.metadata.readTime && (
                                 <span>{blog.metadata.readTime} min read</span>
                             )}
@@ -341,13 +341,6 @@ export default async function Page({
                                     <span>by {blog.metadata.author}</span>
                                 </>
                             )}
-                        </div>
-                        <div className="mb-6 not-prose">
-                            <BlogCoverActions
-                                title={blog.metadata.title}
-                                content={blog.content}
-                                slug={blog.slug}
-                            />
                         </div>
                     </>
                 )}
