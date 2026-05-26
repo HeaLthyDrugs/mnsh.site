@@ -9,7 +9,6 @@ import { META_THEME_COLORS, SITE_INFO } from "@/config/site";
 import { USER } from "@/features/profile/data/user";
 import { fontDomaine, fontSFPro } from "@/lib/fonts";
 import { Providers } from "@/components/providers";
-import { ConsentManager } from "../lib/consent/consent-manager";
 import { FloatingControls } from "@/components/floating-controls";
 import { GlobalAudio } from "@/components/global-audio";
 
@@ -145,9 +144,7 @@ export default function RootLayout({
       <body
       >
         <Providers>
-          <ConsentManager>
-            {children}
-          </ConsentManager>
+          {children}
           <GlobalAudio />
           <FloatingControls />
         </Providers>
