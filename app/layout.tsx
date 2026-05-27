@@ -1,16 +1,13 @@
 import "@/styles/globals.css";
 
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { WebSite, WithContext } from "schema-dts";
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 
 import { META_THEME_COLORS, SITE_INFO } from "@/config/site";
 import { USER } from "@/features/profile/data/user";
 import { fontDomaine, fontSFPro } from "@/lib/fonts";
 import { Providers } from "@/components/providers";
-import { FloatingControls } from "@/components/floating-controls";
-import { GlobalAudio } from "@/components/global-audio";
+import { DeferredGlobalUi } from "@/components/deferred-global-ui";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_INFO.url),
@@ -124,16 +121,16 @@ export default function RootLayout({
     <html lang="en" className={`${fontSFPro.variable} ${fontDomaine.variable}`}
       suppressHydrationWarning>
       <head>
+        <link
+          rel="preconnect"
+          href="https://assets.mnsh.online"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://assets.mnsh.online" />
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{ __html: darkModeScript }}
         />
-        {/*
-          Thanks @tailwindcss. We inject the script via the `<Script/>` tag again,
-          since we found the regular `<script>` tag to not execute when rendering a not-found page.
-         */}
-
-        <Script src={`data:text/javascript;base64,${btoa(darkModeScript)}`} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -145,8 +142,7 @@ export default function RootLayout({
       >
         <Providers>
           {children}
-          <GlobalAudio />
-          <FloatingControls />
+          <DeferredGlobalUi />
         </Providers>
       </body>
     </html>

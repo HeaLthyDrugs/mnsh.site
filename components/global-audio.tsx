@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useRef } from "react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { 
     genreIdxAtom, 
     currentTrackIdxAtom, 

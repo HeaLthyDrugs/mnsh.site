@@ -83,10 +83,10 @@ export default function ProfileHeader() {
                                 <Image
                                     src={FACES[faceIndex]}
                                     alt={`${USER.displayName}'s avatar`}
-                                    fill
-                                    sizes="(max-width: 640px) 96px, 116px"
+                                    width={116}
+                                    height={116}
                                     priority={faceIndex === 0}
-                                    className="select-none object-contain"
+                                    className="size-full select-none object-contain"
                                 />
                             </motion.div>
                         </AnimatePresence>

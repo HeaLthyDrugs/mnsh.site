@@ -141,6 +141,7 @@ const components: MDXRemoteProps["components"] = {
   ),
   YouTubeEmbed,
   FramedImage,
+  img: FramedImage,
 };
 
 const options: MDXRemoteProps["options"] = {

@@ -25,6 +25,10 @@ const nextConfig: NextConfig = {
 		return rewrites;
 	},
 	images: {
+		formats: ["image/avif", "image/webp"],
+		deviceSizes: [320, 420, 640, 750, 828, 1080, 1200],
+		imageSizes: [16, 24, 32, 48, 64, 72, 96, 128, 256, 384],
+		minimumCacheTTL: 31536000,
 		remotePatterns: [
 			{
 				protocol: 'https',
@@ -71,6 +75,37 @@ const nextConfig: NextConfig = {
 				hostname: 'www.asrock.com',
 			},
 		],
+	},
+	async headers() {
+		return [
+			{
+				source: "/sounds/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/logo/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/og/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+		];
 	},
 	devIndicators: false,
 };
