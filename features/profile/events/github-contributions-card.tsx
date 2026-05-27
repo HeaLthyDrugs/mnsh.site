@@ -167,7 +167,7 @@ function GitHubContributionsContent({
       data={data}
       blockSize={11}
       blockMargin={3}
-      blockRadius={2}
+      blockRadius={0}
     >
       <ContributionGraphCalendar
         alignToEnd
@@ -220,7 +220,7 @@ function GitHubContributionsContent({
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-border/60" />
         <span>Rolling 52-week activity window</span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <span className="h-1.5 w-1.5 rounded-none bg-emerald-500" />
           Synced hourly
         </span>
       </div>
