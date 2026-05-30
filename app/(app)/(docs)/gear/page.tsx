@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import { GEAR } from "@/features/gear/data/gear";
 import { GearList } from "@/features/gear/components/gear-list";
+import { SITE_INFO } from "@/config/site";
 
 export const metadata: Metadata = {
     title: "Gear",
     description: "The hardware, gadgets, and desk setup that keeps me productive.",
+    alternates: {
+        canonical: "/gear",
+    },
+    openGraph: {
+        title: "Gear",
+        description: "The hardware, gadgets, and desk setup that keeps me productive.",
+        url: `${SITE_INFO.url}/gear`,
+    },
 };
 
 export default function Page() {

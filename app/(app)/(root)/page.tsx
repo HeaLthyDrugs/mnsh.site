@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
+import type { Metadata } from "next";
 import type { ProfilePage as PageSchema, WithContext } from "schema-dts";
+import { SITE_INFO } from "@/config/site";
 import { USER } from "@/features/profile/data/user";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +12,15 @@ import { Overview } from "@/features/profile/overview";
 import { DeferredEvents } from "@/features/profile/events/deferred-events";
 import Faq from "@/features/profile/faq";
 import AnimatedScene from "@/features/Scene/page";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    url: SITE_INFO.url,
+  },
+};
 
 export default function Page() {
   return (

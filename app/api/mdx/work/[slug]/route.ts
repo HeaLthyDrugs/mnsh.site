@@ -1,4 +1,5 @@
 import { getPostBySlug, getAllPosts } from "@/features/work/data/posts";
+import { SITE_INFO } from "@/config/site";
 
 export async function GET(
     request: Request,
@@ -14,6 +15,8 @@ export async function GET(
     return new Response(post.content, {
         headers: {
             "Content-Type": "text/plain; charset=utf-8",
+            "X-Robots-Tag": "noindex, nofollow, noarchive",
+            Link: `<${SITE_INFO.url}/work/${slug}>; rel="canonical"`,
         },
     });
 }

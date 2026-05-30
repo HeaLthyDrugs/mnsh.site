@@ -3,8 +3,8 @@ import { Suspense } from "react";
 
 import { WorkList } from "@/features/work/components/work-list";
 import { WorkListWithSearch } from "@/features/work/components/work-list-with-search";
-import { WorkSearchInput } from "@/features/work/components/work-search-input";
 import { getAllWorks } from "@/features/work/lib/works";
+import { SITE_INFO } from "@/config/site";
 
 
 
@@ -12,6 +12,15 @@ export const metadata: Metadata = {
   title: "Works",
   description:
     "A showcase of my freelance, personal and collaboration works.",
+  alternates: {
+    canonical: "/work",
+  },
+  openGraph: {
+    title: "Works",
+    description:
+      "A showcase of my freelance, personal and collaboration works.",
+    url: `${SITE_INFO.url}/work`,
+  },
 };
 
 export default function Page() {
