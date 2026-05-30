@@ -1,0 +1,208 @@
+---
+title: "Beginner Guide: Connect MariaDB to Next.js (with Prisma)"
+description: "A beginner-friendly guide to connect MariaDB with Next.js using Prisma, manage credentials safely, and verify your setup."
+image: https://assets.mnsh.online/blog-covers/Connect%20MariaDB%20to%20Next%20JS.png
+createdAt: 2026-05-30
+updatedAt: 2026-05-30
+new: true
+pinned: false
+category: development
+tags:
+  - nextjs
+  - prisma
+  - mariadb
+  - database
+  - beginner
+readTime: 7
+featured: false
+---
+
+## Overview
+
+If you are just getting started, think of the stack like this:
+
+- **Next.js app**: your application code
+- **MariaDB**: where your data is stored
+- **Prisma ORM**: a translator between TypeScript and SQL
+
+You write TypeScript. Prisma handles most SQL details for you.
+
+## What Credentials Do You Need?
+
+To connect Next.js (or any backend app) to MariaDB/MySQL, you need:
+
+- `DB_HOST` (database server address)
+- `DB_PORT` (usually `3306`)
+- `DB_NAME` (database name)
+- `DB_USER` (database username)
+- `DB_PASSWORD` (database password)
+
+Optional (provider-specific):
+
+- SSL mode / certificate
+- IP allowlist
+
+## Example Credentials (Dummy Values)
+
+The following are placeholder values in the same structure. Do not use real credentials in public docs:
+
+- `DB_HOST`: `srv0000.hstgr.io`
+- `DB_PORT`: `3306`
+- `DB_NAME`: `u000000000_exampledb`
+- `DB_USER`: `u000000000_exampledbUser`
+- `DB_PASSWORD`: `ExamplePass@123`
+
+> Never commit real DB credentials to GitHub.
+
+## Where to Find These in Hostinger
+
+In **Hostinger hPanel**:
+
+1. Open **Databases**.
+2. Go to **MySQL Databases**.
+3. Copy your DB name, DB user, DB host, and port.
+4. Reset password if needed.
+5. Use **phpMyAdmin** for quick table and row management.
+
+## Where to Find These on Other Platforms
+
+### cPanel Hosting
+
+- Open **MySQL Databases**
+- Check DB and user details
+- Use phpMyAdmin from control panel
+
+### AWS RDS (MariaDB)
+
+- Open RDS Console and choose your DB instance
+- Use instance **Endpoint** as host
+- Port is in the Connectivity section
+- Username/password are the DB credentials you set
+
+### DigitalOcean Managed Databases
+
+- Open your database cluster
+- Go to connection details
+- Copy host, port, database name, user, password, and SSL details
+
+### Railway / Render / Similar PaaS
+
+- Open your project database service
+- Check **Connect** or **Connection details**
+- Copy host, port, user, password, and database name
+
+### Aiven / Azure / GCP
+
+- Open service dashboard
+- Go to connection/credentials section
+- Download SSL certificate if required
+
+## What Is Port 3306?
+
+`3306` is the default network port used by MariaDB/MySQL.
+
+- You do not open this in a browser.
+- Your backend connects to this port in the background.
+
+## Connect MariaDB to Next.js with Prisma
+
+### 1) Add Database URL
+
+Create `apps/web/.env.local` (or your app's environment file):
+
+```env
+DATABASE_URL="mysql://DB_USER:DB_PASSWORD@DB_HOST:3306/DB_NAME"
+```
+
+If your password has `@`, encode it as `%40`.
+
+Example format:
+
+```env
+DATABASE_URL="mysql://u000...User:ExamplePass%40123@srv0000.hstgr.io:3306/u000..."
+```
+
+### 2) Install Prisma Packages
+
+```bash
+pnpm --filter web add @prisma/client
+pnpm --filter web add -D prisma dotenv
+pnpm --filter web add @prisma/adapter-mariadb mariadb
+```
+
+### 3) Initialize Prisma
+
+```bash
+pnpm --filter web exec prisma init --datasource-provider mysql
+```
+
+### 4) Define Your First Model
+
+In `schema.prisma`:
+
+```prisma
+model Healthcheck {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+}
+```
+
+### 5) Run Migration and Generate Client
+
+Recommended hosted DB flow:
+
+1. Create migration SQL
+2. Apply migration
+3. Generate Prisma client
+
+Some shared hosting environments may block `prisma migrate dev` shadow database behavior.
+
+### 6) Add a DB Test API Route
+
+Create an API route (for example, `/api/db-test`) and run:
+
+```sql
+SELECT 1 AS ok;
+```
+
+If the response succeeds, your database connection is working.
+
+## How to Manage Tables
+
+Two easy options:
+
+1. **Visual method**: phpMyAdmin
+2. **Code method**: Prisma migrations (recommended for teams and long-term maintenance)
+
+Best practice:
+
+- Use Prisma migrations for schema changes
+- Use phpMyAdmin or Prisma Studio for quick data edits
+
+## Prisma Studio (Beginner-Friendly UI)
+
+```bash
+pnpm --filter web exec prisma studio
+```
+
+This opens a table editor UI to browse and update rows safely.
+
+## Quick Q&A
+
+**Q: Do I run MariaDB inside Next.js?**
+No. In this setup, MariaDB is hosted remotely and Next.js connects to it.
+
+**Q: How do I manage tables and data?**
+Use Prisma migrations for structure, and phpMyAdmin/Prisma Studio for data operations.
+
+**Q: Is Prisma mandatory?**
+No, but it is highly recommended for beginners because it reduces mistakes and improves maintainability.
+
+## Beginner Checklist
+
+- Keep secrets in `.env.local`
+- Never expose `DATABASE_URL` to frontend code
+- Access DB only in server-side routes/actions
+- Use migrations for schema updates
+- Validate quickly with a DB test route
+- Use Prisma Studio/phpMyAdmin for row-level edits
