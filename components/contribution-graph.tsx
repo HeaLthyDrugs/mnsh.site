@@ -331,7 +331,7 @@ export const ContributionGraphBlock = ({
   className,
   ...props
 }: ContributionGraphBlockProps) => {
-  const { blockSize, blockMargin, blockRadius, labelHeight, maxLevel } =
+  const { blockSize, blockMargin, labelHeight, maxLevel } =
     useContributionGraph()
 
   if (activity.level < 0 || activity.level > maxLevel) {
@@ -347,8 +347,8 @@ export const ContributionGraphBlock = ({
       data-date={activity.date}
       data-level={activity.level}
       height={blockSize}
-      rx={blockRadius}
-      ry={blockRadius}
+      rx={0}
+      ry={0}
       width={blockSize}
       x={(blockSize + blockMargin) * weekIndex}
       y={labelHeight + (blockSize + blockMargin) * dayIndex}
@@ -501,7 +501,7 @@ export const ContributionGraphLegend = ({
   children,
   ...props
 }: ContributionGraphLegendProps) => {
-  const { labels, maxLevel, blockSize, blockRadius } = useContributionGraph()
+  const { labels, maxLevel, blockSize } = useContributionGraph()
 
   return (
     <div
@@ -521,8 +521,8 @@ export const ContributionGraphLegend = ({
               className={cn(THEME)}
               data-level={level}
               height={blockSize}
-              rx={blockRadius}
-              ry={blockRadius}
+              rx={0}
+              ry={0}
               width={blockSize}
             />
           </svg>

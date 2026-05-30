@@ -7,12 +7,39 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { toCloudflareTransformedUrl } from "@/lib/cloudflare-image";
 
 type GalleryItem = {
   type: "image" | "video";
   url: string;
   thumbnail?: string;
 };
+
+const IMAGE_HOST_WHITELIST = new Set([
+  "assets.mnsh.online",
+  "avatars.githubusercontent.com",
+  "images.unsplash.com",
+  "code.visualstudio.com",
+  "static.figma.com",
+  "www.notion.so",
+  "assets.vercel.com",
+  "static.linear.app",
+  "m.media-amazon.com",
+  "rukminim2.flixcart.com",
+  "www.asrock.com",
+]);
+
+function canUseOptimizedImage(src: string) {
+  if (!src) return false;
+  if (src.startsWith("/")) return true;
+  try {
+    const { hostname } = new URL(src);
+    return IMAGE_HOST_WHITELIST.has(hostname);
+  } catch {
+    return false;
+  }
+}
 
 interface WorkCarouselProps {
   gallery: GalleryItem[];
@@ -108,16 +135,29 @@ export function WorkCarousel({ gallery }: WorkCarouselProps) {
                   src={currentItem.url}
                   className="w-full h-full object-contain"
                   controls
-                  autoPlay
                   muted
+                  preload="metadata"
                   onClick={(e) => e.stopPropagation()}
                 />
               ) : (
-                <img
-                  src={currentItem.url}
-                  alt={`Gallery image ${currentIndex + 1}`}
-                  className="w-full h-full object-contain"
-                />
+                canUseOptimizedImage(currentItem.url) ? (
+                  <Image
+                    src={toCloudflareTransformedUrl(currentItem.url, { width: 1280 })}
+                    alt={`Gallery image ${currentIndex + 1}`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 1200px"
+                    className="object-contain"
+                    priority={currentIndex === 0}
+                  />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={currentItem.url}
+                    alt={`Gallery image ${currentIndex + 1}`}
+                    className="w-full h-full object-contain"
+                    loading={currentIndex === 0 ? "eager" : "lazy"}
+                  />
+                )
               )}
             </motion.div>
           </AnimatePresence>
@@ -173,11 +213,27 @@ export function WorkCarousel({ gallery }: WorkCarouselProps) {
                     )}
                   >
                     {thumbUrl ? (
-                      <img
-                        src={thumbUrl}
-                        alt={`Thumbnail ${index + 1}`}
-                        className="h-full w-auto block object-cover"
-                      />
+                      canUseOptimizedImage(thumbUrl) ? (
+                        <Image
+                          src={toCloudflareTransformedUrl(thumbUrl, {
+                            width: 320,
+                            fit: "cover",
+                          })}
+                          alt={`Thumbnail ${index + 1}`}
+                          width={320}
+                          height={180}
+                          sizes="(max-width: 640px) 128px, 180px"
+                          className="h-full w-auto block object-cover"
+                        />
+                      ) : (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={thumbUrl}
+                          alt={`Thumbnail ${index + 1}`}
+                          className="h-full w-auto block object-cover"
+                          loading="lazy"
+                        />
+                      )
                     ) : (
                       <div className="h-full aspect-video flex items-center justify-center bg-zinc-800 text-zinc-400">
                         {item.type === "video" ? <Play size={24} /> : "No media"}
@@ -245,8 +301,12 @@ export function WorkCarousel({ gallery }: WorkCarouselProps) {
                     justifyContent: "center",
                   }}
                 >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={currentItem.url}
+                    src={toCloudflareTransformedUrl(currentItem.url, {
+                      width: 1920,
+                      quality: 78,
+                    })}
                     alt="Fullscreen expanded view"
                     className="max-w-full max-h-full object-contain select-none shadow-2xl"
                     draggable={false}

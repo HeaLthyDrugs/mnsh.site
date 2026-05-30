@@ -3,21 +3,13 @@ import type { ProfilePage as PageSchema, WithContext } from "schema-dts";
 import { USER } from "@/features/profile/data/user";
 import { cn } from "@/lib/utils";
 
-
-
 // import AnimatedScene from "@/features/scene/page";
 import ProfileHeader from "@/features/profile/components/profile-header";
 import Work from "@/features/profile/components/work";
 import { Overview } from "@/features/profile/overview";
-import HowIWork from "@/features/profile/how-i-work";
-import WhatIDo from "@/features/profile/what-i-do";
-import Events from "@/features/profile/events";
+import { DeferredEvents } from "@/features/profile/events/deferred-events";
 import Faq from "@/features/profile/faq";
-import Blog from "@/features/profile/blog";
 import AnimatedScene from "@/features/Scene/page";
-
-
-
 
 export default function Page() {
   return (
@@ -42,9 +34,6 @@ export default function Page() {
         {/* Work I have done  */}
         <Work />
         <Separator />
-
-
-
         {/* Services I provide  */}
         {/* <HowIWork />
         <Separator />
@@ -53,8 +42,7 @@ export default function Page() {
         <Separator /> */}
 
         {/* Events  */}
-        <Events />
-        <Separator />
+        <DeferredEvents />
 
         {/* FAQ  */}
         <Faq />

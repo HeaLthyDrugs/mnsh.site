@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { USER } from "../data/user";
 import { cn } from "@/lib/utils";
 import { BriefcaseIcon, CalendarIcon } from "lucide-react";
@@ -19,7 +20,7 @@ import { useLoop } from "@/lib/animation/useLoop";
 import { MessageCircleMoreIcon } from "@/components/animated-icons/message-circle-more";
 import { MailCheckIcon } from "@/components/ui/mail-check";
 import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 const FACES = [
     "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(1).png",
@@ -53,21 +54,13 @@ export default function ProfileHeader() {
         setFaceIndex(newIndex);
     };
 
-    // Preload images
-    useEffect(() => {
-        FACES.forEach((src) => {
-            const img = new Image();
-            img.src = src;
-        });
-    }, []);
-
     return (
         <div className="border-b border-x border-edge">
             {/* Main header - responsive layout */}
             <div className="flex flex-col sm:flex-row">
                 {/* Avatar section */}
                 <div className="flex justify-start border-b border-dashed border-edge p-2 sm:justify-start sm:border-b-0 sm:border-r">
-                    <audio ref={audioRef} src="/sounds/tap.wav" preload="auto" />
+                    <audio ref={audioRef} src="/sounds/tap.wav" preload="none" />
                     <motion.div
                         className="relative size-24 cursor-pointer overflow-hidden sm:size-29"
                         whileTap={{ scale: 0.9, rotate: Math.random() > 0.5 ? 2 : -2 }}
@@ -75,7 +68,7 @@ export default function ProfileHeader() {
                         initial={false}
                     >
                         <AnimatePresence mode="popLayout">
-                            <motion.img
+                            <motion.div
                                 key={faceIndex}
                                 initial={{ opacity: 0, scale: 0.8, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -85,11 +78,17 @@ export default function ProfileHeader() {
                                     stiffness: 400,
                                     damping: 25,
                                 }}
-                                className="size-full select-none"
-                                alt={`${USER.displayName}'s avatar`}
-                                src={FACES[faceIndex]}
-                                fetchPriority="high"
-                            />
+                                className="absolute inset-0"
+                            >
+                                <Image
+                                    src={FACES[faceIndex]}
+                                    alt={`${USER.displayName}'s avatar`}
+                                    width={116}
+                                    height={116}
+                                    priority={faceIndex === 0}
+                                    className="size-full select-none object-contain"
+                                />
+                            </motion.div>
                         </AnimatePresence>
                         {/* Decorative subtle ring that reacts to tap */}
                         <motion.div

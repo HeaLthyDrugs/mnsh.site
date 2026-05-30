@@ -8,7 +8,7 @@ class SoundManager {
 
     if (!audio) {
       audio = new Audio(url);
-      audio.preload = "auto";
+      audio.preload = "none";
       this.audioCache.set(url, audio);
     }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useRef } from "react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { 
     genreIdxAtom, 
     currentTrackIdxAtom, 
@@ -108,7 +108,8 @@ export function GlobalAudio() {
     return (
         <audio
             ref={globalAudioRef}
-            src={track.audioSrc}
+            src={isPlaying ? track.audioSrc : undefined}
+            preload="none"
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={handleAudioEnded}

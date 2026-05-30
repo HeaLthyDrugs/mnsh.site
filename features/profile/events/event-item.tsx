@@ -93,9 +93,10 @@ export function EventItem({
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-black flex items-center justify-center">
                     <div className="w-[105%] h-[105%] relative pointer-events-none">
                         <iframe
-                            src={`https://www.youtube.com/embed/${event.youtubeVideoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${event.youtubeVideoId}&playsinline=1&modestbranding=1&rel=0&disablekb=1&iv_load_policy=3`}
+                            src={`https://www.youtube.com/embed/${event.youtubeVideoId}?autoplay=0&mute=1&controls=0&loop=1&playlist=${event.youtubeVideoId}&playsinline=1&modestbranding=1&rel=0&disablekb=1&iv_load_policy=3`}
                             title={event.title}
                             className="absolute inset-0 w-full h-full border-0 outline-none opacity-95 pointer-events-none"
+                            loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         />
                     </div>
