@@ -2,10 +2,19 @@ import type { Metadata } from "next";
 import { TOOLS } from "@/features/tools/data/tools";
 import { ToolsContainer } from "@/features/tools/components/tools-container";
 import { cn } from "@/lib/utils";
+import { SITE_INFO } from "@/config/site";
 
 export const metadata: Metadata = {
     title: "Tools",
     description: "A curated collection of software and utilities that power my workflow.",
+    alternates: {
+        canonical: "/tools",
+    },
+    openGraph: {
+        title: "Tools",
+        description: "A curated collection of software and utilities that power my workflow.",
+        url: `${SITE_INFO.url}/tools`,
+    },
 };
 
 export default function Page() {

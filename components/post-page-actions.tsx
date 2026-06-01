@@ -88,15 +88,39 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
     )
 }
 
-function getPrompt(url: string, isComponent?: boolean) {
+function getAbsoluteUrl(url: string) {
+    if (typeof window === "undefined") return url
+
+    return new URL(url, window.location.origin).toString()
+}
+
+function stripMdxExtension(url: string) {
+    return url.endsWith(".mdx") ? url.slice(0, -4) : url
+}
+
+function getPrompt(pageUrl: string, markdownUrl: string, isComponent?: boolean) {
     if (isComponent) {
-        return `I'm looking at this component documentation: ${url}
-I want to use it in a React (TypeScript) project.
-Help me understand how to use it step-by-step, including explaining key concepts, showing practical examples with TypeScript code, and pointing out common pitfalls.
-Be ready to answer follow-up questions and help debug issues based on the documentation.`
+        return `I'm looking at this component documentation and want help using it well.
+
+Rendered page: ${pageUrl}
+MDX source: ${markdownUrl}
+
+Please read the linked documentation, use the MDX source as the primary reference when it is available, and explain how to use this component in a React and TypeScript project. Walk through the main ideas, show practical examples, call out important props or patterns, and mention common mistakes or edge cases. After the overview, be ready to answer follow-up questions and help debug an implementation based on this documentation.`
     }
 
-    return `Read ${url}, I want to ask questions about it.`
+    return `I want to discuss this article/project page in detail.
+
+Rendered page: ${pageUrl}
+MDX source: ${markdownUrl}
+
+Please read the linked content, use the MDX source as the primary reference when it is available, and give me a thoughtful overview. Include a clear summary, the main ideas, any important technical or design details, practical takeaways, and a few good follow-up questions I could ask next. After that, be ready to answer deeper questions about the content.`
+}
+
+function getPromptHref(baseUrl: string, prompt: string) {
+    const url = new URL(baseUrl)
+    url.searchParams.set("q", prompt)
+
+    return url.toString()
 }
 
 export function ViewOptions({
@@ -107,12 +131,9 @@ export function ViewOptions({
     isComponent?: boolean
 }) {
     const items = useMemo(() => {
-        const fullMarkdownUrl =
-            typeof window !== "undefined"
-                ? new URL(markdownUrl, window.location.origin).toString()
-                : markdownUrl
-
-        const q = getPrompt(fullMarkdownUrl, isComponent)
+        const fullMarkdownUrl = getAbsoluteUrl(markdownUrl)
+        const fullPageUrl = getAbsoluteUrl(stripMdxExtension(markdownUrl))
+        const q = getPrompt(fullPageUrl, fullMarkdownUrl, isComponent)
 
         const _items = [
             {
@@ -122,27 +143,35 @@ export function ViewOptions({
             },
             {
                 title: "Open in ChatGPT",
-                href: `https://chatgpt.com/?${new URLSearchParams({
-                    hints: "search",
-                    q,
-                })}`,
+                href: getPromptHref("https://chatgpt.com/", q),
                 icon: Icons.openai,
             },
             {
                 title: "Open in Claude",
-                href: `https://claude.ai/new?${new URLSearchParams({
-                    q,
-                })}`,
+                href: getPromptHref("https://claude.ai/new", q),
                 icon: Icons.claude,
+            },
+            {
+                title: "Open in Grok",
+                href: getPromptHref("https://grok.com/", q),
+                icon: Icons.grok,
+            },
+            {
+                title: "Open in DeepSeek",
+                href: getPromptHref("https://chat.deepseek.com/", q),
+                icon: Icons.deepseek,
+            },
+            {
+                title: "Open in Perplexity",
+                href: getPromptHref("https://www.perplexity.ai/search/new", q),
+                icon: Icons.perplexity,
             },
         ]
 
         if (isComponent) {
             _items.splice(1, 0, {
                 title: "Open in v0",
-                href: `https://v0.app/?${new URLSearchParams({
-                    q,
-                })}`,
+                href: getPromptHref("https://v0.app/", q),
                 icon: Icons.v0,
             })
         }

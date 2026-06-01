@@ -4,26 +4,12 @@ import { SITE_INFO } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const blogs = getAllBlogs();
-
-  const blogUrls: MetadataRoute.Sitemap = blogs.map((blog) => ({
-    url: `${SITE_INFO.url}/blog/${blog.slug}`,
-    lastModified: new Date(blog.metadata.updatedAt),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
-
-  return [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: SITE_INFO.url,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
-    },
-    {
-      url: `${SITE_INFO.url}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
     },
     {
       url: `${SITE_INFO.url}/work`,
@@ -38,11 +24,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${SITE_INFO.url}/snaps`,
+      url: `${SITE_INFO.url}/tools`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
+    {
+      url: `${SITE_INFO.url}/gear`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+  ];
+
+  const blogUrls: MetadataRoute.Sitemap = blogs.map((blog) => ({
+    url: `${SITE_INFO.url}/blog/${blog.slug}`,
+    lastModified: new Date(blog.metadata.updatedAt),
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  }));
+
+  return [
+    ...staticRoutes,
     ...blogUrls,
   ]
 }

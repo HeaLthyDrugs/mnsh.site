@@ -1,4 +1,6 @@
 const ASSETS_HOSTNAME = "assets.mnsh.online";
+const CLOUDFLARE_IMAGE_RESIZING_ENABLED =
+  process.env.NEXT_PUBLIC_CLOUDFLARE_IMAGE_RESIZING === "true";
 
 interface CloudflareTransformOptions {
   width?: number;
@@ -12,6 +14,7 @@ export function toCloudflareTransformedUrl(
   options: CloudflareTransformOptions = {}
 ) {
   if (!src) return src;
+  if (!CLOUDFLARE_IMAGE_RESIZING_ENABLED) return src;
   if (!src.startsWith("https://")) return src;
 
   let parsed: URL;

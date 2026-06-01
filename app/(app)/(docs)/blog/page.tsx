@@ -3,17 +3,21 @@ import { Suspense } from "react";
 
 import { BlogList } from "@/features/blog/components/blog-list";
 import { BlogListWithSearch } from "@/features/blog/components/blog-list-with-search";
-import { BlogSearchInput } from "@/features/blog/components/blog-search-input";
 import { getAllBlogs } from "@/features/blog/lib/blogs";
+import { SITE_INFO } from "@/config/site";
 
 export const metadata: Metadata = {
     title: "Blog",
     description:
         "Thoughts, tutorials, and insights on technology, design, and development.",
+    alternates: {
+        canonical: "/blog",
+    },
     openGraph: {
         title: "Blog",
         description:
             "Thoughts, tutorials, and insights on technology, design, and development.",
+        url: `${SITE_INFO.url}/blog`,
         images: [
             {
                 url: "https://assets.mnsh.online/blog-covers/blog-headline.png",
