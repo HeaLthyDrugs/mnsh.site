@@ -92,14 +92,14 @@ export function SnapsBentoGrid({
     <>
       <div
         className={cn(
-          "columns-1 gap-2 sm:columns-2 md:columns-3 [column-fill:balance]",
+          "columns-1 gap-1 sm:columns-2 md:columns-3 [column-fill:balance]",
           className
         )}
       >
         {snaps.map((snap, index) => (
           <figure
             key={snap.id}
-            className="group relative mb-2 break-inside-avoid overflow-hidden border border-edge bg-card"
+            className="group relative mb-1 break-inside-avoid overflow-hidden border border-edge bg-card"
           >
             <button
               type="button"
@@ -119,8 +119,8 @@ export function SnapsBentoGrid({
                 className="block h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.015]"
               />
 
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-10 border-t border-white/20 bg-black/48 opacity-0 backdrop-blur-lg transition-opacity duration-200 group-hover:opacity-100 dark:border-white/12 dark:bg-black/36">
-                <div className="flex h-full items-center justify-between gap-2 px-2">
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 border-t border-white/20 bg-black/48 opacity-0 backdrop-blur-lg transition-opacity duration-200 group-hover:opacity-100 dark:border-white/12 dark:bg-black/36">
+                <div className="flex h-full items-center justify-between gap-2 px-1.5">
                   <p className="truncate text-[9px] font-medium tracking-[0.02em] text-zinc-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                     {snap.location}
                   </p>

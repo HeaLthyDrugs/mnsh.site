@@ -22,22 +22,7 @@ export default function Page() {
         </p>
       </div>
 
-      <section className="border-b border-edge bg-background p-2 text-foreground sm:p-3">
-        <div className="mb-3 border border-edge bg-card p-3">
-          <p className="mb-2 max-w-xl font-heading text-sm text-muted-foreground">
-            {SNAPS_INTRO.description}
-          </p>
-          <div className="flex flex-wrap gap-2 text-[11px]">
-            <span className="inline-flex items-center gap-1 border border-edge bg-muted/40 px-2 py-1 text-muted-foreground">
-              <MapPin className="size-3.5" />
-              Location tagged
-            </span>
-            <span className="inline-flex items-center gap-1 border border-edge bg-muted/40 px-2 py-1 text-muted-foreground">
-              <UserRound className="size-3.5" />
-              Clicked by tracked
-            </span>
-          </div>
-        </div>
+      <section className="border-b border-edge bg-background p-1 text-foreground">
 
         <SnapsBentoGrid snaps={SNAPS} />
       </section>

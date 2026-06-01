@@ -2,7 +2,7 @@ import type { Snap } from "@/features/snaps/types/snap";
 
 export const SNAPS_INTRO = {
   title: "Snaps",
-  subtitle: "Frames I have clicked or keep returning to.",
+  subtitle: "Collection of snaps",
   description:
     "Using Unsplash images for now. Replace any `src` below with your Cloudflare URL and it will automatically settle into the bento based on natural aspect ratio.",
 };
