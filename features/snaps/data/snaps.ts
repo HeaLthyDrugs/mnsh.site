@@ -1,0 +1,107 @@
+import type { Snap } from "@/features/snaps/types/snap";
+
+export const SNAPS_INTRO = {
+  title: "Snaps",
+  subtitle: "Frames I have clicked or keep returning to.",
+  description:
+    "Using Unsplash images for now. Replace any `src` below with your Cloudflare URL and it will automatically settle into the bento based on natural aspect ratio.",
+};
+
+export const SNAPS: Snap[] = [
+  {
+    id: "market-alley-01",
+    src: "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&w=1200&q=80",
+    alt: "A narrow alley in a market lit by warm afternoon sunlight.",
+    location: "Crawford Market, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "Feb 2026",
+  },
+  {
+    id: "vendor-lights-02",
+    src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80",
+    alt: "Street-side shop with warm tungsten lights and stacked products.",
+    location: "Chor Bazaar, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "Jan 2026",
+  },
+  {
+    id: "rail-shadow-03",
+    src: "https://images.unsplash.com/photo-1493244040629-496f6d136cc3?auto=format&fit=crop&w=1200&q=80",
+    alt: "Commuters standing near railway tracks with hard shadows.",
+    location: "Dadar Station, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "Dec 2025",
+  },
+  {
+    id: "city-noon-04",
+    src: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?auto=format&fit=crop&w=1200&q=80",
+    alt: "Bright noon scene with buildings, rickshaws, and moving crowd.",
+    location: "Fort, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "Nov 2025",
+  },
+  {
+    id: "chai-window-05",
+    src: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1200&q=80",
+    alt: "Portrait by a chai stall window with steam and reflections.",
+    location: "Lonavla",
+    clickedBy: "mnsh",
+    capturedAt: "Oct 2025",
+  },
+  {
+    id: "old-town-06",
+    src: "https://images.unsplash.com/photo-1524492514790-831f5b6317d4?auto=format&fit=crop&w=1200&q=80",
+    alt: "Historic facade and old signage with people crossing the frame.",
+    location: "Pune Camp",
+    clickedBy: "mnsh",
+    capturedAt: "Sep 2025",
+  },
+  {
+    id: "festival-lane-07",
+    src: "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=1200&q=80",
+    alt: "Colorful festival lane with hanging decorations and crowd.",
+    location: "Mandai, Pune",
+    clickedBy: "mnsh",
+    capturedAt: "Aug 2025",
+  },
+  {
+    id: "night-stall-08",
+    src: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1200&q=80",
+    alt: "Night food stall with fluorescent light and deep shadows.",
+    location: "JM Road, Pune",
+    clickedBy: "mnsh",
+    capturedAt: "Jul 2025",
+  },
+  {
+    id: "bus-stop-09",
+    src: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+    alt: "People waiting at a crowded bus stop during golden hour.",
+    location: "Andheri, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "Jun 2025",
+  },
+  {
+    id: "rain-mirror-10",
+    src: "https://images.unsplash.com/photo-1470290378698-263fa7ca328d?auto=format&fit=crop&w=1200&q=80",
+    alt: "Puddle reflection of lights and silhouettes after rain.",
+    location: "Bandra, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "May 2025",
+  },
+  {
+    id: "stairs-frame-11",
+    src: "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80",
+    alt: "Geometric stairs and lines with a single subject in frame.",
+    location: "Kala Ghoda, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "Apr 2025",
+  },
+  {
+    id: "market-blue-12",
+    src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+    alt: "Blue tarpaulin market scene with textured light leaks.",
+    location: "Bhuleshwar, Mumbai",
+    clickedBy: "mnsh",
+    capturedAt: "Mar 2025",
+  },
+];

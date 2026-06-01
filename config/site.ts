@@ -50,6 +50,12 @@ export const MAIN_NAV: NavItem[] = [
     description: "Read my thoughts",
   },
   {
+    title: "Snaps",
+    href: "/snaps",
+    shortcut: "S",
+    description: "Photos I have clicked or love",
+  },
+  {
     title: "Tools",
     href: "/tools",
     shortcut: "T",
