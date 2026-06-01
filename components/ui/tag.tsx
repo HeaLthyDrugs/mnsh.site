@@ -6,7 +6,7 @@ function Tag({ className, ...props }: React.ComponentProps<"span">) {
     return (
         <span
             className={cn(
-                "inline-flex items-center rounded-lg border bg-zinc-50 px-1.5 py-0.5 text-xs text-muted-foreground dark:bg-zinc-900",
+                "inline-flex items-center rounded-lg border bg-zinc-50 px-1.5 py-0.5 text-xs text-muted-foreground",
                 className
             )}
             {...props}
