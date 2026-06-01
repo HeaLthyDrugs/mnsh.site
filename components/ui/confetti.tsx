@@ -15,7 +15,6 @@ import type {
   CreateTypes as ConfettiInstance,
   Options as ConfettiOptions,
 } from "canvas-confetti"
-import confetti from "canvas-confetti"
 
 import { Button } from "@/components/ui/button"
 
@@ -34,11 +33,19 @@ export type ConfettiRef = Api | null
 
 const ConfettiContext = createContext<Api>({} as Api)
 
-const HEART_CONFETTI_SHAPE = confetti.shapeFromText({
-  text: "\u2764",
-  scalar: 1.1,
-  color: "#ef4444",
-})
+const DEFAULT_GLOBAL_OPTIONS: ConfettiGlobalOptions = { resize: true, useWorker: true }
+
+type ConfettiFn = typeof import("canvas-confetti")["default"]
+
+let confettiLoader: Promise<ConfettiFn> | null = null
+
+async function loadConfetti(): Promise<ConfettiFn | null> {
+  if (typeof window === "undefined") return null
+  if (!confettiLoader) {
+    confettiLoader = import("canvas-confetti").then((module) => module.default)
+  }
+  return confettiLoader
+}
 
 const HEART_CONFETTI_VARIANTS: ConfettiOptions[] = [
   {
@@ -49,7 +56,6 @@ const HEART_CONFETTI_VARIANTS: ConfettiOptions[] = [
     gravity: 1,
     decay: 0.92,
     ticks: 180,
-    shapes: [HEART_CONFETTI_SHAPE],
     colors: ["#ef4444", "#f43f5e", "#fb7185"],
   },
   {
@@ -61,7 +67,6 @@ const HEART_CONFETTI_VARIANTS: ConfettiOptions[] = [
     drift: 0.3,
     decay: 0.9,
     ticks: 220,
-    shapes: [HEART_CONFETTI_SHAPE],
     colors: ["#dc2626", "#ec4899", "#fda4af"],
   },
   {
@@ -72,7 +77,6 @@ const HEART_CONFETTI_VARIANTS: ConfettiOptions[] = [
     gravity: 1.2,
     decay: 0.94,
     ticks: 160,
-    shapes: [HEART_CONFETTI_SHAPE],
     colors: ["#b91c1c", "#e11d48", "#f43f5e"],
   },
 ]
@@ -95,30 +99,49 @@ export function getNextHeartConfettiVariant(previousVariant: number | null) {
 const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
   const {
     options,
-    globalOptions = { resize: true, useWorker: true },
+    globalOptions = DEFAULT_GLOBAL_OPTIONS,
     manualstart = false,
     children,
     ...rest
   } = props
   const instanceRef = useRef<ConfettiInstance | null>(null)
+  const canvasNodeRef = useRef<HTMLCanvasElement | null>(null)
 
   const canvasRef = useCallback(
-    (node: HTMLCanvasElement) => {
-      if (node !== null) {
-        if (instanceRef.current) return
-        instanceRef.current = confetti.create(node, {
-          ...globalOptions,
-          resize: true,
-        })
-      } else {
-        if (instanceRef.current) {
-          instanceRef.current.reset()
-          instanceRef.current = null
-        }
+    (node: HTMLCanvasElement | null) => {
+      canvasNodeRef.current = node
+      if (node === null && instanceRef.current) {
+        instanceRef.current.reset()
+        instanceRef.current = null
       }
     },
-    [globalOptions]
+    []
   )
+
+  useEffect(() => {
+    let cancelled = false
+
+    const init = async () => {
+      if (instanceRef.current || !canvasNodeRef.current) return
+      const confetti = await loadConfetti()
+      if (!confetti || cancelled || !canvasNodeRef.current) return
+
+      instanceRef.current = confetti.create(canvasNodeRef.current, {
+        ...globalOptions,
+        resize: true,
+      })
+    }
+
+    void init()
+
+    return () => {
+      cancelled = true
+      if (instanceRef.current) {
+        instanceRef.current.reset()
+        instanceRef.current = null
+      }
+    }
+  }, [globalOptions])
 
   const fire = useCallback(
     async (opts = {}) => {
@@ -178,6 +201,9 @@ const ConfettiButtonComponent = ({
 }: ConfettiButtonProps) => {
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     try {
+      const confetti = await loadConfetti()
+      if (!confetti) return
+
       const rect = event.currentTarget.getBoundingClientRect()
       const x = rect.left + rect.width / 2
       const y = rect.top + rect.height / 2
