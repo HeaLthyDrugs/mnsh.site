@@ -20,14 +20,14 @@ function getCategoryIcon(category?: string) {
     switch (category?.toLowerCase()) {
         case "technology":
         case "development":
-            return <Icons.code className="size-3.5" />;
+            return <Icons.code className="size-3.5 text-white" />;
         case "design":
-            return <Icons.palette className="size-3.5" />;
+            return <Icons.palette className="size-3.5 text-white" />;
         case "thoughts":
         case "personal":
-            return <Icons.feather className="size-3.5" />;
+            return <Icons.feather className="size-3.5 text-white" />;
         default:
-            return <Icons.fileText className="size-3.5" />;
+            return <Icons.fileText className="size-3.5 text-white" />;
     }
 }
 
@@ -70,10 +70,10 @@ export function BlogItem({
 
                     {metadata.category && (
                         <Tag
-                            className="absolute bottom-1 left-1 flex items-center gap-1 rounded-none bg-background/60 px-1.5 py-0.5 text-xs font-medium text-foreground backdrop-blur-md"
+                            className="absolute bottom-1 left-1 flex items-center gap-1 rounded-none bg-background/60 px-1.5 py-0.5 text-xs font-medium text-foreground backdrop-blur-sm"
                         >
                             {getCategoryIcon(metadata.category)}
-                            <span className="capitalize">{metadata.category}</span>
+                            <span className="capitalize text-white">{metadata.category}</span>
                         </Tag>
                     )}
                 </div>
