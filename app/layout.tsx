@@ -8,6 +8,10 @@ import { USER } from "@/features/profile/data/user";
 import { fontDomaine, fontSFPro } from "@/lib/fonts";
 import { Providers } from "@/components/providers";
 import { DeferredGlobalUi } from "@/components/deferred-global-ui";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_INFO.url),
@@ -117,7 +121,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fontSFPro.variable} ${fontDomaine.variable}`}
+    <html lang="en" className={cn(fontSFPro.variable, fontDomaine.variable, "font-sans", geist.variable)}
       suppressHydrationWarning>
       <head>
         <link
