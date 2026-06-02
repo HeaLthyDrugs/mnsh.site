@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useAtomValue } from "jotai";
 import { toast } from "sonner";
@@ -40,6 +39,7 @@ import { SOCIAL_LINKS } from "@/features/profile/data/social-links";
 import { cn } from "@/lib/utils";
 import { copyText } from "@/utils/copy";
 import { useSound } from "@/hooks/use-sound";
+import { useAnimatedThemeToggle } from "@/hooks/use-animated-theme-toggle";
 import { showLabelsAtom } from "@/store/ui-store";
 
 
@@ -122,7 +122,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
   const playHover = useSound("/sounds/hover.wav");
   const playTap = useSound("/sounds/tap.wav");
 
-  const { setTheme, resolvedTheme } = useTheme();
+  const { setAnimatedTheme } = useAnimatedThemeToggle();
 
   const [open, setOpen] = useState(false);
   const [isModifierKeyPressed, setIsModifierKeyPressed] = useState(false);
@@ -205,9 +205,9 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
   const handleThemeChange = useCallback(
     (theme: "light" | "dark" | "system") => {
       setOpen(false);
-      setTheme(theme);
+      setAnimatedTheme(theme);
     },
-    [setTheme]
+    [setAnimatedTheme]
   );
 
   const { blogLinks, workLinks, componentLinks } = useMemo(

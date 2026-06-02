@@ -8,6 +8,8 @@ import soundManager from "@/lib/sound-manager";
 import { useMetaColor } from "@/hooks/use-meta-color";
 import { META_THEME_COLORS } from "@/config/site";
 
+type ThemeOption = "light" | "dark" | "system";
+
 export function useAnimatedThemeToggle() {
     const { resolvedTheme, setTheme } = useTheme();
     const { setMetaColor } = useMetaColor();
@@ -60,23 +62,30 @@ export function useAnimatedThemeToggle() {
     }
   `;
 
-    const toggleTheme = useCallback(() => {
-        if (isSoundEnabled) {
-            soundManager.playWoosh();
+    const getResolvedTargetTheme = useCallback((theme: ThemeOption) => {
+        if (theme !== "system") {
+            return theme;
         }
 
-        const switchTheme = () => {
-            setTheme(resolvedTheme === "dark" ? "light" : "dark");
-            setMetaColor(
-                resolvedTheme === "dark"
-                    ? META_THEME_COLORS.light
-                    : META_THEME_COLORS.dark
-            );
-        };
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+    }, []);
 
+    const applyTheme = useCallback((theme: ThemeOption) => {
+        const resolvedTargetTheme = getResolvedTargetTheme(theme);
+
+        setTheme(theme);
+        setMetaColor(
+            resolvedTargetTheme === "dark"
+                ? META_THEME_COLORS.dark
+                : META_THEME_COLORS.light
+        );
+    }, [getResolvedTargetTheme, setMetaColor, setTheme]);
+
+    const ensureTransitionStyles = useCallback(() => {
         if (!document.startViewTransition) {
-            switchTheme();
-            return;
+            return false;
         }
 
         const styleId = "theme-transition-styles";
@@ -89,12 +98,38 @@ export function useAnimatedThemeToggle() {
         }
 
         styleElement.textContent = animationCss;
+        return true;
+    }, [animationCss]);
 
-        document.startViewTransition(switchTheme);
-    }, [resolvedTheme, setTheme, setMetaColor, isSoundEnabled, animationCss]);
+    const setAnimatedTheme = useCallback((theme: ThemeOption) => {
+        const nextResolvedTheme = getResolvedTargetTheme(theme);
+        const shouldAnimate = nextResolvedTheme !== resolvedTheme;
+
+        if (isSoundEnabled) {
+            soundManager.playWoosh();
+        }
+
+        if (!shouldAnimate || !ensureTransitionStyles()) {
+            applyTheme(theme);
+            return;
+        }
+
+        document.startViewTransition(() => applyTheme(theme));
+    }, [
+        applyTheme,
+        ensureTransitionStyles,
+        getResolvedTargetTheme,
+        isSoundEnabled,
+        resolvedTheme,
+    ]);
+
+    const toggleTheme = useCallback(() => {
+        setAnimatedTheme(resolvedTheme === "dark" ? "light" : "dark");
+    }, [resolvedTheme, setAnimatedTheme]);
 
     return {
         toggleTheme,
+        setAnimatedTheme,
         isDark: resolvedTheme === "dark",
     };
 }
