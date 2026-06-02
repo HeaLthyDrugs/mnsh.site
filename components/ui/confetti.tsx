@@ -35,14 +35,17 @@ const ConfettiContext = createContext<Api>({} as Api)
 
 const DEFAULT_GLOBAL_OPTIONS: ConfettiGlobalOptions = { resize: true, useWorker: true }
 
-type ConfettiFn = typeof import("canvas-confetti")["default"]
+type ConfettiModule = typeof import("canvas-confetti")
+type ConfettiFn = ConfettiModule extends { default: infer T } ? T : ConfettiModule
 
 let confettiLoader: Promise<ConfettiFn> | null = null
 
 async function loadConfetti(): Promise<ConfettiFn | null> {
   if (typeof window === "undefined") return null
   if (!confettiLoader) {
-    confettiLoader = import("canvas-confetti").then((module) => module.default)
+    confettiLoader = import("canvas-confetti").then(
+      (module) => ("default" in module ? module.default : module) as ConfettiFn
+    )
   }
   return confettiLoader
 }

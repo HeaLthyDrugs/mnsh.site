@@ -38,8 +38,8 @@
   --color-selection: var(--selection);
   --color-selection-foreground: var(--selection-foreground);
 
-  --font-sans: var(--font-sans);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-body-current);
+  --font-heading: var(--font-heading-current);
 
   --shadow-popover: var(--shadow-popover);
 
@@ -165,7 +165,7 @@
 }
 
 @utility font-heading {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading-current);
 }
 
 @utility screen-line-before {
@@ -186,6 +186,9 @@
 }
 
 :root {
+  --font-body-current: var(--font-geist);
+  --font-heading-current: var(--font-newsreader);
+
   /* white */
 
   /* zinc-950 */
@@ -435,12 +438,15 @@
     @apply bg-selection text-selection-foreground;
   }
 
-  html {
-    @apply motion-safe:scroll-smooth font-sans;
+html {
+    @apply motion-safe:scroll-smooth;
+    font-family: var(--font-body-current);
+    font-optical-sizing: auto;
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply antialiased bg-background text-foreground;
+    font-family: inherit;
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
   }
@@ -551,4 +557,23 @@
 /* Prevent layout shift on initial render */
 .layout {
   min-height: 600px;
+}
+
+:where(.font-sans) {
+  font-family: var(--font-body-current) !important;
+}
+
+:where(.font-heading) {
+  font-family: var(--font-heading-current) !important;
+  font-optical-sizing: auto;
+}
+
+html[data-font-theme="minimal"] {
+  --font-body-current: var(--font-manrope);
+  --font-heading-current: var(--font-manrope);
+}
+
+html[data-font-theme="aesthetic"] {
+  --font-body-current: var(--font-jakarta);
+  --font-heading-current: var(--font-fraunces);
 }

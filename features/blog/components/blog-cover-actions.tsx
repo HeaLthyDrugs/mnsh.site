@@ -77,7 +77,7 @@ export function BlogCoverActions({ title, content, slug }: BlogCoverActionsProps
             <SimpleTooltip content={isReading ? "Stop reading" : "Listen to article"}>
                 <Button
                     variant="secondary"
-                    size="icon:sm"
+                    size="icon-sm"
                     onClick={handleReadAloud}
                     className={cn(
                         "rounded-none",
@@ -92,7 +92,7 @@ export function BlogCoverActions({ title, content, slug }: BlogCoverActionsProps
             <SimpleTooltip content={copied ? "Link copied!" : "Share article"}>
                 <Button
                     variant="secondary"
-                    size="icon:sm"
+                    size="icon-sm"
                     onClick={handleShare}
                     className="rounded-none"
                 >

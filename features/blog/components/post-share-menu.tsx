@@ -28,7 +28,7 @@ export function PostShareMenu({ title, url }: { title: string; url: string }) {
                 <Button
                     className="size-7 border-none active:scale-none rounded-none"
                     variant="secondary"
-                    size="icon:sm"
+                    size="icon-sm"
                 >
                     <ShareIcon />
                 </Button>

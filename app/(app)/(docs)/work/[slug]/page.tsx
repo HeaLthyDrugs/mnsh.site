@@ -148,7 +148,7 @@ export default async function Page({
                 <Button
                   className="size-7 border-none rounded-none"
                   variant="secondary"
-                  size="icon:sm"
+                  size="icon-sm"
                   asChild
                 >
                   <Link href={`/work/${previous.slug}`}>
@@ -174,7 +174,7 @@ export default async function Page({
                 <Button
                   className="size-7 border-none rounded-none"
                   variant="secondary"
-                  size="icon:sm"
+                  size="icon-sm"
                   asChild
                 >
                   <Link href={`/work/${next.slug}`}>

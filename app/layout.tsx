@@ -5,13 +5,20 @@ import type { Metadata, Viewport } from "next";
 
 import { META_THEME_COLORS, SITE_INFO } from "@/config/site";
 import { USER } from "@/features/profile/data/user";
-import { fontDomaine, fontSFPro } from "@/lib/fonts";
+import {
+  fontFraunces,
+  fontGeist,
+  fontManrope,
+  fontNewsreader,
+  fontPlusJakartaSans,
+} from "@/lib/fonts";
+import {
+  DEFAULT_FONT_THEME,
+  FONT_THEME_STORAGE_KEY,
+} from "@/lib/font-theme";
 import { Providers } from "@/components/providers";
 import { DeferredGlobalUi } from "@/components/deferred-global-ui";
-import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_INFO.url),
@@ -109,6 +116,15 @@ const darkModeScript = String.raw`
   } catch (_) {}
 
   try {
+    const fontTheme = localStorage.getItem('${FONT_THEME_STORAGE_KEY}')
+    if (fontTheme === 'editorial' || fontTheme === 'minimal' || fontTheme === 'aesthetic') {
+      document.documentElement.dataset.fontTheme = fontTheme
+    } else {
+      document.documentElement.dataset.fontTheme = '${DEFAULT_FONT_THEME}'
+    }
+  } catch (_) {}
+
+  try {
     if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
       document.documentElement.classList.add('os-macos')
     }
@@ -121,7 +137,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(fontSFPro.variable, fontDomaine.variable, "font-sans", geist.variable)}
+    <html
+      lang="en"
+      data-font-theme={DEFAULT_FONT_THEME}
+      className={cn(
+        fontGeist.variable,
+        fontNewsreader.variable,
+        fontManrope.variable,
+        fontPlusJakartaSans.variable,
+        fontFraunces.variable,
+        "font-sans"
+      )}
       suppressHydrationWarning>
       <head>
         <link
