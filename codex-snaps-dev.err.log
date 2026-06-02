@@ -1,2 +1,41 @@
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
  ⚠ Your project has `@next/font` installed as a dependency, please use the built-in `next/font` instead. The `@next/font` package will be removed in Next.js 14. You can migrate by running `pnpm dlx @next/codemod@latest built-in-next-font .`. Read more: https://nextjs.org/docs/messages/built-in-next-font
+ ⨯ ./components/ui/confetti.tsx:46:22
+Module not found: Can't resolve 'canvas-confetti'
+[0m [90m 44 |[39m   [36mif[39m ([36mtypeof[39m window [33m===[39m [32m"undefined"[39m) [36mreturn[39m [36mnull[39m
+ [90m 45 |[39m   [36mif[39m ([33m![39mconfettiLoader) {
+[31m[1m>[22m[39m[90m 46 |[39m     confettiLoader [33m=[39m [36mimport[39m([32m"canvas-confetti"[39m)[33m.[39mthen(
+ [90m    |[39m                      [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 47 |[39m       (module) [33m=>[39m ([32m"default"[39m [36min[39m module [33m?[39m module[33m.[39m[36mdefault[39m [33m:[39m module) [36mas[39m [33mConfettiFn[39m
+ [90m 48 |[39m     )
+ [90m 49 |[39m   }[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./components/ui/confetti.tsx [Client Component Browser]
+    ./components/site-footer-credit.tsx [Client Component Browser]
+    ./components/site-footer-credit.tsx [Server Component]
+    ./app/(app)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/ui/confetti.tsx [Client Component SSR]
+    ./components/site-footer-credit.tsx [Client Component SSR]
+    ./components/site-footer-credit.tsx [Server Component]
+    ./app/(app)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+C:\work\Personal\mnsh.online\node_modules\next\dist\build\utils.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\work\Personal\mnsh.online\node_modules\next\dist\server\dev\hot-reloader-turbopack.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Turbopack build failed with 1 errors:
+./app
+Error: Next.js inferred your workspace root, but it may not be correct.
+    We couldn't find the Next.js package (next/package.json) from the project directory: C:\work\Personal\mnsh.online\app
+     To fix this, set turbopack.root in your Next.js config, or ensure the Next.js package is resolvable from this directory.
+    Note: For security and performance reasons, files outside of the project directory will not be compiled.
+    See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+
+    at ignore-listed frames

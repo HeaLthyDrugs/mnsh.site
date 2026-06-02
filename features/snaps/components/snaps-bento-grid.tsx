@@ -7,58 +7,44 @@ import Image from "next/image";
 import type { Snap } from "@/features/snaps/types/snap";
 import { cn } from "@/lib/utils";
 
-const GRID_IMAGE_SIZES = "(max-width: 639px) 96vw, (max-width: 767px) 48vw, 32vw";
+const GRID_IMAGE_SIZES = "(max-width: 639px) 96vw, (max-width: 767px) 48vw, 256px";
 const LIGHTBOX_IMAGE_SIZES = "(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 80vw";
-
-function getGridImageSrc(snap: Snap) {
-  return snap.gridSrc || snap.src;
-}
-
-function getLightboxImageSrc(snap: Snap) {
-  return snap.lightboxSrc || snap.src;
-}
+const BLUR_DATA_URL =
+  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiMxMTEzMTciLz48L3N2Zz4=";
 
 function SnapImage({
-  preferredSrc,
-  fallbackSrc,
+  src,
   alt,
   width,
   height,
   sizes,
   priority = false,
   className,
+  quality,
 }: {
-  preferredSrc: string;
-  fallbackSrc: string;
+  src: string;
   alt: string;
   width: number;
   height: number;
   sizes: string;
   priority?: boolean;
   className?: string;
+  quality: number;
 }) {
-  const [resolvedSrc, setResolvedSrc] = useState(preferredSrc);
-
-  useEffect(() => {
-    setResolvedSrc(preferredSrc);
-  }, [preferredSrc]);
-
   return (
     <Image
-      src={resolvedSrc}
+      src={src}
       alt={alt}
       width={width}
       height={height}
       sizes={sizes}
-      unoptimized
+      quality={quality}
+      placeholder="blur"
+      blurDataURL={BLUR_DATA_URL}
       priority={priority}
       loading={priority ? "eager" : "lazy"}
+      decoding="async"
       className={className}
-      onError={() => {
-        if (resolvedSrc !== fallbackSrc) {
-          setResolvedSrc(fallbackSrc);
-        }
-      }}
     />
   );
 }
@@ -163,13 +149,13 @@ export function SnapsBentoGrid({
               aria-label={`Open snap from ${snap.location}`}
             >
               <SnapImage
-                preferredSrc={getGridImageSrc(snap)}
-                fallbackSrc={snap.src}
+                src={snap.src}
                 alt={snap.alt}
                 width={snap.width}
                 height={snap.height}
                 sizes={GRID_IMAGE_SIZES}
-                priority={index < 3}
+                quality={68}
+                priority={index < 2}
                 className="block h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.015]"
               />
 
@@ -238,12 +224,12 @@ export function SnapsBentoGrid({
           >
             <figure className="relative mx-auto w-fit max-w-[90vw]">
               <SnapImage
-                preferredSrc={getLightboxImageSrc(activeSnap)}
-                fallbackSrc={activeSnap.src}
+                src={activeSnap.src}
                 alt={activeSnap.alt}
                 width={activeSnap.width}
                 height={activeSnap.height}
                 sizes={LIGHTBOX_IMAGE_SIZES}
+                quality={82}
                 priority
                 className="mx-auto max-h-[82vh] w-auto max-w-[90vw] object-contain"
               />
