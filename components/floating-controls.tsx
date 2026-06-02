@@ -118,7 +118,7 @@ export function FloatingControls() {
 
     return (
         <>
-            <AnimatePresence mode="wait">
+            <AnimatePresence initial={false} mode="sync">
                 {fontAnnouncement ? (
                     <motion.div
                         key={fontAnnouncement.id}
@@ -126,14 +126,14 @@ export function FloatingControls() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
                     >
                         <motion.div
                             className="text-center"
                             initial={{ opacity: 0, y: 24, scale: 0.96, filter: "blur(16px)" }}
                             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                             exit={{ opacity: 0, y: -20, scale: 1.03, filter: "blur(20px)" }}
-                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                         >
                             <p className="font-sans text-[11px] uppercase tracking-[0.45em] text-white/60 drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] sm:text-xs">
                                 Typography
