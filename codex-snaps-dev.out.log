@@ -14,3 +14,4 @@
  GET /snaps 200 in 132ms (compile: 6ms, render: 126ms)
  GET /snaps 200 in 110ms (compile: 6ms, render: 103ms)
  GET /snaps 200 in 99ms (compile: 5ms, render: 94ms)
+ ✓ Compiled in 175ms

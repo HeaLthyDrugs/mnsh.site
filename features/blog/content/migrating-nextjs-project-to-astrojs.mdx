@@ -1,0 +1,353 @@
+---
+title: "Migrating an Existing Next.js Project to Astro.js"
+description: "A practical guide to moving an existing Next.js app to Astro.js without breaking routing, styling, SEO, or the small interactive pieces that still matter."
+image: https://assets.mnsh.online/blog-covers/Migrate%20From%20Next%20to%20Astro.png
+createdAt: 2026-06-03
+updatedAt: 2026-06-03
+new: true
+pinned: false
+category: development
+tags:
+  - nextjs
+  - astro
+  - migration
+  - performance
+  - web-development
+author: Manish
+readTime: 8
+featured: false
+---
+
+## Overview
+
+Migrating from Next.js to Astro.js is not just a framework swap. It is usually a shift in how you think about rendering, JavaScript delivery, and content-heavy pages.
+
+If your current project is mostly made of marketing pages, docs, blogs, case studies, legal pages, or a lightweight product site with only a few interactive widgets, Astro can be a very strong fit. It helps you ship less JavaScript by default, keeps static pages simple, and still gives you room for server-side behavior when you need it.
+
+The best migrations are not rushed. They are planned, incremental, and focused on preserving URLs, styling, metadata, and user experience while reducing unnecessary framework overhead.
+
+## When this migration is a good fit
+
+Astro is usually a great choice when your Next.js project is:
+
+- mostly content-first
+- primarily public-facing
+- light on client-side state
+- using React for only a few interactive areas
+- performance-sensitive on slower devices or networks
+
+It is not always the best move for:
+
+- dashboard-heavy apps
+- deeply interactive SaaS products
+- auth-centric products with lots of client state
+- apps relying heavily on Next.js server actions or middleware patterns
+
+If your app sits somewhere in the middle, Astro can still work well, but you should expect a more selective migration rather than a quick one-to-one replacement.
+
+## Start with a migration audit
+
+Before moving code, make a short inventory of the project. This saves a lot of confusion later.
+
+| Audit item | What to capture | Why it matters |
+| --- | --- | --- |
+| Routes | public pages, dynamic pages, nested paths | keeps URLs stable |
+| Layouts | root shell, navigation, footer, wrappers | helps rebuild structure cleanly |
+| Content | blogs, docs, marketing copy, MDX, CMS data | identifies what should become Astro-first |
+| Interactive UI | forms, toggles, search, accordions, carousels | decides what stays hydrated |
+| APIs | route handlers, webhooks, server helpers | shows what needs endpoints |
+| Assets | fonts, images, favicons, OG assets | prevents broken references |
+| Environment variables | public vs server-only values | avoids leaking secrets |
+
+After that, split the app into two buckets:
+
+1. Pages that should stay mostly static
+2. Features that actually need JavaScript in the browser
+
+That single decision makes the rest of the migration much easier.
+
+## Recommended migration order
+
+Do not migrate everything in one pass. The cleanest path is:
+
+1. Move the shared layout and global styles
+2. Migrate the homepage
+3. Migrate static content pages such as `about`, `services`, `pricing`, or `blog`
+4. Migrate dynamic routes
+5. Rebuild endpoints and server-side helpers
+6. Reintroduce small interactive pieces as Astro islands
+
+This order gives you quick visual progress while keeping risk low.
+
+## How Next.js concepts map to Astro
+
+Here is the simplest mental model for the move:
+
+| In Next.js | In Astro | Notes |
+| --- | --- | --- |
+| `app/page.tsx` | `src/pages/index.astro` | page entry points move into `src/pages` |
+| `app/layout.tsx` | `src/layouts/BaseLayout.astro` | layouts become standard Astro components |
+| `next/link` | regular `<a>` | no framework wrapper needed for simple navigation |
+| `next/image` | `<img>` or Astro image tools | start simple, optimize later if needed |
+| `next/font` | self-hosted fonts, CSS imports, or `@fontsource` | keep font loading explicit |
+| `metadata` export | `<head>` tags in layout/page | SEO stays straightforward |
+| `app/api/.../route.ts` | `src/pages/api/...ts` | route handlers become Astro endpoints |
+
+This is where Astro often feels refreshing: many framework-specific abstractions disappear.
+
+## A typical structure after migration
+
+A basic Astro project often looks like this:
+
+```text
+src/
+  layouts/
+    BaseLayout.astro
+  pages/
+    index.astro
+    blog/
+      [slug].astro
+    api/
+      health.ts
+  components/
+    Header.astro
+    Footer.astro
+    ThemeToggle.tsx
+public/
+  fonts/
+  images/
+  favicon.ico
+```
+
+If you already have a solid `public/` folder in Next.js, that part usually transfers with very little effort.
+
+## Rebuild the layout first
+
+Your layout migration sets the tone for the rest of the project. Move the document shell, shared metadata defaults, and global CSS into a reusable Astro layout.
+
+```astro
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+```
+
+Once this is in place, every migrated page becomes easier because you are no longer repeating the same document setup.
+
+## Keep React only where it earns its place
+
+One of the biggest mistakes in a Next.js to Astro migration is bringing over every React habit unchanged.
+
+Astro works best when static content stays static, and only the truly interactive pieces are hydrated on the client.
+
+Good examples for Astro islands:
+
+- theme toggles
+- search boxes
+- carousels
+- small forms
+- tabs and accordions
+
+If you already have a React component that still makes sense, you can keep it and hydrate it only when needed:
+
+```astro
+---
+import ThemeToggle from "../components/ThemeToggle.tsx";
+---
+
+<ThemeToggle client:load />
+```
+
+Useful hydration directives include:
+
+- `client:load` for immediate interactivity
+- `client:idle` for lower-priority widgets
+- `client:visible` for below-the-fold components
+
+This is one of Astro's biggest wins: you decide exactly where browser JavaScript is worth paying for.
+
+## Migrate routes one by one
+
+Static pages are usually the easiest to move. Blog pages, guides, and marketing pages often become simpler in Astro, especially if you store content in Markdown or MDX.
+
+For dynamic routes, the main pattern is `getStaticPaths()`:
+
+```astro
+---
+export async function getStaticPaths() {
+  return [
+    { params: { slug: "about" } },
+    { params: { slug: "pricing" } },
+    { params: { slug: "docs" } },
+  ];
+}
+
+const { slug } = Astro.params;
+---
+```
+
+That makes route generation explicit and easy to reason about.
+
+## Move API routes carefully
+
+If your Next.js project has route handlers, map them intentionally instead of treating them like an afterthought.
+
+Next.js:
+
+```text
+app/api/status/route.ts
+```
+
+Astro:
+
+```text
+src/pages/api/status.ts
+```
+
+Example endpoint:
+
+```ts
+export async function GET() {
+  return Response.json({ ok: true });
+}
+```
+
+If you use Prisma, Drizzle, or another database layer, keep those imports server-only and avoid failing at module load time when an environment variable is missing. Lazy initialization is usually safer during a migration.
+
+## Revisit environment variables
+
+This part gets missed a lot.
+
+In Next.js, it is common to see browser-safe values prefixed with `NEXT_PUBLIC_`. In Astro, public values usually move to `PUBLIC_`.
+
+That means a variable like:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://example.com
+```
+
+often becomes:
+
+```env
+PUBLIC_SITE_URL=https://example.com
+```
+
+Also double-check:
+
+- analytics keys
+- CMS URLs
+- image CDN values
+- auth callback URLs
+- any code that assumed `.next` output or Next-specific runtime behavior
+
+## Preserve styling before redesigning
+
+A migration is already a large enough change. Avoid mixing it with a visual rewrite unless there is a strong reason.
+
+If you use Tailwind, keep it. If you already have design tokens, utility classes, CSS variables, or a typography system, bring them over first and redesign later.
+
+The goal of a good migration is stability:
+
+- same brand feel
+- same public URLs
+- same content
+- less unnecessary client JavaScript
+
+That is a much safer path than changing framework, layout, styles, and content structure all at once.
+
+## Best practices that make the migration smoother
+
+- Migrate page-by-page, not feature-by-feature across the whole app
+- Preserve existing URLs whenever possible
+- Keep a route mapping sheet while you work
+- Move content into Markdown or MDX when the page is writing-heavy
+- Keep React only for genuinely interactive areas
+- Treat env vars and API routes as first-class migration tasks
+- Run visual checks after every meaningful milestone
+
+These are simple habits, but they prevent most of the frustrating regressions.
+
+## What to test before calling it done
+
+Once the migration is in place, test it like a real product, not just a successful build.
+
+### Routing
+
+- old URLs still resolve
+- dynamic pages render correctly
+- unknown routes return a proper `404`
+- canonical URLs remain correct
+
+### SEO
+
+- titles and descriptions are correct
+- Open Graph images still work
+- favicons and manifest links load
+- sitemap and robots setup still make sense
+
+### UI and assets
+
+- navigation and footer match the old experience
+- fonts load correctly
+- images still point to valid paths
+- responsive layout holds up on mobile
+
+### Interactivity
+
+- toggles, menus, and forms still work
+- any React islands hydrate correctly
+- no unnecessary client bundle is being shipped for static sections
+
+### Build and deployment
+
+- lint passes
+- production build passes
+- environment variables are configured for the new runtime
+- hosting setup matches Astro's output mode
+
+## Common mistakes to avoid
+
+### 1. Forcing a one-to-one rewrite
+
+Astro is not meant to recreate every Next.js abstraction exactly as-is. Usually the cleaner result comes from simplifying.
+
+### 2. Migrating too much at once
+
+If pages, APIs, styles, and content structure all change together, debugging becomes painful very quickly.
+
+### 3. Hydrating everything out of habit
+
+If a section does not need browser interactivity, let it stay server-rendered or static.
+
+### 4. Forgetting SEO and metadata
+
+Public sites often look finished while still shipping broken titles, canonicals, or social previews.
+
+### 5. Underestimating deployment differences
+
+Static output, server output, and hybrid rendering all have different hosting expectations. Decide that early.
+
+## Final thought
+
+Migrating an existing Next.js project to Astro.js works best when you treat it as a simplification exercise, not just a framework replacement.
+
+Keep the content stable, move the layout first, reintroduce interactivity only where it matters, and test URLs and metadata as carefully as the UI. If your project is content-first, the result is often a codebase that feels lighter, faster, and much easier to maintain.
