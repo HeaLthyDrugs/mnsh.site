@@ -143,7 +143,7 @@ export function EventItem({
                 {/* Tagline Overlay (Primarily for Socials) */}
                 {isSocial ? (
                     <div className="relative z-20 mt-auto hidden md:block">
-                        <div className="text-xs font-medium leading-snug text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                        <div className="text-[9px] font-medium leading-snug text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                             {SOCIAL_CAPTIONS[event.id] || event.tagline || event.title}
                         </div>
                     </div>

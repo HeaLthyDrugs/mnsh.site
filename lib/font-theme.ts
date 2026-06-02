@@ -1,4 +1,5 @@
 export const FONT_THEME_STORAGE_KEY = "font-theme";
+export const FONT_THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 export const FONT_THEME_IDS = ["editorial", "minimal", "aesthetic"] as const;
 
@@ -29,6 +30,10 @@ export const FONT_THEME_OPTIONS: Record<
 
 export function isFontThemeId(value: string | null | undefined): value is FontThemeId {
   return !!value && FONT_THEME_IDS.includes(value as FontThemeId);
+}
+
+export function resolveFontTheme(value: string | null | undefined): FontThemeId {
+  return isFontThemeId(value) ? value : DEFAULT_FONT_THEME;
 }
 
 export function getNextFontTheme(theme: FontThemeId): FontThemeId {

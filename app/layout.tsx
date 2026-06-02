@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import type { WebSite, WithContext } from "schema-dts";
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 
 import { META_THEME_COLORS, SITE_INFO } from "@/config/site";
 import { USER } from "@/features/profile/data/user";
@@ -13,8 +14,8 @@ import {
   fontPlusJakartaSans,
 } from "@/lib/fonts";
 import {
-  DEFAULT_FONT_THEME,
   FONT_THEME_STORAGE_KEY,
+  resolveFontTheme,
 } from "@/lib/font-theme";
 import { Providers } from "@/components/providers";
 import { DeferredGlobalUi } from "@/components/deferred-global-ui";
@@ -119,8 +120,6 @@ const darkModeScript = String.raw`
     const fontTheme = localStorage.getItem('${FONT_THEME_STORAGE_KEY}')
     if (fontTheme === 'editorial' || fontTheme === 'minimal' || fontTheme === 'aesthetic') {
       document.documentElement.dataset.fontTheme = fontTheme
-    } else {
-      document.documentElement.dataset.fontTheme = '${DEFAULT_FONT_THEME}'
     }
   } catch (_) {}
 
@@ -131,15 +130,20 @@ const darkModeScript = String.raw`
   } catch (_) {}
 `;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const selectedFontTheme = resolveFontTheme(
+    cookieStore.get(FONT_THEME_STORAGE_KEY)?.value
+  );
+
   return (
     <html
       lang="en"
-      data-font-theme={DEFAULT_FONT_THEME}
+      data-font-theme={selectedFontTheme}
       className={cn(
         fontGeist.variable,
         fontNewsreader.variable,
