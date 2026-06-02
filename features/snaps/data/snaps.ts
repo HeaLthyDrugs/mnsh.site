@@ -9,27 +9,33 @@ export const SNAPS_INTRO = {
 
 export const SNAPS: Snap[] = [
   {
-    id: "Hanuman Tekdi",
+    id: "hanuman-tekdi-green-mountain",
     src: "https://assets.mnsh.online/snaps/green-mountain.jpg",
     alt: "Misty hillside with bright green monsoon grass and wet rocks.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
+    width: 4032,
+    height: 2268,
     capturedAt: "Jun 2026",
   },
   {
-    id: "Ryewood garden Morning",
+    id: "ryewood-garden-morning",
     src: "https://assets.mnsh.online/snaps/IMG_0205.JPG",
     alt: "Sunrays break through trees over a damp forest floor.",
     location: "Ryewood Garden, Lonavla",
     clickedBy: "Me",
+    width: 4032,
+    height: 3024,
     capturedAt: "Jun 2026",
   },
   {
-    id: "Hanuman Tekdi",
+    id: "hanuman-tekdi-tree-silhouette",
     src: "https://assets.mnsh.online/snaps/IMG_0212.JPG",
     alt: "A lone tree silhouette against bright blue sky and clouds.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
+    width: 3456,
+    height: 4608,
     capturedAt: "Jun 2026",
   },
   {
@@ -38,14 +44,18 @@ export const SNAPS: Snap[] = [
     alt: "Foggy railway yard with wet tracks fading into mist.",
     location: "Lonavla Rail Tracks",
     clickedBy: "Aditya",
+    width: 2080,
+    height: 4608,
     capturedAt: "Jun 2026",
   },
   {
-    id: "Rani Sleeping",
+    id: "rani-sleeping",
     src: "https://assets.mnsh.online/snaps/cat-sleep.jpg",
     alt: "Close-up of a sleeping cat with soft morning light.",
     location: "Home, Lonavla",
     clickedBy: "Me",
+    width: 4032,
+    height: 2268,
     capturedAt: "Jun 2026",
   },
   {
@@ -54,6 +64,8 @@ export const SNAPS: Snap[] = [
     alt: "Rocky grassland covered in thick monsoon fog.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
+    width: 4032,
+    height: 2268,
     capturedAt: "Jun 2026",
   },
   {
@@ -62,6 +74,8 @@ export const SNAPS: Snap[] = [
     alt: "Printed photo of grazing goats in warm field light.",
     location: "Lonavla Dam",
     clickedBy: "Abhishek",
+    width: 2268,
+    height: 4032,
     capturedAt: "Jun 2026",
   },
   {
@@ -70,6 +84,8 @@ export const SNAPS: Snap[] = [
     alt: "Goats grazing across a dry field at golden hour.",
     location: "Lonavla Dam",
     clickedBy: "Abhishek",
+    width: 2268,
+    height: 4032,
     capturedAt: "Jun 2026",
   },
   {
@@ -78,6 +94,8 @@ export const SNAPS: Snap[] = [
     alt: "Close view of a goat grazing with herd in the distance.",
     location: "Lonavla Dam",
     clickedBy: "Abhishek",
+    width: 2268,
+    height: 4032,
     capturedAt: "Jun 2026",
   },
   {
@@ -86,6 +104,8 @@ export const SNAPS: Snap[] = [
     alt: "Early morning haze over open fields and distant trees.",
     location: "Jaitpur, Uttar Pradesh",
     clickedBy: "Me",
+    width: 3840,
+    height: 2160,
     capturedAt: "Jun 2026",
   },
   {
@@ -94,6 +114,8 @@ export const SNAPS: Snap[] = [
     alt: "Misty ridge line with mixed green and brown shrubs.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
+    width: 4032,
+    height: 2268,
     capturedAt: "Jun 2026",
   },
   {
@@ -102,6 +124,8 @@ export const SNAPS: Snap[] = [
     alt: "Rain clouds hanging over a hillside town view.",
     location: "Olkaiwadi, Lonavla",
     clickedBy: "Me",
+    width: 4032,
+    height: 2268,
     capturedAt: "Jun 2026",
   },
 ];

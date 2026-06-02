@@ -1,12 +1,15 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import Image from "next/image";
 
 import type { Snap } from "@/features/snaps/types/snap";
 import { toCloudflareTransformedUrl } from "@/lib/cloudflare-image";
 import { cn } from "@/lib/utils";
+
+const GRID_IMAGE_SIZES = "(max-width: 639px) 96vw, (max-width: 767px) 48vw, 32vw";
+const LIGHTBOX_IMAGE_SIZES = "(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 80vw";
 
 export function SnapsBentoGrid({
   snaps,
@@ -107,15 +110,17 @@ export function SnapsBentoGrid({
               onClick={() => setActiveIndex(index)}
               aria-label={`Open snap from ${snap.location}`}
             >
-              <img
+              <Image
                 src={toCloudflareTransformedUrl(snap.src, {
-                  width: 1200,
-                  quality: 84,
+                  width: 960,
+                  quality: 80,
                   format: "auto",
                 })}
                 alt={snap.alt}
-                loading="lazy"
-                decoding="async"
+                width={snap.width}
+                height={snap.height}
+                sizes={GRID_IMAGE_SIZES}
+                priority={index < 3}
                 className="block h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.015]"
               />
 
@@ -183,13 +188,17 @@ export function SnapsBentoGrid({
             onClick={(event) => event.stopPropagation()}
           >
             <figure className="relative mx-auto w-fit max-w-[90vw]">
-              <img
+              <Image
                 src={toCloudflareTransformedUrl(activeSnap.src, {
-                  width: 2200,
-                  quality: 92,
+                  width: 1800,
+                  quality: 88,
                   format: "auto",
                 })}
                 alt={activeSnap.alt}
+                width={activeSnap.width}
+                height={activeSnap.height}
+                sizes={LIGHTBOX_IMAGE_SIZES}
+                priority
                 className="mx-auto max-h-[82vh] w-auto max-w-[90vw] object-contain"
               />
 

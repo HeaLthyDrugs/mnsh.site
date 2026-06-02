@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { MapPin, UserRound } from "lucide-react";
 
 import { SNAPS, SNAPS_INTRO } from "@/features/snaps/data/snaps";
 import { SnapsBentoGrid } from "@/features/snaps/components/snaps-bento-grid";
@@ -23,8 +22,13 @@ export default function Page() {
       </div>
 
       <section className="border-b border-edge bg-background p-1 text-foreground">
-
         <SnapsBentoGrid snaps={SNAPS} />
+
+        <div className="px-2 py-5">
+          <p className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/80">
+            More snaps are slowly developing here, like film.
+          </p>
+        </div>
       </section>
     </div>
   );

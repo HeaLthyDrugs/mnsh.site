@@ -4,5 +4,7 @@ export interface Snap {
   alt: string;
   location: string;
   clickedBy: string;
+  width: number;
+  height: number;
   capturedAt?: string;
 }
