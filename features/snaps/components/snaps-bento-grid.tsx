@@ -5,11 +5,63 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 
 import type { Snap } from "@/features/snaps/types/snap";
-import { toCloudflareTransformedUrl } from "@/lib/cloudflare-image";
 import { cn } from "@/lib/utils";
 
 const GRID_IMAGE_SIZES = "(max-width: 639px) 96vw, (max-width: 767px) 48vw, 32vw";
 const LIGHTBOX_IMAGE_SIZES = "(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 80vw";
+
+function getGridImageSrc(snap: Snap) {
+  return snap.gridSrc || snap.src;
+}
+
+function getLightboxImageSrc(snap: Snap) {
+  return snap.lightboxSrc || snap.src;
+}
+
+function SnapImage({
+  preferredSrc,
+  fallbackSrc,
+  alt,
+  width,
+  height,
+  sizes,
+  priority = false,
+  className,
+}: {
+  preferredSrc: string;
+  fallbackSrc: string;
+  alt: string;
+  width: number;
+  height: number;
+  sizes: string;
+  priority?: boolean;
+  className?: string;
+}) {
+  const [resolvedSrc, setResolvedSrc] = useState(preferredSrc);
+
+  useEffect(() => {
+    setResolvedSrc(preferredSrc);
+  }, [preferredSrc]);
+
+  return (
+    <Image
+      src={resolvedSrc}
+      alt={alt}
+      width={width}
+      height={height}
+      sizes={sizes}
+      unoptimized
+      priority={priority}
+      loading={priority ? "eager" : "lazy"}
+      className={className}
+      onError={() => {
+        if (resolvedSrc !== fallbackSrc) {
+          setResolvedSrc(fallbackSrc);
+        }
+      }}
+    />
+  );
+}
 
 export function SnapsBentoGrid({
   snaps,
@@ -110,12 +162,9 @@ export function SnapsBentoGrid({
               onClick={() => setActiveIndex(index)}
               aria-label={`Open snap from ${snap.location}`}
             >
-              <Image
-                src={toCloudflareTransformedUrl(snap.src, {
-                  width: 960,
-                  quality: 80,
-                  format: "auto",
-                })}
+              <SnapImage
+                preferredSrc={getGridImageSrc(snap)}
+                fallbackSrc={snap.src}
                 alt={snap.alt}
                 width={snap.width}
                 height={snap.height}
@@ -188,12 +237,9 @@ export function SnapsBentoGrid({
             onClick={(event) => event.stopPropagation()}
           >
             <figure className="relative mx-auto w-fit max-w-[90vw]">
-              <Image
-                src={toCloudflareTransformedUrl(activeSnap.src, {
-                  width: 1800,
-                  quality: 88,
-                  format: "auto",
-                })}
+              <SnapImage
+                preferredSrc={getLightboxImageSrc(activeSnap)}
+                fallbackSrc={activeSnap.src}
                 alt={activeSnap.alt}
                 width={activeSnap.width}
                 height={activeSnap.height}

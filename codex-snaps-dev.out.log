@@ -1,0 +1,16 @@
+
+> folio@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3002
+
+   ▲ Next.js 16.0.8 (Turbopack)
+   - Local:         http://127.0.0.1:3002
+   - Network:       http://127.0.0.1:3002
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 5.9s
+ ○ Compiling /snaps ...
+ GET /snaps 200 in 9.9s (compile: 9.5s, render: 418ms)
+ GET /snaps 200 in 132ms (compile: 6ms, render: 126ms)
+ GET /snaps 200 in 110ms (compile: 6ms, render: 103ms)
+ GET /snaps 200 in 99ms (compile: 5ms, render: 94ms)
