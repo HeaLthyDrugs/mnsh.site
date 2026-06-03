@@ -26,7 +26,7 @@ export default function Page() {
 
         <div className="px-2 py-5">
           <p className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/80">
-            More snaps are slowly developing here, like film.
+            More snaps will be added over time ...
           </p>
         </div>
       </section>
