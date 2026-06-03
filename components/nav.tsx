@@ -49,7 +49,7 @@ export function Nav({
 
   return (
     <nav className={cn("flex h-full items-center", className)}>
-      {items.map(({ title, href, shortcut, description }, index) => {
+      {items.map(({ title, href, shortcut, description }) => {
         const active =
           activeId === href || (href !== "/" && activeId?.startsWith(href));
 

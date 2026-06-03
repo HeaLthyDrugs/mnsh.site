@@ -1,6 +1,5 @@
 import { User } from "../types/user";
 
-
 export const USER: User = {
     firstName: "Manish",
     lastName: "Vishwakarma",
@@ -12,7 +11,7 @@ export const USER: User = {
     bio: "Learning and building",
     flipSentences: [
         "across web and mobile",
-        "that doesn’t fight the user",
+        "that doesn't fight the user",
         "designed for daily use",
         "that scale quietly",
         "with performance in mind",
@@ -32,10 +31,10 @@ export const USER: User = {
 - **Freelance Developer** working with Fiverr and Local Clients
 - **Building and maintaining** multiple real-world Websites and Applications
 - Actively participating in **Hackathons**:
-  - HackFrost Winter Hackathon — [WeMakeDevs](https://www.wemakedevs.org/)
-  - NotJustHack — [Vadim - NotJustDev](https://www.notjust.dev/)
-  - JSM Hackathon — [JSMastery](https://jsmastery.com/) (Shortlisted)
-  - Vibe Coding Hackathon — [Outlier](https://outlier.ai/) (Shortlisted)
+  - HackFrost Winter Hackathon - [WeMakeDevs](https://www.wemakedevs.org/)
+  - NotJustHack - [Vadim - NotJustDev](https://www.notjust.dev/)
+  - JSM Hackathon - [JSMastery](https://jsmastery.com/) (Shortlisted)
+  - Vibe Coding Hackathon - [Outlier](https://outlier.ai/) (Shortlisted)
 - Currently working on [Leank.space](https://leank.space) & [JustWrite.sbs](https://justwrite.sbs)`,
     avatar: "https://avatars.githubusercontent.com/u/122515021?v=4",
     ogImage:

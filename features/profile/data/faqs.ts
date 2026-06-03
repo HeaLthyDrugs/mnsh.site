@@ -5,10 +5,10 @@ export const FAQS: Faq[] = [
         id: "what-services",
         question: "What services do you offer?",
         answer: `I specialize in building modern web and mobile applications with a focus on:
-- **Frontend Development** — React, Next.js, TypeScript
-- **Mobile Development** — React Native, cross-platform apps
-- **UI/UX Design** — Clean, intuitive interfaces
-- **Full-Stack Solutions** — End-to-end product development`,
+- **Frontend Development** - React, Next.js, TypeScript
+- **Mobile Development** - React Native, cross-platform apps
+- **UI/UX Design** - Clean, intuitive interfaces
+- **Full-Stack Solutions** - End-to-end product development`,
         isExpanded: true,
     },
     {
@@ -21,11 +21,11 @@ export const FAQS: Faq[] = [
         question: "What's your typical working process?",
         answer: `My process is collaborative and transparent:
 
-1. **Discovery** — Understanding your goals, requirements, and timeline
-2. **Planning** — Creating a detailed roadmap and technical specifications
-3. **Development** — Building in iterative sprints with regular updates
-4. **Review & Refine** — Incorporating feedback and polishing the details
-5. **Delivery** — Launching with documentation and support`,
+1. **Discovery** - Understanding your goals, requirements, and timeline
+2. **Planning** - Creating a detailed roadmap and technical specifications
+3. **Development** - Building in iterative sprints with regular updates
+4. **Review & Refine** - Incorporating feedback and polishing the details
+5. **Delivery** - Launching with documentation and support`,
     },
     {
         id: "timeline",

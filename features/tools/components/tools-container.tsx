@@ -23,7 +23,7 @@ export function ToolsContainer({ tools }: ToolsContainerProps) {
         <div className="flex flex-col">
             {/* Filter Bar */}
             <div className="flex flex-wrap items-stretch border-t border-l border-edge bg-background">
-                {categories.map((category, index) => (
+                {categories.map((category) => (
                     <button
                         key={category}
                         onClick={() => setSelectedCategory(category)}

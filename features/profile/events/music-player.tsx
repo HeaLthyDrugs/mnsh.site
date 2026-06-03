@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { 
     genreIdxAtom, currentTrackIdxAtom, isPlayingAtom, 
     currentTimeAtom, durationAtom, volumeAtom, isMusicMutedAtom, 
@@ -23,8 +23,6 @@ import {
     type AudioLinesIconHandle,
 } from "@/components/animated-icons/audio-lines";
 
-import { GENRES } from "../data/music";
-
 // Glass style shared across buttons
 const GLASS =
     "backdrop-blur-md bg-white/10 border border-white/15 hover:bg-white/20 active:scale-95 transition-all duration-300";
@@ -34,8 +32,8 @@ export function MusicPlayer({ className }: { className?: string }) {
     const [genreIdx, setGenreIdx] = useAtom(genreIdxAtom);
     const [currentTrack, setCurrentTrack] = useAtom(currentTrackIdxAtom);
     const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
-    const [currentTime, setCurrentTime] = useAtom(currentTimeAtom);
-    const [duration, setDuration] = useAtom(durationAtom);
+    const currentTime = useAtomValue(currentTimeAtom);
+    const duration = useAtomValue(durationAtom);
     const [volume, setVolume] = useAtom(volumeAtom);
     const [isMuted, setIsMuted] = useAtom(isMusicMutedAtom);
     const [volumeOpen, setVolumeOpen] = useState(false);
@@ -56,21 +54,21 @@ export function MusicPlayer({ className }: { className?: string }) {
         }
     }, [isPlaying]);
 
-    const handlePlayPause = useCallback(() => setIsPlaying((p) => !p), []);
+    const handlePlayPause = useCallback(() => setIsPlaying((p) => !p), [setIsPlaying]);
 
     const handleNext = useCallback(() => {
         setCurrentTrack((p) => (p + 1) % genre.tracks.length);
-    }, [genre.tracks.length]);
+    }, [genre.tracks.length, setCurrentTrack]);
 
     const handlePrev = useCallback(() => {
         setCurrentTrack((p) => (p - 1 + genre.tracks.length) % genre.tracks.length);
-    }, [genre.tracks.length]);
+    }, [genre.tracks.length, setCurrentTrack]);
 
     const handleGenreChange = useCallback((idx: number) => {
         setGenreIdx(idx);
         setCurrentTrack(0);
         setGenreOpen(false);
-    }, []);
+    }, [setCurrentTrack, setGenreIdx]);
 
     const handleProgressClick = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
@@ -91,7 +89,7 @@ export function MusicPlayer({ className }: { className?: string }) {
             setVolume(newVol);
             if (newVol > 0 && isMuted) setIsMuted(false);
         },
-        [isMuted]
+        [isMuted, setIsMuted, setVolume]
     );
 
 

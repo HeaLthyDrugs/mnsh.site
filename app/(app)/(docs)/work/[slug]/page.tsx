@@ -15,7 +15,6 @@ import { Prose } from "@/components/ui/typography";
 import { InlineTOC } from "@/components/inline-toc";
 import { FloatingTOC } from "@/components/floating-toc";
 import { MDX } from "@/components/mdx";
-import { MDXViewer } from "@/components/mdx-viewer";
 import { cn } from "@/lib/utils";
 import { Post } from "@/features/work/types/work-post";
 import { SITE_INFO } from "@/config/site";

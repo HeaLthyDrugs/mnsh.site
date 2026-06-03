@@ -1,13 +1,50 @@
 "use client";
 
-import { useState, useEffect, useRef, useId, useMemo } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type MouseEvent } from "react";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+type YouTubePlayer = {
+    destroy: () => void;
+    loadVideoById: (videoId: string) => void;
+    mute: () => void;
+    pauseVideo: () => void;
+    playVideo: () => void;
+    unMute: () => void;
+};
+
+type YouTubePlayerReadyEvent = {
+    target: YouTubePlayer;
+};
+
+type YouTubePlayerStateChangeEvent = YouTubePlayerReadyEvent & {
+    data: number;
+};
+
+type YouTubeApi = {
+    Player: new (
+        elementId: string,
+        config: {
+            videoId: string;
+            playerVars: Record<string, number>;
+            events?: {
+                onReady?: (event: YouTubePlayerReadyEvent) => void;
+                onStateChange?: (event: YouTubePlayerStateChangeEvent) => void;
+            };
+        }
+    ) => YouTubePlayer;
+    PlayerState: {
+        BUFFERING: number;
+        ENDED: number;
+        PAUSED: number;
+        PLAYING: number;
+    };
+};
+
 declare global {
     interface Window {
-        YT: any;
-        onYouTubeIframeAPIReady: () => void;
+        YT?: YouTubeApi;
+        onYouTubeIframeAPIReady?: () => void;
     }
 }
 
@@ -20,9 +57,8 @@ export function YoutubePlaylistPlayer({
 }) {
     const rawId = useId();
     const playerId = `yt-player-${rawId.replace(/:/g, "")}`;
-    const playerRef = useRef<any>(null);
+    const playerRef = useRef<YouTubePlayer | null>(null);
 
-    const [isReady, setIsReady] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -54,29 +90,11 @@ export function YoutubePlaylistPlayer({
     useEffect(() => {
         if (!shuffledVideoIds || shuffledVideoIds.length === 0) return;
 
-        const loadYT = () => {
-            if (window.YT && window.YT.Player) {
-                initPlayer();
-            } else {
-                if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
-                    const script = document.createElement('script');
-                    script.src = "https://www.youtube.com/iframe_api";
-                    document.body.appendChild(script);
-                }
-
-                const oldReady = window.onYouTubeIframeAPIReady;
-                window.onYouTubeIframeAPIReady = () => {
-                    if (oldReady) oldReady();
-                    initPlayer();
-                };
-            }
-        };
-
-        const initPlayer = () => {
+        const initPlayer = (youtube: YouTubeApi) => {
             const playerElement = document.getElementById(playerId);
             if (!playerElement) return;
 
-            playerRef.current = new window.YT.Player(playerId, {
+            playerRef.current = new youtube.Player(playerId, {
                 videoId: shuffledVideoIds[0],
                 playerVars: {
                     autoplay: 0,
@@ -89,39 +107,56 @@ export function YoutubePlaylistPlayer({
                     iv_load_policy: 3
                 },
                 events: {
-                    onReady: (event: any) => {
-                        setIsReady(true);
-                    },
-                    onStateChange: (event: any) => {
-                        if (event.data === window.YT.PlayerState.PLAYING) {
-                            setIsPlaying(true);
-                            setHasStarted(true);
-                            setIsSwitching(false);
-                        } else if (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) {
+                    onStateChange: (event: YouTubePlayerStateChangeEvent) => {
+                        if (event.data === youtube.PlayerState.ENDED) {
                             setIsPlaying(false);
-                        } else if (event.data === window.YT.PlayerState.BUFFERING) {
-                            // Keep overlay hidden during switches or small buffers
-                        } else if (event.data === window.YT.PlayerState.ENDED) {
+                            setIsSwitching(true);
                             const next = (currentIndexRef.current + 1) % videoIdsRef.current.length;
                             setCurrentIndex(next);
                             event.target.loadVideoById(videoIdsRef.current[next]);
+                        } else if (event.data === youtube.PlayerState.PLAYING) {
+                            setIsPlaying(true);
+                            setHasStarted(true);
+                            setIsSwitching(false);
+                        } else if (event.data === youtube.PlayerState.PAUSED) {
+                            setIsPlaying(false);
                         }
                     }
                 }
             });
         };
 
+        const loadYT = () => {
+            if (window.YT?.Player) {
+                initPlayer(window.YT);
+            } else {
+                if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+                    const script = document.createElement('script');
+                    script.src = "https://www.youtube.com/iframe_api";
+                    document.body.appendChild(script);
+                }
+
+                const oldReady = window.onYouTubeIframeAPIReady;
+                window.onYouTubeIframeAPIReady = () => {
+                    if (oldReady) oldReady();
+                    if (window.YT) {
+                        initPlayer(window.YT);
+                    }
+                };
+            }
+        };
+
         loadYT();
 
         return () => {
-            if (playerRef.current && playerRef.current.destroy) {
+            if (playerRef.current) {
                 playerRef.current.destroy();
                 playerRef.current = null;
             }
         };
-    }, []);
+    }, [playerId, shuffledVideoIds]);
 
-    const handleNext = (e: React.MouseEvent) => {
+    const handleNext = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         if (!playerRef.current) return;
         const next = (currentIndex + 1) % shuffledVideoIds.length;
@@ -131,7 +166,7 @@ export function YoutubePlaylistPlayer({
         playerRef.current.loadVideoById(shuffledVideoIds[next]);
     };
 
-    const handlePrev = (e: React.MouseEvent) => {
+    const handlePrev = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         if (!playerRef.current) return;
         const prev = currentIndex === 0 ? shuffledVideoIds.length - 1 : currentIndex - 1;
@@ -141,7 +176,7 @@ export function YoutubePlaylistPlayer({
         playerRef.current.loadVideoById(shuffledVideoIds[prev]);
     };
 
-    const toggleMute = (e: React.MouseEvent) => {
+    const toggleMute = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         if (!playerRef.current) return;
         if (isMuted) {
@@ -153,7 +188,7 @@ export function YoutubePlaylistPlayer({
         }
     };
 
-    const togglePlay = (e?: React.MouseEvent) => {
+    const togglePlay = (e?: MouseEvent<HTMLElement>) => {
         if (e) e.stopPropagation();
         if (!playerRef.current) return;
 
@@ -161,16 +196,6 @@ export function YoutubePlaylistPlayer({
             playerRef.current.pauseVideo();
         } else {
             playerRef.current.playVideo();
-        }
-    };
-
-    const handleStart = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setHasStarted(true);
-        if (playerRef.current) {
-            playerRef.current.playVideo();
-            playerRef.current.unMute();
-            setIsMuted(false);
         }
     };
 

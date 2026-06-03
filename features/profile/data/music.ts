@@ -1,6 +1,6 @@
 // ─── Genre & Track Definitions ─────────────────────────────────────
 
-import { Globe, Flame, Coffee } from "lucide-react";
+import { Flame, Globe, type LucideIcon } from "lucide-react";
 
 export interface Track {
     title: string;
@@ -14,7 +14,7 @@ export interface Track {
 
 export interface Genre {
     label: string;
-    icon: any;
+    icon: LucideIcon;
     tracks: Track[];
 }
 

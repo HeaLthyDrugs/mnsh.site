@@ -1,6 +1,5 @@
 "use client";
 
-import { MailIcon } from "lucide-react";
 import { useSound } from "@/hooks/use-sound";
 
 import { Panel, PanelHeader, PanelTitle } from "../components/panel";
@@ -24,7 +23,7 @@ export default function Faq() {
     return (
         <Panel id="faq">
             <PanelHeader>
-                <PanelTitle>FAQ's</PanelTitle>
+                <PanelTitle>FAQs</PanelTitle>
             </PanelHeader>
 
             {/* FAQ Items - no show more/less button */}
@@ -42,7 +41,7 @@ export default function Faq() {
                     <div className="w-px bg-[repeating-linear-gradient(to_bottom,var(--color-muted-foreground)_0,var(--color-muted-foreground)_3px,transparent_3px,transparent_6px)] opacity-20" />
                     <div className="flex items-center gap-2 py-2">
                         <span className="text-xs font-heading text-muted-foreground/60 whitespace-nowrap">
-                            Still have questions ?
+                            Still have questions?
                         </span>
                         <a
                             href={`mailto:${decodedEmail}`}

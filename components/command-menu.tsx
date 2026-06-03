@@ -1,19 +1,13 @@
 "use client";
 
-import { useCommandState } from "cmdk";
 import type { LucideProps } from "lucide-react";
 import {
   BriefcaseBusinessIcon,
-  CircleUserIcon,
   CornerDownLeftIcon,
-  DownloadIcon,
-  LetterTextIcon,
   MoonStarIcon,
   RssIcon,
   SunIcon,
   TextIcon,
-  TriangleDashedIcon,
-  TypeIcon,
   ArrowUpDownIcon,
   ArrowUpRightIcon,
   WrenchIcon,
@@ -23,7 +17,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useAtomValue } from "jotai";
-import { toast } from "sonner";
 
 import {
   CommandDialog,
@@ -37,7 +30,6 @@ import {
 
 import { SOCIAL_LINKS } from "@/features/profile/data/social-links";
 import { cn } from "@/lib/utils";
-import { copyText } from "@/utils/copy";
 import { useSound } from "@/hooks/use-sound";
 import { useAnimatedThemeToggle } from "@/hooks/use-animated-theme-toggle";
 import { showLabelsAtom } from "@/store/ui-store";
@@ -48,9 +40,7 @@ import { Button } from "./ui/button";
 
 import { Post as WorkPost } from "@/features/work/types/work-post";
 import { BlogPost } from "@/features/blog/types/blog-post";
-import { getMarkSVG, MnshMark } from "./mnsh-mark";
-import { getWordmarkSVG, MnshWordmark } from "./mnsh-wordmark";
-import { Separator } from "./ui/seperator";
+import { MnshMark } from "./mnsh-mark";
 
 type CommandLinkItem = {
   title: string;
@@ -91,24 +81,6 @@ const MENU_LINKS: CommandLinkItem[] = [
   },
 ];
 
-const ME_LINKS: CommandLinkItem[] = [
-  {
-    title: "About",
-    href: "/#about",
-    icon: LetterTextIcon,
-  },
-  {
-    title: "Experience",
-    href: "/#experience",
-    icon: BriefcaseBusinessIcon,
-  },
-  {
-    title: "Works & Projects",
-    href: "/#projects",
-    icon: Icons.project,
-  },
-];
-
 const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({
   title: item.title,
   href: item.href,
@@ -127,14 +99,13 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
   const [open, setOpen] = useState(false);
   const [isModifierKeyPressed, setIsModifierKeyPressed] = useState(false);
 
-  /* eslint-disable-next-line react-hooks/exhaustive-deps */
   const playOpen = useSound("/sounds/menu-open.wav");
 
   useEffect(() => {
     if (open) {
       playOpen();
     }
-  }, [open]);
+  }, [open, playOpen]);
 
   useEffect(() => {
     const downHandler = (e: KeyboardEvent) => {
@@ -196,12 +167,6 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
     [router, isModifierKeyPressed]
   );
 
-  const handleCopyText = useCallback((text: string, message: string) => {
-    setOpen(false);
-    copyText(text);
-    toast.success(message);
-  }, []);
-
   const handleThemeChange = useCallback(
     (theme: "light" | "dark" | "system") => {
       setOpen(false);
@@ -210,12 +175,11 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
     [setAnimatedTheme]
   );
 
-  const { blogLinks, workLinks, componentLinks } = useMemo(
+  const { blogLinks, workLinks } = useMemo(
     () => ({
       blogLinks: blogs
         .filter((post) => post.metadata?.category !== "components")
         .map(blogToCommandLinkItem),
-      componentLinks: [],
       workLinks: works.map(workToCommandLinkItem),
     }),
     [blogs, works]

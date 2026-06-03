@@ -1,24 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { USER } from "../data/user";
-import { cn } from "@/lib/utils";
-import { BriefcaseIcon, CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Icons } from "@/components/icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLoop } from "@/lib/animation/useLoop";
-import { MessageCircleMoreIcon } from "@/components/animated-icons/message-circle-more";
-import { MailCheckIcon } from "@/components/ui/mail-check";
 import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status";
 import { useState, useRef } from "react";
 
@@ -151,45 +136,6 @@ export default function ProfileHeader() {
                                 </Status>
                             </div>
                         )}
-
-                        {/* <div className="flex items-center px-3 py-2 sm:px-1 sm:py-1">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="sm" className="rounded-none cursor-pointer shrink-0">
-                                        <MessageCircleMoreIcon className="size-4" />
-                                        Start a conversation
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="start" className="w-42 rounded-none">
-                                    <DropdownMenuItem asChild className="rounded-none cursor-pointer">
-                                        <a
-                                            href="https://wa.me/918432563227"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Icons.whatsapp className="mr-2 size-4" />
-                                            WhatsApp
-                                        </a>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild className="rounded-none cursor-pointer">
-                                        <a href={`mailto:${USER.email}`}>
-                                            <Icons.mail className="mr-2 size-4" />
-                                            Email
-                                        </a>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild className="rounded-none cursor-pointer">
-                                        <a
-                                            href="https://cal.com/mnsh"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Icons.phone className="mr-2 size-4" />
-                                            Schedule a call
-                                        </a>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div> */}
                     </div>
                 </div>
             </div>

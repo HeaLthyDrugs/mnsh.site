@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Volume2Icon, Share2Icon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -59,8 +59,7 @@ export function BlogCoverActions({ title, content, slug }: BlogCoverActionsProps
                     title,
                     url,
                 });
-            } catch (err) {
-                // User cancelled or error
+            } catch {
                 console.log("Share cancelled");
             }
         } else {

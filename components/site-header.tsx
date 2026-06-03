@@ -1,15 +1,11 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
 
 import { DesktopNav } from "@/components/desktop-nav";
-import { NavItemGitHub } from "./nav-item-github";
 import { MAIN_NAV } from "@/config/site";
 
 import { cn } from "@/lib/utils";
 
 import { SiteHeaderWrapper } from "./site-header-wrapper";
-import { ToggleTheme } from "./toggle-theme";
-import { MoreOptions } from "./site-header-actions";
 import { HomeLink } from "@/components/home-link";
 import { getAllBlogs } from "@/features/blog/lib/blogs";
 import { getAllWorks } from "@/features/work/lib/works";
@@ -25,7 +21,6 @@ const MobileNav = dynamic(() =>
 export async function SiteHeader() {
   const blogs = getAllBlogs().map(({ slug, metadata }) => ({ slug, metadata, content: "" }));
   const works = getAllWorks().map(({ slug, metadata }) => ({ slug, metadata, content: "" }));
-
 
   return (
     <SiteHeaderWrapper
@@ -48,14 +43,12 @@ export async function SiteHeader() {
 
         <div className="hidden sm:flex h-full items-center border-l border-border">
           <DesktopNav items={MAIN_NAV.filter(item => !["Tools", "Gear"].includes(item.title))} />
-          {/* <MoreOptions /> */}
         </div>
 
         <div className="flex h-full items-center border-border">
           <div className="hidden sm:flex h-full items-center px-4">
             <CommandMenu blogs={blogs} works={works} />
           </div>
-          {/* <ToggleTheme /> */}
           <div className="flex h-full w-12 items-center justify-center border-l border-border sm:hidden">
             <MobileNav items={MAIN_NAV} />
           </div>
