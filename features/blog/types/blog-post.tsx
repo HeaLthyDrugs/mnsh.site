@@ -4,6 +4,10 @@ export type BlogMetadata = {
     /** Blog post description/excerpt */
     description: string;
     /**
+     * Explicit SEO keywords for the blog post.
+     */
+    keywords?: string[];
+    /**
      * Social/OG image URL for the blog post.
      * Use an absolute URL or a path under /public. Recommended size: 1200x630.
      */

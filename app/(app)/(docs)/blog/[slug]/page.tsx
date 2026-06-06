@@ -38,6 +38,7 @@ function getPageJsonLd(post: BlogPost): WithContext<PageSchema> {
         "@type": "BlogPosting",
         headline: post.metadata.title,
         description: post.metadata.description,
+        keywords: post.metadata.keywords?.join(", ") || post.metadata.tags?.join(", "),
         image:
             post.metadata.image
                 ? (post.metadata.image.startsWith("http") ? post.metadata.image : `${SITE_INFO.url}${post.metadata.image}`)
@@ -45,6 +46,7 @@ function getPageJsonLd(post: BlogPost): WithContext<PageSchema> {
         url: `${SITE_INFO.url}/blog/${post.slug}`,
         datePublished: dayjs(post.metadata.createdAt).toISOString(),
         dateModified: dayjs(post.metadata.updatedAt).toISOString(),
+        articleSection: post.metadata.category,
         author: {
             "@type": "Person",
             name: post.metadata.author || USER.displayName,
@@ -66,7 +68,7 @@ export async function generateMetadata({
         return notFound();
     }
 
-    const { title, description, image, createdAt, updatedAt } = post.metadata;
+    const { title, description, image, createdAt, updatedAt, keywords, tags } = post.metadata;
 
     const postUrl = `/blog/${post.slug}`;
     const ogImage = image
@@ -76,6 +78,7 @@ export async function generateMetadata({
     return {
         title,
         description,
+        keywords: keywords?.length ? keywords : tags,
         alternates: {
             canonical: postUrl,
         },
