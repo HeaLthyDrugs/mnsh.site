@@ -33,17 +33,21 @@ export async function generateStaticParams() {
 }
 
 function getPageJsonLd(post: BlogPost): WithContext<PageSchema> {
+    const canonicalUrl = `${SITE_INFO.url}/blog/${post.slug}`;
+    const imageUrl =
+        post.metadata.image
+            ? (post.metadata.image.startsWith("http") ? post.metadata.image : `${SITE_INFO.url}${post.metadata.image}`)
+            : `${SITE_INFO.url}/og/simple?title=${encodeURIComponent(post.metadata.title)}`;
+
     return {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         headline: post.metadata.title,
         description: post.metadata.description,
         keywords: post.metadata.keywords?.join(", ") || post.metadata.tags?.join(", "),
-        image:
-            post.metadata.image
-                ? (post.metadata.image.startsWith("http") ? post.metadata.image : `${SITE_INFO.url}${post.metadata.image}`)
-                : `${SITE_INFO.url}/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
-        url: `${SITE_INFO.url}/blog/${post.slug}`,
+        image: imageUrl,
+        url: canonicalUrl,
+        mainEntityOfPage: canonicalUrl,
         datePublished: dayjs(post.metadata.createdAt).toISOString(),
         dateModified: dayjs(post.metadata.updatedAt).toISOString(),
         articleSection: post.metadata.category,
@@ -52,6 +56,12 @@ function getPageJsonLd(post: BlogPost): WithContext<PageSchema> {
             name: post.metadata.author || USER.displayName,
             identifier: USER.username,
             image: USER.avatar,
+        },
+        publisher: {
+            "@type": "Person",
+            name: USER.displayName,
+            image: USER.avatar,
+            url: SITE_INFO.url,
         },
     };
 }
@@ -68,7 +78,7 @@ export async function generateMetadata({
         return notFound();
     }
 
-    const { title, description, image, createdAt, updatedAt, keywords, tags } = post.metadata;
+    const { title, description, image, createdAt, updatedAt, keywords, tags, category, author } = post.metadata;
 
     const postUrl = `/blog/${post.slug}`;
     const ogImage = image
@@ -79,6 +89,17 @@ export async function generateMetadata({
         title,
         description,
         keywords: keywords?.length ? keywords : tags,
+        authors: [
+            {
+                name: author || USER.displayName,
+                url: SITE_INFO.url,
+            },
+        ],
+        category,
+        robots: {
+            index: true,
+            follow: true,
+        },
         alternates: {
             canonical: postUrl,
         },
@@ -106,6 +127,12 @@ export async function generateMetadata({
             title,
             description,
             images: [ogImage],
+        },
+        other: {
+            "article:published_time": dayjs(createdAt).toISOString(),
+            "article:modified_time": dayjs(updatedAt).toISOString(),
+            ...(category ? { "article:section": category } : {}),
+            ...(tags?.length ? { "article:tag": tags.join(", ") } : {}),
         },
     };
 }
