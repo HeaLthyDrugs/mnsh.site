@@ -3,8 +3,6 @@ import dayjs from "dayjs";
 import type { BlogPost } from "../types/blog-post";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Tag } from "@/components/ui/tag";
-import { Icons } from "@/components/icons";
 
 /**
  * Formats the date string for display.
@@ -13,30 +11,14 @@ function formatDate(dateString: string): string {
     return dayjs(dateString).format("MMM D, YYYY");
 }
 
-/**
- * Returns the appropriate icon component based on category.
- */
-function getCategoryIcon(category?: string) {
-    switch (category?.toLowerCase()) {
-        case "technology":
-        case "development":
-            return <Icons.code className="size-3.5 text-white/90" />;
-        case "design":
-            return <Icons.palette className="size-3.5 text-white/90" />;
-        case "thoughts":
-        case "personal":
-            return <Icons.feather className="size-3.5 text-white/90" />;
-        default:
-            return <Icons.fileText className="size-3.5 text-white/90" />;
-    }
-}
-
 export function BlogItem({
     post,
     shouldPreloadImage,
+    showNewBadge = false,
 }: {
     post: BlogPost;
     shouldPreloadImage?: boolean;
+    showNewBadge?: boolean;
 }) {
     const { metadata } = post;
 
@@ -62,19 +44,10 @@ export function BlogItem({
 
                     <div className="pointer-events-none absolute inset-0 rounded-none ring-1 ring-black/10 ring-inset dark:ring-white/10" />
 
-                    {metadata.new && (
+                    {showNewBadge && (
                         <span className="absolute top-1.5 right-1.5 rounded-none bg-info px-1.5 font-sans text-sm font-medium text-white text-shadow-xs">
                             New
                         </span>
-                    )}
-
-                    {metadata.category && (
-                        <Tag
-                            className="absolute bottom-1 left-1 flex items-center gap-1 rounded-none border border-white/15 bg-background/20 px-1.5 py-0.5 text-xs font-medium text-foreground backdrop-blur-sm"
-                        >
-                            {getCategoryIcon(metadata.category)}
-                            <span className="capitalize text-white/90">{metadata.category}</span>
-                        </Tag>
                     )}
                 </div>
             )}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
@@ -21,6 +22,8 @@ function SnapImage({
   priority = false,
   className,
   quality,
+  onLoad,
+  maxOptimizedWidth,
 }: {
   src: string;
   alt: string;
@@ -30,9 +33,19 @@ function SnapImage({
   priority?: boolean;
   className?: string;
   quality: number;
+  onLoad?: () => void;
+  maxOptimizedWidth?: number;
 }) {
   return (
     <Image
+      loader={
+        maxOptimizedWidth
+          ? ({ src, width, quality }) => {
+              const optimizedWidth = Math.min(width, maxOptimizedWidth);
+              return `/_next/image?url=${encodeURIComponent(src)}&w=${optimizedWidth}&q=${quality ?? 75}`;
+            }
+          : undefined
+      }
       src={src}
       alt={alt}
       width={width}
@@ -44,7 +57,67 @@ function SnapImage({
       priority={priority}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
+      onLoad={onLoad}
       className={className}
+    />
+  );
+}
+
+function LightboxDetailImage({
+  snap,
+  className,
+  onLoad,
+}: {
+  snap: Snap;
+  className?: string;
+  onLoad?: () => void;
+}) {
+  return (
+    <SnapImage
+      src={snap.src}
+      alt={snap.alt}
+      width={snap.width}
+      height={snap.height}
+      sizes={LIGHTBOX_IMAGE_SIZES}
+      quality={82}
+      priority
+      onLoad={onLoad}
+      maxOptimizedWidth={1200}
+      className={className}
+    />
+  );
+}
+
+function LightboxLayerImage({
+  snap,
+  quality,
+  maxOptimizedWidth,
+  className,
+  onLoad,
+}: {
+  snap: Snap;
+  quality: number;
+  maxOptimizedWidth: number;
+  className?: string;
+  onLoad?: () => void;
+}) {
+  return (
+    <Image
+      loader={({ src, width, quality }) => {
+        const optimizedWidth = Math.min(width, maxOptimizedWidth);
+        return `/_next/image?url=${encodeURIComponent(src)}&w=${optimizedWidth}&q=${quality ?? 75}`;
+      }}
+      src={snap.src}
+      alt={snap.alt}
+      fill
+      sizes={LIGHTBOX_IMAGE_SIZES}
+      quality={quality}
+      placeholder="blur"
+      blurDataURL={BLUR_DATA_URL}
+      priority
+      decoding="async"
+      onLoad={onLoad}
+      className={cn("object-contain", className)}
     />
   );
 }
@@ -58,11 +131,26 @@ export function SnapsBentoGrid({
 }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [loadedDetailIds, setLoadedDetailIds] = useState<Set<string>>(() => new Set());
 
   const activeSnap = useMemo(() => {
     if (activeIndex === null) return null;
     return snaps[activeIndex] ?? null;
   }, [activeIndex, snaps]);
+  const activeSnapFrameStyle = activeSnap
+    ? ({
+        "--snap-aspect": activeSnap.width / activeSnap.height,
+        "--snap-inverse-aspect": activeSnap.height / activeSnap.width,
+      } as CSSProperties)
+    : undefined;
+  const preloadSnaps = useMemo(() => {
+    if (activeIndex === null || snaps.length <= 1) return [];
+    return [
+      snaps[(activeIndex + 1) % snaps.length],
+      snaps[(activeIndex - 1 + snaps.length) % snaps.length],
+    ].filter((snap) => !loadedDetailIds.has(snap.id));
+  }, [activeIndex, loadedDetailIds, snaps]);
+  const isActiveDetailLoaded = activeSnap ? loadedDetailIds.has(activeSnap.id) : false;
 
   const closeLightbox = useCallback(() => {
     setActiveIndex(null);
@@ -156,6 +244,7 @@ export function SnapsBentoGrid({
                 sizes={GRID_IMAGE_SIZES}
                 quality={68}
                 priority={index < 2}
+                maxOptimizedWidth={640}
                 className="block h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.015]"
               />
 
@@ -219,22 +308,44 @@ export function SnapsBentoGrid({
           </button>
 
           <div
-            className="absolute inset-0 grid place-items-center px-4 py-10 sm:px-10 sm:py-12"
+            className="absolute inset-0 flex items-center justify-center px-4 py-12 sm:px-10"
             onClick={(event) => event.stopPropagation()}
           >
-            <figure className="relative mx-auto w-fit max-w-[90vw]">
-              <SnapImage
-                src={activeSnap.src}
-                alt={activeSnap.alt}
-                width={activeSnap.width}
-                height={activeSnap.height}
-                sizes={LIGHTBOX_IMAGE_SIZES}
-                quality={82}
-                priority
-                className="mx-auto max-h-[82vh] w-auto max-w-[90vw] object-contain"
-              />
+            <figure className="relative flex h-full w-full items-center justify-center">
+              <div
+                className="relative h-[min(82dvh,calc(90vw*var(--snap-inverse-aspect)))] w-[min(90vw,calc(82dvh*var(--snap-aspect)))]"
+                style={activeSnapFrameStyle}
+              >
+                <LightboxLayerImage
+                  snap={activeSnap}
+                  quality={68}
+                  maxOptimizedWidth={640}
+                  className={cn(
+                    "transition-opacity duration-200",
+                    isActiveDetailLoaded ? "opacity-0" : "opacity-100"
+                  )}
+                />
 
-              <figcaption className="mt-3 text-center">
+                <LightboxLayerImage
+                  snap={activeSnap}
+                  quality={82}
+                  maxOptimizedWidth={1200}
+                  onLoad={() => {
+                    setLoadedDetailIds((previous) => {
+                      if (previous.has(activeSnap.id)) return previous;
+                      const next = new Set(previous);
+                      next.add(activeSnap.id);
+                      return next;
+                    });
+                  }}
+                  className={cn(
+                    "transition-opacity duration-200",
+                    isActiveDetailLoaded ? "opacity-100" : "opacity-0"
+                  )}
+                />
+              </div>
+
+              <figcaption className="absolute bottom-0 left-1/2 w-full max-w-[90vw] -translate-x-1/2 text-center">
                 <p className="text-[11px] font-medium text-zinc-100">{activeSnap.location}</p>
                 <p className="text-[9px] uppercase tracking-[0.16em] text-zinc-400">
                   Clicked by {activeSnap.clickedBy}
@@ -266,6 +377,24 @@ export function SnapsBentoGrid({
             >
               <ChevronRight className="size-5" />
             </button>
+          </div>
+
+          <div className="pointer-events-none absolute size-px overflow-hidden opacity-0">
+            {preloadSnaps.map((snap) => (
+              <LightboxDetailImage
+                key={snap.id}
+                snap={snap}
+                onLoad={() => {
+                  setLoadedDetailIds((previous) => {
+                    if (previous.has(snap.id)) return previous;
+                    const next = new Set(previous);
+                    next.add(snap.id);
+                    return next;
+                  });
+                }}
+                className="size-px object-cover"
+              />
+            ))}
           </div>
         </div>
       )}

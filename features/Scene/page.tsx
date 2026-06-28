@@ -1,82 +1,100 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
-export default function AnimatedScene() {
-  const [mounted, setMounted] = useState(false);
-  const [videoFailed, setVideoFailed] = useState(false);
-  const { resolvedTheme } = useTheme();
+const SCENES = {
+  light: {
+    poster: "/scene/day-poster.jpg",
+    animated: "https://assets.mnsh.online/gifs/day.gif",
+  },
+  dark: {
+    poster: "/scene/evening-poster.jpg",
+    animated: "https://assets.mnsh.online/gifs/morning-evening.gif",
+  },
+} as const;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+function scheduleIdle(cb: () => void, timeout = 3000) {
+  const win = window as Window & {
+    requestIdleCallback?: (
+      callback: () => void,
+      options?: { timeout: number }
+    ) => number;
+    cancelIdleCallback?: (id: number) => void;
+  };
 
-  useEffect(() => {
-    setVideoFailed(false);
-  }, [resolvedTheme]);
-
-  if (!mounted) {
-    return (
-      <div className="w-full h-40 border-x border-b border-edge bg-muted/10 animate-pulse select-none" />
-    );
+  if (typeof win.requestIdleCallback === "function") {
+    const idleId = win.requestIdleCallback(cb, { timeout });
+    return () => win.cancelIdleCallback?.(idleId);
   }
 
-  const isDark = resolvedTheme === "dark";
+  const fallbackId = window.setTimeout(cb, timeout);
+  return () => window.clearTimeout(fallbackId);
+}
 
-  const getGifSrc = () => {
-    return resolvedTheme === "dark"
-      ? "https://assets.mnsh.online/gifs/morning-evening.gif"
-      : "https://assets.mnsh.online/gifs/day.gif";
-  };
+export default function AnimatedScene() {
+  const [showAnimation, setShowAnimation] = useState(false);
 
-  const getVideoSource = () => {
-    return isDark
-      ? {
-          webm: "https://assets.mnsh.online/videos/morning-evening.webm",
-          mp4: "https://assets.mnsh.online/videos/morning-evening.mp4",
-        }
-      : {
-          webm: "https://assets.mnsh.online/videos/day.webm",
-          mp4: "https://assets.mnsh.online/videos/day.mp4",
-        };
-  };
+  useEffect(() => {
+    const connection = (
+      navigator as Navigator & { connection?: { saveData?: boolean } }
+    ).connection;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-  const videoSource = getVideoSource();
-  const fallbackGif = getGifSrc();
+    if (reduceMotion || connection?.saveData) {
+      return;
+    }
+
+    return scheduleIdle(() => setShowAnimation(true));
+  }, []);
 
   return (
     <div
       className={cn(
-        "w-full border-x border-b border-edge select-none overflow-hidden bg-muted/10"
+        "relative h-40 w-full overflow-hidden border-x border-b border-edge bg-muted/10 select-none"
       )}
     >
-      {!videoFailed ? (
-        <video
-          key={resolvedTheme}
-          className="block h-40 w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={fallbackGif}
-          onError={() => setVideoFailed(true)}
-        >
-          <source src={videoSource.webm} type="video/webm" />
-          <source src={videoSource.mp4} type="video/mp4" />
-        </video>
-      ) : (
-        <Image
-          src={fallbackGif}
-          alt={`Scene for ${resolvedTheme} theme`}
-          width={1600}
-          height={640}
-          className="block h-40 w-full object-cover"
-          priority
+      <picture>
+        <source
+          srcSet={SCENES.dark.poster}
+          media="(prefers-color-scheme: dark)"
         />
+        <img
+          src={SCENES.light.poster}
+          alt=""
+          width={961}
+          height={256}
+          className="h-full w-full object-cover"
+          fetchPriority="high"
+          decoding="async"
+        />
+      </picture>
+
+      {showAnimation && (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={SCENES.light.animated}
+            alt=""
+            width={961}
+            height={256}
+            className="absolute inset-0 h-full w-full object-cover dark:hidden"
+            loading="lazy"
+            decoding="async"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={SCENES.dark.animated}
+            alt=""
+            width={960}
+            height={256}
+            className="absolute inset-0 hidden h-full w-full object-cover dark:block"
+            loading="lazy"
+            decoding="async"
+          />
+        </>
       )}
     </div>
   );

@@ -161,11 +161,6 @@ export default async function RootLayout({
         />
         <link rel="dns-prefetch" href="https://assets.mnsh.online" />
         <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3459385721774517"
-          crossOrigin="anonymous"
-        />
-        <script
           type="text/javascript"
           dangerouslySetInnerHTML={{ __html: darkModeScript }}
         />

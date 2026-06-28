@@ -28,6 +28,7 @@ const nextConfig: NextConfig = {
 		formats: ["image/avif", "image/webp"],
 		deviceSizes: [320, 420, 640, 750, 828, 1080, 1200],
 		imageSizes: [16, 24, 32, 48, 64, 72, 96, 128, 256, 384],
+		qualities: [68, 75, 82],
 		minimumCacheTTL: 31536000,
 		remotePatterns: [
 			{
@@ -98,6 +99,15 @@ const nextConfig: NextConfig = {
 			},
 			{
 				source: "/og/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/scene/:path*",
 				headers: [
 					{
 						key: "Cache-Control",

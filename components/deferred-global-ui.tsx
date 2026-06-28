@@ -41,15 +41,21 @@ export function DeferredGlobalUi() {
     if (shouldMount) return;
 
     const mount = () => setShouldMount(true);
-    const cancelIdle = scheduleIdle(mount, 2500);
+    const cancelIdle = scheduleIdle(mount, 3500);
+    let interactionTimer: number | undefined;
 
-    const handleInteraction = () => setShouldMount(true);
+    const handleInteraction = () => {
+      interactionTimer = window.setTimeout(mount, 800);
+    };
     window.addEventListener("pointerdown", handleInteraction, { once: true });
     window.addEventListener("keydown", handleInteraction, { once: true });
     window.addEventListener("touchstart", handleInteraction, { once: true });
 
     return () => {
       cancelIdle?.();
+      if (interactionTimer) {
+        window.clearTimeout(interactionTimer);
+      }
       window.removeEventListener("pointerdown", handleInteraction);
       window.removeEventListener("keydown", handleInteraction);
       window.removeEventListener("touchstart", handleInteraction);

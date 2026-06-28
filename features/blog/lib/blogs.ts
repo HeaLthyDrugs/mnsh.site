@@ -26,11 +26,19 @@ export function getAllBlogs(): BlogPost[] {
             };
         });
 
-    return blogs.sort(
-        (a, b) =>
-            new Date(b.metadata.createdAt).getTime() -
-            new Date(a.metadata.createdAt).getTime()
-    );
+    return blogs
+        .sort(
+            (a, b) =>
+                new Date(b.metadata.createdAt).getTime() -
+                new Date(a.metadata.createdAt).getTime()
+        )
+        .map((blog, index) => ({
+            ...blog,
+            metadata: {
+                ...blog.metadata,
+                new: index === 0,
+            },
+        }));
 }
 
 export function getBlogBySlug(slug: string): BlogPost | null {

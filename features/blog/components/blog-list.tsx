@@ -28,6 +28,7 @@ export function BlogList({ posts }: BlogListProps) {
                         key={post.slug}
                         post={post}
                         shouldPreloadImage={index < 4}
+                        showNewBadge={post.metadata.new === true}
                     />
                 ))}
             </div>

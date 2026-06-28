@@ -14,8 +14,8 @@ export const SNAPS: Snap[] = [
     alt: "Misty hillside with bright green monsoon grass and wet rocks.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
-    width: 4032,
-    height: 2268,
+    width: 2268,
+    height: 4032,
     capturedAt: "Jun 2026",
   },
   {
