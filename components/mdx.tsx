@@ -100,12 +100,12 @@ const components: MDXRemoteProps["components"] = {
       <>
         <pre {...props} />
 
-        {__rawString__ && (
+        {typeof __rawString__ === "string" && __rawString__.length > 0 ? (
           <CopyButton
             className="absolute top-2 right-2"
             value={__rawString__}
           />
-        )}
+        ) : null}
       </>
     );
   },
@@ -153,15 +153,27 @@ const options: MDXRemoteProps["options"] = {
         { target: "_blank", rel: "nofollow noopener noreferrer", ...UTM_PARAMS },
       ],
       rehypeSlug,
+      // Capture raw code text before rehype-pretty-code rewrites the tree
       () => (tree) => {
         visit(tree, (node) => {
           if (node?.type === "element" && node?.tagName === "pre") {
             const [codeEl] = node.children;
-            if (codeEl.tagName !== "code") {
+            if (codeEl?.tagName !== "code") {
               return;
             }
 
-            node.__rawString__ = codeEl.children?.[0].value;
+            // Flatten text from code children (may be a single text node)
+            const raw =
+              codeEl.children
+                ?.map((child: { type?: string; value?: string }) =>
+                  child?.type === "text" ? (child.value ?? "") : ""
+                )
+                .join("") ?? "";
+
+            node.__rawString__ = raw;
+            // Also stash on properties so pretty-code can carry it onto the figure
+            node.properties = node.properties ?? {};
+            node.properties.__rawString__ = raw;
           }
         });
       },
@@ -182,21 +194,30 @@ const options: MDXRemoteProps["options"] = {
           },
         },
       ],
+      // Move raw string onto the transformed <pre> so the MDX component can copy it
       () => (tree) => {
         visit(tree, (node) => {
           if (node?.type === "element" && node?.tagName === "figure") {
-            if (!("data-rehype-pretty-code-figure" in node.properties)) {
+            if (!("data-rehype-pretty-code-figure" in (node.properties ?? {}))) {
               return;
             }
 
             const preElement = node.children.at(-1);
-            if (preElement.tagName !== "pre") {
+            if (preElement?.tagName !== "pre") {
               return;
             }
 
-            preElement.properties["__withMeta__"] =
-              node.children.at(0).tagName === "figcaption";
-            preElement.properties["__rawString__"] = node.__rawString__;
+            const raw =
+              node.__rawString__ ??
+              node.properties?.__rawString__ ??
+              preElement.properties?.__rawString__;
+
+            preElement.properties = preElement.properties ?? {};
+            preElement.properties.__withMeta__ =
+              node.children.at(0)?.tagName === "figcaption";
+            if (typeof raw === "string" && raw.length > 0) {
+              preElement.properties.__rawString__ = raw;
+            }
           }
         });
       },

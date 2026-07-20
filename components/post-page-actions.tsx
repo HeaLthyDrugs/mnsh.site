@@ -16,8 +16,28 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { motionIconProps } from "@/components/copy-button"
+import { copyText } from "@/utils/copy"
 
 const cache = new Map<string, string>()
+
+/** Resolve a page/mdx URL to the API route that returns raw plain-text MDX. */
+function getMdxSourceUrl(markdownUrl: string) {
+    // Prefer the API so we always get text/plain (not an HTML view page).
+    // /blog/foo.mdx | /blog/foo → /api/mdx/blog/foo
+    // /work/foo.mdx | /work/foo → /api/mdx/work/foo
+    // /api/mdx/...  → unchanged
+    if (markdownUrl.startsWith("/api/mdx/")) {
+        return markdownUrl.replace(/\.mdx$/, "")
+    }
+
+    const match = markdownUrl.match(/^\/(blog|work)\/([^/?#]+?)(?:\.mdx)?\/?$/)
+    if (match) {
+        return `/api/mdx/${match[1]}/${match[2]}`
+    }
+
+    // Fallback: keep original, strip trailing slash
+    return markdownUrl.replace(/\.mdx$/, "").replace(/\/$/, "")
+}
 
 export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
     const [state, setState] = useState<"idle" | "done" | "error">("idle")
@@ -34,21 +54,30 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
         }, 150)
 
         try {
-            const cached = cache.get(markdownUrl)
-            if (cached) {
-                await navigator.clipboard.writeText(cached)
-            } else {
-                await navigator.clipboard.write([
-                    new ClipboardItem({
-                        "text/plain": fetch(markdownUrl)
-                            .then((res) => res.text())
-                            .then((content) => {
-                                cache.set(markdownUrl, content)
-                                return content
-                            }),
-                    }),
-                ])
+            const sourceUrl = getMdxSourceUrl(markdownUrl)
+            let content = cache.get(sourceUrl)
+
+            if (!content) {
+                const res = await fetch(sourceUrl, {
+                    headers: { Accept: "text/plain" },
+                })
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch MDX (${res.status})`)
+                }
+                content = await res.text()
+                // Guard: never copy an HTML document as "MDX"
+                const trimmed = content.trimStart()
+                if (
+                    trimmed.startsWith("<!DOCTYPE") ||
+                    trimmed.startsWith("<html") ||
+                    trimmed.startsWith("<!doctype")
+                ) {
+                    throw new Error("Received HTML instead of MDX")
+                }
+                cache.set(sourceUrl, content)
             }
+
+            await copyText(content)
             setState("done")
         } catch {
             setState("error")

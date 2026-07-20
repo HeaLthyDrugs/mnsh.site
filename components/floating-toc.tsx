@@ -7,6 +7,12 @@ import { ListIcon, XIcon } from "lucide-react";
 import { useAtom } from "jotai";
 import { isGalleryExpandedAtom } from "@/store/ui-store";
 import { useSound } from "@/hooks/use-sound";
+import {
+    getTocItemDepth,
+    TOC_GUIDE_INSET,
+    TOC_GUIDE_STEP,
+    TocTreeGuides,
+} from "@/components/toc-tree-guides";
 
 export function FloatingTOC({ items }: { items: TOCItemType[] }) {
     const [activeId, setActiveId] = useState<string>("");
@@ -66,20 +72,7 @@ export function FloatingTOC({ items }: { items: TOCItemType[] }) {
             <div className="font-semibold text-sm text-foreground mb-3 xl:hidden px-2">Table of Contents</div>
             <ul className="flex flex-col text-sm text-muted-foreground relative">
                 {items.map((item, index) => {
-                    const depth = Math.max(item.depth - 2, 0);
-
-                    let isLastInGroup = true;
-                    for (let i = index + 1; i < items.length; i++) {
-                        const nextDepth = Math.max(items[i].depth - 2, 0);
-                        if (nextDepth === depth) {
-                            isLastInGroup = false;
-                            break;
-                        }
-                        if (nextDepth < depth) {
-                            break;
-                        }
-                    }
-
+                    const depth = getTocItemDepth(item);
                     const id = item.url.startsWith("#") ? item.url.slice(1) : item.url;
                     const isActive = activeId === id;
 
@@ -88,67 +81,10 @@ export function FloatingTOC({ items }: { items: TOCItemType[] }) {
                             key={item.url}
                             className="relative flex items-center py-1.5"
                             style={{
-                                paddingLeft: depth ? depth * 24 + 8 : 4,
+                                paddingLeft: depth ? depth * TOC_GUIDE_STEP + TOC_GUIDE_INSET : 4,
                             }}
                         >
-                            {depth > 0 && (
-                                <svg
-                                    className="absolute text-black/10 dark:text-white/10 top-0 h-full w-[24px]"
-                                    style={{
-                                        left: (depth - 1) * 24 + 8,
-                                    }}
-                                    viewBox="0 0 24 100"
-                                    preserveAspectRatio="xMidYMin slice"
-                                    fill="none"
-                                >
-                                    {/* Top vertical line */}
-                                    <path
-                                        d="M12 0V15"
-                                        stroke="currentColor"
-                                        strokeWidth="1.5"
-                                    />
-                                    {/* Bottom vertical line (if not last) */}
-                                    {!isLastInGroup && (
-                                        <path
-                                            d="M12 21V100"
-                                            stroke="currentColor"
-                                            strokeWidth="1.5"
-                                        />
-                                    )}
-                                    {/* Horizontal connector line */}
-                                    <path
-                                        d="M15 18H24"
-                                        stroke="currentColor"
-                                        strokeWidth="1.5"
-                                    />
-                                </svg>
-                            )}
-
-                            {/* Vertical lines connecting parents */}
-                            {depth > 1 && Array.from({ length: depth - 1 }).map((_, i) => {
-                                let parentContinues = false;
-                                const parentDepth = i + 1;
-                                for (let j = index + 1; j < items.length; j++) {
-                                    const nextDepth = Math.max(items[j].depth - 2, 0);
-                                    if (nextDepth === parentDepth) {
-                                        parentContinues = true;
-                                        break;
-                                    }
-                                    if (nextDepth < parentDepth) {
-                                        break;
-                                    }
-                                }
-
-                                if (!parentContinues) return null;
-
-                                return (
-                                    <div
-                                        key={i}
-                                        className="absolute top-0 bottom-0 w-[1.5px] bg-black/10 dark:bg-white/10"
-                                        style={{ left: i * 24 + 19.25 }}
-                                    />
-                                );
-                            })}
+                            <TocTreeGuides items={items} index={index} depth={depth} />
 
                             <a
                                 className={cn(
