@@ -4,7 +4,25 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAtom } from "jotai";
 import { AnimatePresence, motion } from "framer-motion";
 import confetti from "canvas-confetti";
-import { Terminal, X, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import {
+  Terminal,
+  X,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Settings,
+  Sliders,
+  Volume2,
+  VolumeX,
+  Palette,
+  Type,
+  Check,
+  RefreshCw,
+  Monitor,
+  MousePointer,
+  Maximize2,
+  Minimize2,
+} from "lucide-react";
 import { isTerminalOpenAtom } from "@/store/ui-store";
 import { USER } from "@/features/profile/data/user";
 import { SOCIAL_LINKS } from "@/features/profile/data/social-links";
@@ -18,6 +36,238 @@ import {
   GEAR,
   TOOLS,
 } from "@/config/terminal-catalog";
+
+export interface TerminalTheme {
+  id: string;
+  name: string;
+  bgContainer: string;
+  bgHeader: string;
+  bgToolbar: string;
+  borderColor: string;
+  borderActive: string;
+  promptColor: string;
+  textColor: string;
+  bannerColor: string;
+  systemColor: string;
+  errorColor: string;
+  accentColor: string;
+  badgeBg: string;
+  badgeText: string;
+  glowColor: string;
+  previewGradient: string;
+}
+
+export const TERMINAL_THEMES: TerminalTheme[] = [
+  {
+    id: "cyber-light",
+    name: "Cyber Light",
+    bgContainer: "#fafafa",
+    bgHeader: "#f4f4f5",
+    bgToolbar: "#f4f4f5",
+    borderColor: "rgba(2, 132, 199, 0.35)",
+    borderActive: "#0284c7",
+    promptColor: "#0284c7",
+    textColor: "#0f172a",
+    bannerColor: "#0369a1",
+    systemColor: "#d97706",
+    errorColor: "#dc2626",
+    accentColor: "#0284c7",
+    badgeBg: "rgba(2, 132, 199, 0.15)",
+    badgeText: "#0284c7",
+    glowColor: "rgba(2, 132, 199, 0.15)",
+    previewGradient: "from-slate-100 via-sky-200 to-sky-600",
+  },
+  {
+    id: "matrix",
+    name: "Matrix Emerald",
+    bgContainer: "#090d0a",
+    bgHeader: "#0f1713",
+    bgToolbar: "#0f1713",
+    borderColor: "rgba(16, 185, 129, 0.35)",
+    borderActive: "#10b981",
+    promptColor: "#34d399",
+    textColor: "#e2e8f0",
+    bannerColor: "#10b981",
+    systemColor: "#fbbf24",
+    errorColor: "#f43f5e",
+    accentColor: "#10b981",
+    badgeBg: "rgba(16, 185, 129, 0.15)",
+    badgeText: "#34d399",
+    glowColor: "rgba(16, 185, 129, 0.2)",
+    previewGradient: "from-emerald-950 via-zinc-900 to-emerald-500",
+  },
+  {
+    id: "dracula",
+    name: "Dracula Purple",
+    bgContainer: "#282a36",
+    bgHeader: "#1e1f29",
+    bgToolbar: "#1e1f29",
+    borderColor: "rgba(189, 147, 249, 0.35)",
+    borderActive: "#bd93f9",
+    promptColor: "#ff79c6",
+    textColor: "#f8f8f2",
+    bannerColor: "#bd93f9",
+    systemColor: "#8be9fd",
+    errorColor: "#ff5555",
+    accentColor: "#bd93f9",
+    badgeBg: "rgba(189, 147, 249, 0.15)",
+    badgeText: "#ff79c6",
+    glowColor: "rgba(189, 147, 249, 0.2)",
+    previewGradient: "from-purple-950 via-zinc-900 to-pink-500",
+  },
+  {
+    id: "tokyo-night",
+    name: "Tokyo Night",
+    bgContainer: "#1a1b26",
+    bgHeader: "#16161e",
+    bgToolbar: "#16161e",
+    borderColor: "rgba(122, 162, 247, 0.35)",
+    borderActive: "#7aa2f7",
+    promptColor: "#bb9af7",
+    textColor: "#c0caf5",
+    bannerColor: "#7dcfff",
+    systemColor: "#e0af68",
+    errorColor: "#f7768e",
+    accentColor: "#7aa2f7",
+    badgeBg: "rgba(122, 162, 247, 0.15)",
+    badgeText: "#bb9af7",
+    glowColor: "rgba(122, 162, 247, 0.2)",
+    previewGradient: "from-blue-950 via-indigo-950 to-purple-500",
+  },
+  {
+    id: "catppuccin",
+    name: "Catppuccin Mocha",
+    bgContainer: "#1e1e2e",
+    bgHeader: "#181825",
+    bgToolbar: "#181825",
+    borderColor: "rgba(203, 166, 247, 0.35)",
+    borderActive: "#cba6f7",
+    promptColor: "#f5e0dc",
+    textColor: "#cdd6f4",
+    bannerColor: "#89b4fa",
+    systemColor: "#f9e2af",
+    errorColor: "#f38ba8",
+    accentColor: "#cba6f7",
+    badgeBg: "rgba(203, 166, 247, 0.15)",
+    badgeText: "#f5e0dc",
+    glowColor: "rgba(203, 166, 247, 0.2)",
+    previewGradient: "from-slate-900 via-purple-950 to-rose-400",
+  },
+  {
+    id: "onedark",
+    name: "One Dark Pro",
+    bgContainer: "#21252b",
+    bgHeader: "#181a1f",
+    bgToolbar: "#181a1f",
+    borderColor: "rgba(97, 175, 239, 0.35)",
+    borderActive: "#61afef",
+    promptColor: "#98c379",
+    textColor: "#abb2bf",
+    bannerColor: "#61afef",
+    systemColor: "#e5c07b",
+    errorColor: "#e06c75",
+    accentColor: "#61afef",
+    badgeBg: "rgba(97, 175, 239, 0.15)",
+    badgeText: "#98c379",
+    glowColor: "rgba(97, 175, 239, 0.2)",
+    previewGradient: "from-zinc-900 via-slate-800 to-blue-400",
+  },
+  {
+    id: "nord",
+    name: "Nord Frost",
+    bgContainer: "#2e3440",
+    bgHeader: "#242933",
+    bgToolbar: "#242933",
+    borderColor: "rgba(136, 192, 208, 0.35)",
+    borderActive: "#88c0d0",
+    promptColor: "#a3be8c",
+    textColor: "#d8dee9",
+    bannerColor: "#81a1c1",
+    systemColor: "#ebcb8b",
+    errorColor: "#bf616a",
+    accentColor: "#88c0d0",
+    badgeBg: "rgba(136, 192, 208, 0.15)",
+    badgeText: "#a3be8c",
+    glowColor: "rgba(136, 192, 208, 0.2)",
+    previewGradient: "from-slate-900 via-slate-800 to-cyan-400",
+  },
+  {
+    id: "amber",
+    name: "Retro Amber CRT",
+    bgContainer: "#120c02",
+    bgHeader: "#1c1304",
+    bgToolbar: "#1c1304",
+    borderColor: "rgba(255, 176, 0, 0.35)",
+    borderActive: "#ffb000",
+    promptColor: "#ffc107",
+    textColor: "#ffda6a",
+    bannerColor: "#ffb000",
+    systemColor: "#ffd000",
+    errorColor: "#ff5252",
+    accentColor: "#ffb000",
+    badgeBg: "rgba(255, 176, 0, 0.15)",
+    badgeText: "#ffc107",
+    glowColor: "rgba(255, 176, 0, 0.2)",
+    previewGradient: "from-amber-950 via-zinc-900 to-amber-500",
+  },
+];
+
+export interface FontOption {
+  id: string;
+  name: string;
+  fontFamily: string;
+}
+
+export const TERMINAL_FONTS: FontOption[] = [
+  {
+    id: "mono",
+    name: "System Mono",
+    fontFamily:
+      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  },
+  {
+    id: "fira",
+    name: "Fira Code",
+    fontFamily: '"Fira Code", "Cascadia Code", ui-monospace, monospace',
+  },
+  {
+    id: "geist",
+    name: "Geist Mono",
+    fontFamily: "var(--font-geist), ui-monospace, monospace",
+  },
+  {
+    id: "courier",
+    name: "Retro Courier",
+    fontFamily: '"Courier New", Courier, monospace',
+  },
+  {
+    id: "serif-code",
+    name: "Serif Code",
+    fontFamily: '"Courier Prime", Georgia, serif, monospace',
+  },
+];
+
+interface TerminalConfig {
+  themeId: string;
+  fontId: string;
+  fontSize: number;
+  cursorStyle: "block" | "line" | "underline";
+  cursorBlink: boolean;
+  soundEnabled: boolean;
+  scanlines: boolean;
+}
+
+const DEFAULT_CONFIG: TerminalConfig = {
+  themeId: "cyber-light",
+  fontId: "mono",
+  fontSize: 13,
+  cursorStyle: "block",
+  cursorBlink: true,
+  soundEnabled: true,
+  scanlines: true,
+};
+
+const STORAGE_KEY = "mnsh_terminal_config_v1";
 
 interface OutputLine {
   id: string;
@@ -37,6 +287,13 @@ const COMMAND_LIST = [
   "tools",
   "contact",
   "theme",
+  "theme list",
+  "font",
+  "font list",
+  "cursor",
+  "sound",
+  "settings",
+  "config",
   "cat",
   "sudo hire",
   "matrix",
@@ -49,15 +306,15 @@ const INITIAL_OUTPUT: OutputLine[] = [
     id: "banner-1",
     type: "banner",
     text: `┌───────────────────────────────────────────────────────────┐
-│  M N S H  .  C L I   v1.3.0 (x86_64-apple-darwin)          │
-│  Type 'help' for commands | Ctrl +/- to Zoom             │
+│  M N S H  .  C L I   v1.4.0 (x86_64-apple-darwin)          │
+│  Type 'help' for commands | 'settings' for Theme & Fonts   │
 └───────────────────────────────────────────────────────────┘`,
   },
   {
     id: "banner-2",
     type: "system",
     text: `Welcome to Manish Vishwakarma's interactive terminal.
-Try typing: 'work', 'blog', 'gear', 'tools', 'whoami', 'skills', or 'sudo hire'.`,
+Try typing: 'work', 'blog', 'theme list', 'font fira', 'settings', or 'sudo hire'.`,
   },
 ];
 
@@ -65,18 +322,41 @@ export interface TerminalEngineProps {
   embedded?: boolean;
   onClose?: () => void;
   className?: string;
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
 }
 
-export function TerminalEngine({ embedded = false, onClose, className }: TerminalEngineProps) {
+export function TerminalEngine({
+  embedded = false,
+  onClose,
+  className,
+  isFullscreen: externalIsFullscreen,
+  onToggleFullscreen,
+}: TerminalEngineProps) {
+  const [config, setConfig] = useState<TerminalConfig>(DEFAULT_CONFIG);
   const [input, setInput] = useState("");
+  const [selectionPos, setSelectionPos] = useState(0);
   const [output, setOutput] = useState<OutputLine[]>(INITIAL_OUTPUT);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
   const [isMatrixActive, setIsMatrixActive] = useState(false);
-  const [scanlines, setScanlines] = useState(true);
-  const [fontSize, setFontSize] = useState(13); // Default font size 13px
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [internalFullscreen, setInternalFullscreen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"themes" | "fonts" | "effects">(
+    "themes"
+  );
 
-  const { setAnimatedTheme } = useAnimatedThemeToggle();
+  const isFullscreen = externalIsFullscreen ?? internalFullscreen;
+
+  const toggleFullscreen = useCallback(() => {
+    if (onToggleFullscreen) {
+      onToggleFullscreen();
+    } else {
+      setInternalFullscreen((prev) => !prev);
+    }
+  }, [onToggleFullscreen]);
+
+  const { setAnimatedTheme, isDark } = useAnimatedThemeToggle();
   const playTap = useSound("/sounds/tap.wav");
   const router = useRouter();
 
@@ -84,9 +364,63 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
   const logContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const zoomIn = useCallback(() => setFontSize((prev) => Math.min(prev + 1, 22)), []);
-  const zoomOut = useCallback(() => setFontSize((prev) => Math.max(prev - 1, 10)), []);
-  const zoomReset = useCallback(() => setFontSize(13), []);
+  // Load config from localStorage on mount and sync default theme with site dark/light mode
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setConfig((prev) => ({ ...prev, ...parsed }));
+      } else {
+        setConfig((prev) => ({
+          ...prev,
+          themeId: isDark ? "onedark" : "cyber-light",
+        }));
+      }
+    } catch {
+      setConfig((prev) => ({
+        ...prev,
+        themeId: isDark ? "onedark" : "cyber-light",
+      }));
+    }
+  }, [isDark]);
+
+  // Save config to localStorage whenever it changes
+  const updateConfig = useCallback((updates: Partial<TerminalConfig>) => {
+    setConfig((prev) => {
+      const next = { ...prev, ...updates };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // Ignore localStorage error
+      }
+      return next;
+    });
+  }, []);
+
+  const currentTheme =
+    TERMINAL_THEMES.find((t) => t.id === config.themeId) || TERMINAL_THEMES[0];
+  const currentFont =
+    TERMINAL_FONTS.find((f) => f.id === config.fontId) || TERMINAL_FONTS[0];
+
+  const zoomIn = useCallback(
+    () =>
+      updateConfig({
+        fontSize: Math.min(config.fontSize + 1, 22),
+      }),
+    [config.fontSize, updateConfig]
+  );
+  const zoomOut = useCallback(
+    () =>
+      updateConfig({
+        fontSize: Math.max(config.fontSize - 1, 10),
+      }),
+    [config.fontSize, updateConfig]
+  );
+  const zoomReset = useCallback(
+    () => updateConfig({ fontSize: 13 }),
+    [updateConfig]
+  );
 
   // Internal viewport scroll only (0 page jump/scroll)
   useEffect(() => {
@@ -94,6 +428,15 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
     }
   }, [output]);
+
+  // Keep selection position updated when input value changes
+  useEffect(() => {
+    if (inputRef.current) {
+      setSelectionPos(inputRef.current.selectionStart ?? input.length);
+    } else {
+      setSelectionPos(input.length);
+    }
+  }, [input]);
 
   // Matrix Rain Canvas Animation Effect
   useEffect(() => {
@@ -107,7 +450,7 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
     canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
 
     const characters = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZmnsh.online";
-    const charFontSize = Math.max(12, fontSize);
+    const charFontSize = Math.max(12, config.fontSize);
     const columns = Math.floor(canvas.width / charFontSize);
     const drops: number[] = Array(columns).fill(1);
 
@@ -117,11 +460,13 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
       ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "#10B981";
-      ctx.font = `${charFontSize}px monospace`;
+      ctx.fillStyle = currentTheme.accentColor;
+      ctx.font = `${charFontSize}px ${currentFont.fontFamily}`;
 
       for (let i = 0; i < drops.length; i++) {
-        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        const text = characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
         ctx.fillText(text, i * charFontSize, drops[i] * charFontSize);
 
         if (drops[i] * charFontSize > canvas.height && Math.random() > 0.975) {
@@ -138,7 +483,7 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isMatrixActive, fontSize]);
+  }, [isMatrixActive, config.fontSize, currentTheme.accentColor, currentFont.fontFamily]);
 
   const appendOutput = (text: string, type: OutputLine["type"] = "output") => {
     setOutput((prev) => [
@@ -156,7 +501,10 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
       const raw = cmdStr.trim();
       if (!raw) return;
 
-      playTap();
+      if (config.soundEnabled) {
+        playTap();
+      }
+
       appendOutput(`visitor@mnsh.online:~$ ${raw}`, "input");
 
       setHistory((prev) => [...prev, raw]);
@@ -165,6 +513,7 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
       const parts = raw.split(" ");
       const cmd = parts[0].toLowerCase();
       const subCmd = parts[1]?.toLowerCase();
+      const valArg = parts[2]?.toLowerCase();
 
       switch (cmd) {
         case "help":
@@ -173,14 +522,19 @@ export function TerminalEngine({ embedded = false, onClose, className }: Termina
             `Available Commands:
   whoami          - Display profile details & bio
   skills          - Show tech stack & engineering skills
-  work [open]     - List all featured works or view/open detail ('work justwrite-notes', 'work open leank-p2p-communication')
-  blog [open]     - List all blog posts or view/open post ('blog lifelog', 'blog open lifelog')
+  work [open]     - List all featured works or view detail ('work open leank-p2p')
+  blog [open]     - List all blog posts or read article ('blog open lifelog')
   gear            - List hardware setup & workstation gear
   tools           - List developer tools & software applications
   contact         - Get contact email & social links
-  theme <mode>    - Toggle theme ('theme dark', 'theme light', 'theme system')
+  theme [name]    - Switch terminal theme or list themes ('theme list', 'theme dracula', 'theme cyber-light')
+  theme site <mode> - Toggle portfolio website theme ('theme site dark', 'theme site light')
+  font [name|size]- Customize terminal font ('font list', 'font fira', 'font size 15')
+  cursor <shape>  - Change cursor shape ('cursor block', 'cursor line', 'cursor underline')
+  sound <on|off>  - Toggle typing sound effects
+  settings        - Toggle visual Settings & Theme picker modal
   sudo hire       - Execute hiring protocol 🚀
-  matrix          - Toggle Matrix rain background mode
+  matrix          - Toggle Matrix rain background animation
   cat <file>      - Read text files ('cat bio.md', 'cat gear.txt')
   clear           - Clear terminal output
   exit            - Close terminal window
@@ -193,6 +547,135 @@ Hotkeys:
           );
           break;
 
+        case "settings":
+        case "config":
+        case "customize":
+          setIsSettingsOpen((prev) => !prev);
+          appendOutput(
+            `Settings panel ${!isSettingsOpen ? "OPENED ⚙️" : "CLOSED 🔴"}`,
+            "system"
+          );
+          break;
+
+        case "theme":
+        case "themes":
+        case "color":
+        case "colors":
+          if (!subCmd || subCmd === "list") {
+            const listStr = TERMINAL_THEMES.map(
+              (t) =>
+                `  ${t.id === config.themeId ? "★ " : "  "}${t.id.padEnd(14)} - ${t.name}${t.id === config.themeId ? " [ACTIVE]" : ""}`
+            ).join("\n");
+            appendOutput(
+              `┌──────────────────────────────────────────────────────────┐
+│ TERMINAL COLOR THEMES (${TERMINAL_THEMES.length} available)                    │
+└──────────────────────────────────────────────────────────┘
+${listStr}
+
+💡 Type 'theme <name>' to apply (e.g. 'theme cyber-light', 'theme dracula', 'theme tokyo-night').
+💡 Type 'theme site <light|dark|system>' to toggle main website theme.`,
+              "output"
+            );
+          } else if (subCmd === "site" && parts[2]) {
+            const mode = parts[2].toLowerCase();
+            if (mode === "dark" || mode === "light" || mode === "system") {
+              setAnimatedTheme(mode);
+              appendOutput(`Website theme set to: ${mode}`, "system");
+            } else {
+              appendOutput(`Usage: theme site <light | dark | system>`, "error");
+            }
+          } else {
+            const targetTheme = TERMINAL_THEMES.find(
+              (t) => t.id === subCmd || t.id.startsWith(subCmd)
+            );
+            if (targetTheme) {
+              updateConfig({ themeId: targetTheme.id });
+              appendOutput(`Terminal theme changed to: ${targetTheme.name} ✨`, "system");
+            } else {
+              appendOutput(
+                `Theme not found: '${subCmd}'. Type 'theme list' to see all themes.`,
+                "error"
+              );
+            }
+          }
+          break;
+
+        case "font":
+        case "fonts":
+          if (!subCmd || subCmd === "list") {
+            const listStr = TERMINAL_FONTS.map(
+              (f) =>
+                `  ${f.id === config.fontId ? "★ " : "  "}${f.id.padEnd(12)} - ${f.name}${f.id === config.fontId ? " [ACTIVE]" : ""}`
+            ).join("\n");
+            appendOutput(
+              `┌──────────────────────────────────────────────────────────┐
+│ TERMINAL FONTS (${TERMINAL_FONTS.length} available)                             │
+└──────────────────────────────────────────────────────────┘
+${listStr}
+Current Font Size: ${config.fontSize}px
+
+💡 Type 'font <id>' to change font (e.g. 'font fira', 'font geist', 'font courier').
+💡 Type 'font size <px>' to set font size (e.g. 'font size 15').`,
+              "output"
+            );
+          } else if (subCmd === "size" && valArg) {
+            const num = parseInt(valArg, 10);
+            if (!isNaN(num) && num >= 10 && num <= 24) {
+              updateConfig({ fontSize: num });
+              appendOutput(`Font size set to ${num}px`, "system");
+            } else {
+              appendOutput(`Font size must be a number between 10 and 24`, "error");
+            }
+          } else {
+            const targetFont = TERMINAL_FONTS.find(
+              (f) => f.id === subCmd || f.id.startsWith(subCmd)
+            );
+            if (targetFont) {
+              updateConfig({ fontId: targetFont.id });
+              appendOutput(`Font changed to: ${targetFont.name} 🔤`, "system");
+            } else {
+              appendOutput(
+                `Font not found: '${subCmd}'. Type 'font list' to see options.`,
+                "error"
+              );
+            }
+          }
+          break;
+
+        case "cursor":
+          if (subCmd === "block" || subCmd === "line" || subCmd === "underline") {
+            updateConfig({ cursorStyle: subCmd });
+            appendOutput(`Cursor shape set to: ${subCmd}`, "system");
+          } else if (subCmd === "blink") {
+            const state = valArg === "off" || valArg === "false" ? false : true;
+            updateConfig({ cursorBlink: state });
+            appendOutput(`Cursor blinking ${state ? "ENABLED" : "DISABLED"}`, "system");
+          } else {
+            appendOutput(
+              `Usage: cursor <block | line | underline> or cursor blink <on | off>`,
+              "error"
+            );
+          }
+          break;
+
+        case "sound":
+        case "audio":
+          if (subCmd === "off" || subCmd === "mute" || subCmd === "false") {
+            updateConfig({ soundEnabled: false });
+            appendOutput(`Terminal typing sound MUTED 🔇`, "system");
+          } else if (subCmd === "on" || subCmd === "unmute" || subCmd === "true") {
+            updateConfig({ soundEnabled: true });
+            appendOutput(`Terminal typing sound ENABLED 🔊`, "system");
+          } else {
+            const nextState = !config.soundEnabled;
+            updateConfig({ soundEnabled: nextState });
+            appendOutput(
+              `Terminal typing sound ${nextState ? "ENABLED 🔊" : "MUTED 🔇"}`,
+              "system"
+            );
+          }
+          break;
+
         case "whoami":
         case "bio":
           appendOutput(
@@ -203,7 +686,7 @@ Role:               ${USER.jobTitle}
 Location:           ${USER.address}
 Timezone:           ${USER.timezone} (${USER.localTimeLabel})
 Status:             ${USER.availabilityText}
-Currently Building: ${USER.currentlyBuilding.name} - ${USER.currentlyBuilding.label}
+Currently Building: ${USER.currentlyBuilding ? `${USER.currentlyBuilding.name} - ${USER.currentlyBuilding.label}` : "mnsh.online"}
 Bio:                ${USER.bio}`,
             "output"
           );
@@ -262,7 +745,10 @@ Type 'work open ${found.slug}' to view project page.`,
                 "output"
               );
             } else {
-              appendOutput(`Project not found: '${subCmd}'. Type 'work' to view all projects.`, "error");
+              appendOutput(
+                `Project not found: '${subCmd}'. Type 'work' to view all projects.`,
+                "error"
+              );
             }
           }
           break;
@@ -306,7 +792,10 @@ Type 'blog open ${foundBlog.slug}' to read complete post on website.`,
                 "output"
               );
             } else {
-              appendOutput(`Article not found: '${subCmd}'. Type 'blog' to list all posts.`, "error");
+              appendOutput(
+                `Article not found: '${subCmd}'. Type 'blog' to list all posts.`,
+                "error"
+              );
             }
           }
           break;
@@ -368,15 +857,6 @@ Social Handles:
 ${SOCIAL_LINKS.map((s) => `  - ${s.title.padEnd(12)} : ${s.href}`).join("\n")}`,
             "output"
           );
-          break;
-
-        case "theme":
-          if (parts[1] === "dark" || parts[1] === "light" || parts[1] === "system") {
-            setAnimatedTheme(parts[1]);
-            appendOutput(`Theme set to: ${parts[1]}`, "system");
-          } else {
-            appendOutput(`Usage: theme <light | dark | system>`, "error");
-          }
           break;
 
         case "cat":
@@ -444,14 +924,36 @@ Status:  Open for freelance projects & engineering roles.`,
           break;
 
         default:
-          appendOutput(`Command not found: '${cmd}'. Type 'help' for available commands.`, "error");
+          appendOutput(
+            `Command not found: '${cmd}'. Type 'help' for available commands or 'settings' for customization.`,
+            "error"
+          );
           break;
       }
     },
-    [playTap, router, setAnimatedTheme, isMatrixActive, onClose]
+    [
+      config.soundEnabled,
+      config.themeId,
+      config.fontId,
+      config.fontSize,
+      playTap,
+      router,
+      setAnimatedTheme,
+      isMatrixActive,
+      isSettingsOpen,
+      onClose,
+      updateConfig,
+    ]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Update cursor selection position asynchronously after keydown
+    setTimeout(() => {
+      if (inputRef.current) {
+        setSelectionPos(inputRef.current.selectionStart ?? inputRef.current.value.length);
+      }
+    }, 0);
+
     // Zoom hotkeys: Ctrl/Cmd + [+] / [-] / [0]
     if ((e.ctrlKey || e.metaKey) && (e.key === "+" || e.key === "=")) {
       e.preventDefault();
@@ -466,12 +968,16 @@ Status:  Open for freelance projects & engineering roles.`,
       e.preventDefault();
       handleCommand(input);
       setInput("");
+      setSelectionPos(0);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (history.length === 0) return;
-      const nextIdx = historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1);
+      const nextIdx =
+        historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1);
       setHistoryIndex(nextIdx);
-      setInput(history[nextIdx] || "");
+      const histVal = history[nextIdx] || "";
+      setInput(histVal);
+      setSelectionPos(histVal.length);
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       if (historyIndex === -1) return;
@@ -479,35 +985,60 @@ Status:  Open for freelance projects & engineering roles.`,
       if (nextIdx >= history.length) {
         setHistoryIndex(-1);
         setInput("");
+        setSelectionPos(0);
       } else {
         setHistoryIndex(nextIdx);
-        setInput(history[nextIdx] || "");
+        const histVal = history[nextIdx] || "";
+        setInput(histVal);
+        setSelectionPos(histVal.length);
       }
     } else if (e.key === "Tab") {
       e.preventDefault();
       if (!input.trim()) return;
-      const matches = COMMAND_LIST.filter((c) => c.startsWith(input.trim().toLowerCase()));
+      const matches = COMMAND_LIST.filter((c) =>
+        c.startsWith(input.trim().toLowerCase())
+      );
       if (matches.length === 1) {
         setInput(matches[0]);
+        setSelectionPos(matches[0].length);
       } else if (matches.length > 1) {
         appendOutput(`Matches: ${matches.join(", ")}`, "system");
       }
-    } else if (e.key === "Escape" && onClose) {
-      onClose();
+    } else if (e.key === "Escape") {
+      if (isSettingsOpen) {
+        setIsSettingsOpen(false);
+      } else if (onClose) {
+        onClose();
+      }
     }
   };
+
+  // Cursor position splitting for rendering exact custom cursor variant
+  const safePos = Math.min(Math.max(0, selectionPos), input.length);
+  const textBeforeCursor = input.slice(0, safePos);
+  const charAtCursor = input.slice(safePos, safePos + 1);
+  const textAfterCursor = input.slice(safePos + 1);
 
   return (
     <div
       className={cn(
-        "relative flex flex-col w-full font-mono bg-zinc-950 text-zinc-100 shadow-2xl overflow-hidden select-text rounded-none",
-        embedded
-          ? "h-[420px] max-h-[420px] rounded-none border-t border-edge"
-          : "h-[85vh] max-h-[680px] rounded-none border border-emerald-500/40 max-w-4xl",
-        scanlines &&
+        "relative flex flex-col w-full shadow-2xl overflow-hidden select-text rounded-none transition-all duration-200",
+        isFullscreen
+          ? "fixed inset-0 z-[110] h-screen max-h-none w-screen max-w-none rounded-none border-0"
+          : embedded
+          ? "h-[440px] max-h-[440px] rounded-none border-t"
+          : "h-[85vh] max-h-[700px] rounded-none border max-w-4xl",
+        config.scanlines &&
           "before:pointer-events-none before:absolute before:inset-0 before:z-20 before:bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] before:bg-[length:100%_4px]",
         className
       )}
+      style={{
+        backgroundColor: currentTheme.bgContainer,
+        borderColor: currentTheme.borderColor,
+        color: currentTheme.textColor,
+        fontFamily: currentFont.fontFamily,
+        boxShadow: isFullscreen ? "none" : `0 20px 40px -15px ${currentTheme.glowColor}`,
+      }}
       onClick={() => inputRef.current?.focus()}
     >
       {/* Matrix Rain Canvas Background */}
@@ -518,47 +1049,167 @@ Status:  Open for freelance projects & engineering roles.`,
         />
       )}
 
-      {/* Header Bar - Sharp Edges */}
-      <div className="relative z-10 flex items-center justify-between px-4 py-2 bg-zinc-900/90 border-b border-emerald-500/30 select-none rounded-none">
+      {/* Header Bar */}
+      <div
+        className="relative z-30 flex items-center justify-between px-3.5 py-2 border-b select-none transition-colors duration-200"
+        style={{
+          backgroundColor: currentTheme.bgHeader,
+          borderColor: currentTheme.borderColor,
+        }}
+      >
+        {/* Top-Left Window Action Control Squares with Tooltips */}
         <div className="flex items-center gap-2">
-          {!embedded && (
-            <button
-              onClick={onClose}
-              className="size-2.5 rounded-none bg-red-500 hover:bg-red-600 transition-colors"
-              title="Close Terminal"
-            />
-          )}
-          <div className="size-2.5 rounded-none bg-amber-500/80" />
-          <div className="size-2.5 rounded-none bg-emerald-500/80" />
-          <span className="ml-1 text-xs font-semibold tracking-wider text-emerald-400/90 flex items-center gap-1.5">
-            <Terminal className="size-3.5" /> mnsh.cli — bash {embedded ? "(Bento Terminal)" : ""}
+          {/* Red Square: Close Terminal */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onClose) onClose();
+              else setOutput([]);
+            }}
+            className="size-3 rounded-none bg-red-500 hover:bg-red-600 active:scale-95 transition-all cursor-pointer shadow-xs"
+            title="Close Terminal Window (ESC)"
+            aria-label="Close Terminal"
+          />
+
+          {/* Yellow Square: Reset Zoom & Window Size */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              zoomReset();
+            }}
+            className="size-3 rounded-none bg-amber-500 hover:bg-amber-600 active:scale-95 transition-all cursor-pointer shadow-xs"
+            title="Minimize / Reset Zoom & Layout Size (Ctrl 0)"
+            aria-label="Reset Terminal Size"
+          />
+
+          {/* Blue Square: Toggle Fullscreen */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFullscreen();
+            }}
+            className="size-3 rounded-none bg-sky-500 hover:bg-sky-600 active:scale-95 transition-all cursor-pointer shadow-xs"
+            title={isFullscreen ? "Exit Fullscreen Mode" : "Toggle Fullscreen Mode"}
+            aria-label="Toggle Fullscreen"
+          />
+
+          <span
+            className="ml-1 text-xs font-semibold tracking-wider flex items-center gap-1.5"
+            style={{ color: currentTheme.promptColor }}
+          >
+            <Terminal className="size-3.5" /> mnsh.cli — bash
+          </span>
+
+          <span
+            className="hidden sm:inline-block px-1.5 py-0.2 text-[10px] uppercase font-mono tracking-wider border rounded-none ml-1"
+            style={{
+              backgroundColor: currentTheme.badgeBg,
+              color: currentTheme.badgeText,
+              borderColor: currentTheme.borderColor,
+            }}
+          >
+            {currentTheme.name}
           </span>
         </div>
 
-        {/* Header Controls: CRT Toggle & Zoom Controls */}
-        <div className="flex items-center gap-2.5 text-xs text-zinc-400">
-          <div className="flex items-center gap-1 bg-zinc-800/80 px-1.5 py-0.5 rounded-none border border-zinc-700/60 text-[11px]">
+        {/* Header Controls: Settings, Sound, Zoom, CRT */}
+        <div className="flex items-center gap-1.5 text-xs">
+          {/* Fullscreen Toggle Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFullscreen();
+            }}
+            className="p-1 border opacity-75 hover:opacity-100 transition-opacity rounded-none"
+            style={{
+              backgroundColor: currentTheme.badgeBg,
+              color: currentTheme.promptColor,
+              borderColor: currentTheme.borderColor,
+            }}
+            title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Mode"}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="size-3.5" />
+            ) : (
+              <Maximize2 className="size-3.5" />
+            )}
+          </button>
+
+          {/* Settings Modal Toggle Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsSettingsOpen((prev) => !prev);
+            }}
+            className={cn(
+              "flex items-center gap-1 px-2 py-1 text-[11px] font-mono border transition-all rounded-none",
+              isSettingsOpen
+                ? "font-semibold shadow-xs"
+                : "opacity-80 hover:opacity-100"
+            )}
+            style={{
+              backgroundColor: isSettingsOpen
+                ? currentTheme.accentColor
+                : currentTheme.badgeBg,
+              color: isSettingsOpen ? "#ffffff" : currentTheme.promptColor,
+              borderColor: currentTheme.borderColor,
+            }}
+            title="Terminal Settings & Customization"
+          >
+            <Settings className="size-3.5" />
+            <span className="hidden sm:inline">Settings</span>
+          </button>
+
+          {/* Sound Mute Toggle */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              updateConfig({ soundEnabled: !config.soundEnabled });
+            }}
+            className="p-1 border opacity-75 hover:opacity-100 transition-opacity rounded-none"
+            style={{
+              backgroundColor: currentTheme.badgeBg,
+              color: currentTheme.promptColor,
+              borderColor: currentTheme.borderColor,
+            }}
+            title={config.soundEnabled ? "Mute Sounds" : "Enable Sounds"}
+          >
+            {config.soundEnabled ? (
+              <Volume2 className="size-3.5" />
+            ) : (
+              <VolumeX className="size-3.5 opacity-50" />
+            )}
+          </button>
+
+          {/* Zoom Controls */}
+          <div
+            className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 border text-[11px] rounded-none"
+            style={{
+              backgroundColor: currentTheme.bgToolbar,
+              borderColor: currentTheme.borderColor,
+            }}
+          >
             <button
               onClick={zoomOut}
-              className="hover:text-emerald-400 p-0.5 transition-colors"
+              className="hover:opacity-100 opacity-70 p-0.5 transition-opacity"
               title="Zoom Out (Ctrl -)"
             >
               <ZoomOut className="size-3" />
             </button>
-            <span className="text-[10px] text-zinc-300 font-mono min-w-[28px] text-center">
-              {fontSize}px
+            <span className="text-[10px] font-mono min-w-[28px] text-center opacity-90">
+              {config.fontSize}px
             </span>
             <button
               onClick={zoomIn}
-              className="hover:text-emerald-400 p-0.5 transition-colors"
+              className="hover:opacity-100 opacity-70 p-0.5 transition-opacity"
               title="Zoom In (Ctrl +)"
             >
               <ZoomIn className="size-3" />
             </button>
-            {fontSize !== 13 && (
+            {config.fontSize !== 13 && (
               <button
                 onClick={zoomReset}
-                className="hover:text-amber-400 p-0.5 transition-colors ml-0.5"
+                className="hover:opacity-100 opacity-70 p-0.5 transition-opacity ml-0.5 text-amber-400"
                 title="Reset Zoom (Ctrl 0)"
               >
                 <RotateCcw className="size-2.5" />
@@ -566,22 +1217,32 @@ Status:  Open for freelance projects & engineering roles.`,
             )}
           </div>
 
+          {/* CRT Toggle */}
           <button
-            onClick={() => setScanlines((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              updateConfig({ scanlines: !config.scanlines });
+            }}
             className={cn(
-              "px-2 py-0.5 text-[11px] rounded-none border transition-colors",
-              scanlines
-                ? "border-emerald-500/50 text-emerald-400 bg-emerald-950/40"
-                : "border-zinc-700 text-zinc-500"
+              "px-2 py-0.5 text-[11px] border transition-colors rounded-none font-mono",
+              config.scanlines ? "font-semibold" : "opacity-50"
             )}
+            style={{
+              backgroundColor: config.scanlines
+                ? currentTheme.badgeBg
+                : "transparent",
+              color: config.scanlines ? currentTheme.promptColor : "inherit",
+              borderColor: currentTheme.borderColor,
+            }}
             title="Toggle CRT Scanline Effect"
           >
             CRT
           </button>
+
           {!embedded && onClose && (
             <button
               onClick={onClose}
-              className="p-1 hover:text-zinc-100 transition-colors rounded-none"
+              className="p-1 opacity-70 hover:opacity-100 transition-opacity rounded-none ml-1"
               aria-label="Close modal"
             >
               <X className="size-4" />
@@ -590,72 +1251,488 @@ Status:  Open for freelance projects & engineering roles.`,
         </div>
       </div>
 
+      {/* Settings Modal Overlay Drawer */}
+      <AnimatePresence>
+        {isSettingsOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="relative z-20 border-b select-none overflow-hidden"
+            style={{
+              backgroundColor: currentTheme.bgHeader,
+              borderColor: currentTheme.borderColor,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 space-y-4 max-h-[360px] overflow-y-auto scrollbar-thin">
+              {/* Settings Header Tabs */}
+              <div className="flex items-center justify-between border-b pb-2" style={{ borderColor: currentTheme.borderColor }}>
+                <div className="flex items-center gap-2">
+                  <Sliders className="size-4" style={{ color: currentTheme.promptColor }} />
+                  <span className="text-xs font-bold uppercase tracking-wider">
+                    Terminal Preferences
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1 text-xs">
+                  <button
+                    onClick={() => setActiveTab("themes")}
+                    className={cn(
+                      "px-2.5 py-1 text-xs border font-medium transition-all rounded-none flex items-center gap-1.5",
+                      activeTab === "themes" ? "font-bold" : "opacity-60 hover:opacity-100"
+                    )}
+                    style={{
+                      backgroundColor: activeTab === "themes" ? currentTheme.badgeBg : "transparent",
+                      color: activeTab === "themes" ? currentTheme.promptColor : "inherit",
+                      borderColor: currentTheme.borderColor,
+                    }}
+                  >
+                    <Palette className="size-3.5" /> Color Themes
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("fonts")}
+                    className={cn(
+                      "px-2.5 py-1 text-xs border font-medium transition-all rounded-none flex items-center gap-1.5",
+                      activeTab === "fonts" ? "font-bold" : "opacity-60 hover:opacity-100"
+                    )}
+                    style={{
+                      backgroundColor: activeTab === "fonts" ? currentTheme.badgeBg : "transparent",
+                      color: activeTab === "fonts" ? currentTheme.promptColor : "inherit",
+                      borderColor: currentTheme.borderColor,
+                    }}
+                  >
+                    <Type className="size-3.5" /> Fonts & Size
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("effects")}
+                    className={cn(
+                      "px-2.5 py-1 text-xs border font-medium transition-all rounded-none flex items-center gap-1.5",
+                      activeTab === "effects" ? "font-bold" : "opacity-60 hover:opacity-100"
+                    )}
+                    style={{
+                      backgroundColor: activeTab === "effects" ? currentTheme.badgeBg : "transparent",
+                      color: activeTab === "effects" ? currentTheme.promptColor : "inherit",
+                      borderColor: currentTheme.borderColor,
+                    }}
+                  >
+                    <MousePointer className="size-3.5" /> Cursor & FX
+                  </button>
+                </div>
+              </div>
+
+              {/* TAB 1: COLOR THEMES SWATCH GRID */}
+              {activeTab === "themes" && (
+                <div className="space-y-2">
+                  <div className="text-[11px] opacity-75">
+                    Select a color scheme or type <code className="px-1 py-0.5 border" style={{ borderColor: currentTheme.borderColor }}>theme &lt;name&gt;</code> in CLI:
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {TERMINAL_THEMES.map((theme) => {
+                      const isActive = theme.id === config.themeId;
+                      return (
+                        <button
+                          key={theme.id}
+                          onClick={() => updateConfig({ themeId: theme.id })}
+                          className={cn(
+                            "relative group p-2.5 text-left border transition-all rounded-none flex flex-col justify-between h-20",
+                            isActive ? "ring-1" : "hover:border-slate-400 opacity-80 hover:opacity-100"
+                          )}
+                          style={{
+                            backgroundColor: theme.bgContainer,
+                            borderColor: isActive ? theme.borderActive : currentTheme.borderColor,
+                            boxShadow: isActive ? `0 0 12px ${theme.glowColor}` : "none",
+                          }}
+                        >
+                          {/* Mini Header Strip Preview */}
+                          <div className="flex items-center justify-between w-full">
+                            <div className="flex items-center gap-1">
+                              <div className="size-1.5 bg-red-400 rounded-none" />
+                              <div className="size-1.5 bg-amber-400 rounded-none" />
+                              <div
+                                className="size-1.5 rounded-none"
+                                style={{ backgroundColor: theme.accentColor }}
+                              />
+                            </div>
+                            {isActive && (
+                              <Check
+                                className="size-3.5"
+                                style={{ color: theme.promptColor }}
+                              />
+                            )}
+                          </div>
+
+                          {/* Theme Swatch Pill */}
+                          <div className="space-y-1 my-1">
+                            <div
+                              className="text-xs font-bold truncate"
+                              style={{ color: theme.promptColor }}
+                            >
+                              {theme.name}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <span
+                                className="size-2 rounded-none"
+                                style={{ backgroundColor: theme.promptColor }}
+                              />
+                              <span
+                                className="size-2 rounded-none"
+                                style={{ backgroundColor: theme.systemColor }}
+                              />
+                              <span
+                                className="size-2 rounded-none"
+                                style={{ backgroundColor: theme.errorColor }}
+                              />
+                              <span
+                                className="size-2 rounded-none"
+                                style={{ backgroundColor: theme.textColor }}
+                              />
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: FONTS & TYPOGRAPHY */}
+              {activeTab === "fonts" && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold block">Font Family:</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                      {TERMINAL_FONTS.map((font) => {
+                        const isActive = font.id === config.fontId;
+                        return (
+                          <button
+                            key={font.id}
+                            onClick={() => updateConfig({ fontId: font.id })}
+                            className={cn(
+                              "p-2.5 text-left border transition-all rounded-none flex items-center justify-between",
+                              isActive ? "font-bold" : "opacity-75 hover:opacity-100"
+                            )}
+                            style={{
+                              backgroundColor: isActive ? currentTheme.badgeBg : "transparent",
+                              borderColor: isActive ? currentTheme.borderActive : currentTheme.borderColor,
+                              fontFamily: font.fontFamily,
+                            }}
+                          >
+                            <div>
+                              <div className="text-xs" style={{ color: currentTheme.promptColor }}>
+                                {font.name}
+                              </div>
+                              <div className="text-[10px] opacity-60">visitor@mnsh:~$</div>
+                            </div>
+                            {isActive && <Check className="size-3.5" style={{ color: currentTheme.promptColor }} />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t" style={{ borderColor: currentTheme.borderColor }}>
+                    <div className="flex items-center justify-between text-xs">
+                      <label className="font-semibold">Font Size ({config.fontSize}px):</label>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={zoomOut}
+                          className="px-2 py-0.5 border text-xs hover:opacity-100 opacity-80"
+                          style={{ borderColor: currentTheme.borderColor }}
+                        >
+                          -
+                        </button>
+                        <button
+                          onClick={zoomReset}
+                          className="px-2 py-0.5 border text-xs text-amber-400 hover:opacity-100 opacity-80"
+                          style={{ borderColor: currentTheme.borderColor }}
+                        >
+                          Reset
+                        </button>
+                        <button
+                          onClick={zoomIn}
+                          className="px-2 py-0.5 border text-xs hover:opacity-100 opacity-80"
+                          style={{ borderColor: currentTheme.borderColor }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <input
+                      type="range"
+                      min={10}
+                      max={22}
+                      value={config.fontSize}
+                      onChange={(e) => updateConfig({ fontSize: Number(e.target.value) })}
+                      className="w-full accent-sky-500 cursor-pointer"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: CURSOR & AUDIO FX */}
+              {activeTab === "effects" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Cursor Style */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold block">Cursor Shape:</label>
+                    <div className="flex gap-2">
+                      {(["block", "line", "underline"] as const).map((shape) => (
+                        <button
+                          key={shape}
+                          onClick={() => updateConfig({ cursorStyle: shape })}
+                          className={cn(
+                            "flex-1 p-2 text-center text-xs border capitalize transition-all rounded-none",
+                            config.cursorStyle === shape ? "font-bold" : "opacity-60 hover:opacity-100"
+                          )}
+                          style={{
+                            backgroundColor: config.cursorStyle === shape ? currentTheme.badgeBg : "transparent",
+                            borderColor: config.cursorStyle === shape ? currentTheme.borderActive : currentTheme.borderColor,
+                            color: config.cursorStyle === shape ? currentTheme.promptColor : "inherit",
+                          }}
+                        >
+                          {shape === "block" ? "█ Block" : shape === "line" ? "| Line" : "_ Underline"}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Cursor Blink */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold block">Cursor Pulse:</label>
+                    <button
+                      onClick={() => updateConfig({ cursorBlink: !config.cursorBlink })}
+                      className="w-full p-2 text-xs border text-left transition-all rounded-none flex items-center justify-between"
+                      style={{
+                        backgroundColor: config.cursorBlink ? currentTheme.badgeBg : "transparent",
+                        borderColor: currentTheme.borderColor,
+                      }}
+                    >
+                      <span>Blinking Cursor Animation</span>
+                      <span className="font-mono text-[11px]" style={{ color: currentTheme.promptColor }}>
+                        {config.cursorBlink ? "ENABLED" : "OFF"}
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Sound FX Toggle */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold block">Terminal Audio:</label>
+                    <button
+                      onClick={() => updateConfig({ soundEnabled: !config.soundEnabled })}
+                      className="w-full p-2 text-xs border text-left transition-all rounded-none flex items-center justify-between"
+                      style={{
+                        backgroundColor: config.soundEnabled ? currentTheme.badgeBg : "transparent",
+                        borderColor: currentTheme.borderColor,
+                      }}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        {config.soundEnabled ? <Volume2 className="size-3.5" /> : <VolumeX className="size-3.5 opacity-50" />}
+                        Typing Sound Feedback
+                      </span>
+                      <span className="font-mono text-[11px]" style={{ color: currentTheme.promptColor }}>
+                        {config.soundEnabled ? "ON" : "MUTED"}
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Matrix Rain Toggle */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold block">Background Animation:</label>
+                    <button
+                      onClick={() => setIsMatrixActive((prev) => !prev)}
+                      className="w-full p-2 text-xs border text-left transition-all rounded-none flex items-center justify-between"
+                      style={{
+                        backgroundColor: isMatrixActive ? currentTheme.badgeBg : "transparent",
+                        borderColor: currentTheme.borderColor,
+                      }}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Monitor className="size-3.5" /> Matrix Rain Canvas
+                      </span>
+                      <span className="font-mono text-[11px]" style={{ color: currentTheme.promptColor }}>
+                        {isMatrixActive ? "ACTIVE 🟢" : "OFF 🔴"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Modal Footer Controls */}
+              <div className="flex items-center justify-between pt-3 border-t text-xs select-none" style={{ borderColor: currentTheme.borderColor }}>
+                <button
+                  onClick={() => updateConfig(DEFAULT_CONFIG)}
+                  className="flex items-center gap-1 text-[11px] opacity-70 hover:opacity-100 hover:text-amber-400 transition-colors"
+                >
+                  <RefreshCw className="size-3" /> Restore Factory Defaults
+                </button>
+                <button
+                  onClick={() => setIsSettingsOpen(false)}
+                  className="px-3 py-1 text-xs border font-semibold transition-all rounded-none"
+                  style={{
+                    backgroundColor: currentTheme.accentColor,
+                    color: "#ffffff",
+                    borderColor: currentTheme.borderActive,
+                  }}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Terminal Body / Output Log (Internal Container Scroll Only - 0 Window Jump) */}
       <div
         ref={logContainerRef}
-        className="relative z-10 flex-1 p-3.5 overflow-y-auto space-y-2 leading-relaxed scrollbar-thin scrollbar-thumb-zinc-800"
-        style={{ fontSize: `${fontSize}px` }}
+        className="relative z-10 flex-1 p-3.5 overflow-y-auto space-y-2 leading-relaxed scrollbar-thin"
+        style={{ fontSize: `${config.fontSize}px` }}
       >
         {output.map((line) => (
           <div key={line.id} className="whitespace-pre-wrap break-words">
             {line.type === "banner" ? (
-              <pre className="text-emerald-400 font-bold overflow-x-auto text-[11px] sm:text-xs">
+              <pre
+                className="font-bold overflow-x-auto text-[11px] sm:text-xs"
+                style={{ color: currentTheme.bannerColor }}
+              >
                 {line.text}
               </pre>
             ) : line.type === "input" ? (
-              <span className="text-emerald-400 font-medium">{line.text}</span>
+              <span className="font-medium" style={{ color: currentTheme.promptColor }}>
+                {line.text}
+              </span>
             ) : line.type === "error" ? (
-              <span className="text-rose-400">{line.text}</span>
+              <span style={{ color: currentTheme.errorColor }}>{line.text}</span>
             ) : line.type === "system" ? (
-              <span className="text-amber-300">{line.text}</span>
+              <span style={{ color: currentTheme.systemColor }}>{line.text}</span>
             ) : (
-              <span className="text-zinc-300">{line.text}</span>
+              <span style={{ color: currentTheme.textColor }}>{line.text}</span>
             )}
           </div>
         ))}
 
-        {/* Active Command Input Prompt */}
+        {/* Active Command Input Prompt with Custom Working Cursor Variants */}
         <div className="flex items-center gap-2 pt-1">
-          <span className="text-emerald-400 font-bold shrink-0">
+          <span className="font-bold shrink-0" style={{ color: currentTheme.promptColor }}>
             visitor@mnsh.online:~$
           </span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent text-zinc-100 outline-none border-none p-0 focus:ring-0 font-mono rounded-none"
-            style={{ fontSize: `${fontSize}px` }}
-            autoFocus={!embedded}
-            spellCheck={false}
-            autoComplete="off"
-          />
+          <div
+            className="relative flex-1 flex items-center font-mono cursor-text min-h-[1.5em]"
+            onClick={() => inputRef.current?.focus()}
+          >
+            {/* Real hidden input element */}
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                setSelectionPos(e.target.selectionStart ?? e.target.value.length);
+              }}
+              onSelect={(e) => {
+                const target = e.target as HTMLInputElement;
+                setSelectionPos(target.selectionStart ?? target.value.length);
+              }}
+              onKeyDown={handleKeyDown}
+              className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-text border-none p-0 focus:ring-0 outline-none"
+              autoFocus={!embedded}
+              spellCheck={false}
+              autoComplete="off"
+            />
+
+            {/* Custom Terminal Cursor Rendering (Block, Line, Underline) */}
+            <div className="flex items-center whitespace-pre font-mono pointer-events-none select-none">
+              <span>{textBeforeCursor}</span>
+              <span
+                className={cn(
+                  "inline-flex items-center justify-center transition-opacity leading-none",
+                  config.cursorBlink && "animate-pulse duration-700",
+                  config.cursorStyle === "block" && "px-[1px]",
+                  config.cursorStyle === "line" && "w-[2px] mx-[0.5px] h-[1.2em]",
+                  config.cursorStyle === "underline" && "border-b-2 h-[1.2em] px-[0.5px]"
+                )}
+                style={{
+                  backgroundColor:
+                    config.cursorStyle === "block"
+                      ? currentTheme.promptColor
+                      : config.cursorStyle === "line"
+                      ? currentTheme.promptColor
+                      : "transparent",
+                  color:
+                    config.cursorStyle === "block"
+                      ? currentTheme.bgContainer
+                      : currentTheme.textColor,
+                  borderColor: currentTheme.promptColor,
+                }}
+              >
+                {charAtCursor === "" ? "\u00A0" : charAtCursor}
+              </span>
+              <span>{textAfterCursor}</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Quick Action Touch Toolbar - Sharp Edges */}
-      <div className="relative z-10 flex items-center gap-1.5 p-2 bg-zinc-900/90 border-t border-emerald-500/20 overflow-x-auto select-none rounded-none">
-        <span className="text-[10px] text-zinc-500 uppercase tracking-widest pl-1 mr-1 shrink-0">
+      {/* Quick Action Touch Toolbar */}
+      <div
+        className="relative z-10 flex items-center gap-1.5 p-2 border-t overflow-x-auto select-none rounded-none transition-colors duration-200"
+        style={{
+          backgroundColor: currentTheme.bgToolbar,
+          borderColor: currentTheme.borderColor,
+        }}
+      >
+        <span className="text-[10px] uppercase tracking-widest pl-1 mr-1 shrink-0 opacity-50">
           Quick:
         </span>
-        {["help", "whoami", "skills", "work", "blog", "gear", "tools", "sudo hire", "matrix", "clear"].map((action) => (
+        {[
+          "settings",
+          "theme list",
+          "help",
+          "whoami",
+          "skills",
+          "work",
+          "blog",
+          "gear",
+          "tools",
+          "sudo hire",
+          "matrix",
+          "clear",
+        ].map((action) => (
           <button
             key={action}
             onClick={() => handleCommand(action)}
-            className="px-2 py-0.5 text-[11px] rounded-none bg-zinc-800 hover:bg-emerald-950 hover:text-emerald-300 border border-zinc-700 text-zinc-300 shrink-0 transition-colors"
+            className="px-2 py-0.5 text-[11px] rounded-none border shrink-0 transition-all opacity-80 hover:opacity-100"
+            style={{
+              backgroundColor: currentTheme.badgeBg,
+              color: currentTheme.textColor,
+              borderColor: currentTheme.borderColor,
+            }}
           >
             {action}
           </button>
         ))}
       </div>
 
-      {/* Footer Shortcuts - Sharp Edges */}
+      {/* Footer Shortcuts */}
       {!embedded && (
-        <div className="relative z-10 hidden sm:flex items-center justify-between px-4 py-1.5 bg-zinc-900/60 border-t border-zinc-800 text-[11px] text-zinc-500 select-none rounded-none">
-          <span>Press <kbd className="px-1 py-0.5 rounded-none bg-zinc-800 text-zinc-300">Tab</kbd> for completion</span>
-          <span>Press <kbd className="px-1 py-0.5 rounded-none bg-zinc-800 text-zinc-300">Ctrl +/-</kbd> to zoom font</span>
-          <span>Press <kbd className="px-1 py-0.5 rounded-none bg-zinc-800 text-zinc-300">ESC</kbd> to exit</span>
+        <div
+          className="relative z-10 hidden sm:flex items-center justify-between px-4 py-1.5 border-t text-[11px] select-none rounded-none opacity-70"
+          style={{
+            backgroundColor: currentTheme.bgHeader,
+            borderColor: currentTheme.borderColor,
+          }}
+        >
+          <span>
+            Press <kbd className="px-1 py-0.5 border text-xs" style={{ borderColor: currentTheme.borderColor }}>Tab</kbd> for completion
+          </span>
+          <span>
+            Type <kbd className="px-1 py-0.5 border text-xs" style={{ borderColor: currentTheme.borderColor }}>settings</kbd> or click ⚙️ for Themes
+          </span>
+          <span>
+            Press <kbd className="px-1 py-0.5 border text-xs" style={{ borderColor: currentTheme.borderColor }}>ESC</kbd> to exit
+          </span>
         </div>
       )}
     </div>
@@ -665,6 +1742,7 @@ Status:  Open for freelance projects & engineering roles.`,
 // Modal CLI Export
 export function DeveloperTerminal() {
   const [isOpen, setIsOpen] = useAtom(isTerminalOpenAtom);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const playOpen = useSound("/sounds/menu-open.wav");
 
   useEffect(() => {
@@ -677,7 +1755,10 @@ export function DeveloperTerminal() {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-black/75 backdrop-blur-md"
+          className={cn(
+            "fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-md transition-all duration-200",
+            isFullscreen ? "p-0" : "p-4 sm:p-6 md:p-10"
+          )}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -687,13 +1768,18 @@ export function DeveloperTerminal() {
           }}
         >
           <motion.div
-            className="w-full max-w-4xl"
+            className={cn("w-full transition-all duration-200", isFullscreen ? "h-full max-w-none" : "max-w-4xl")}
             initial={{ scale: 0.95, y: 12 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 12 }}
             transition={{ duration: 0.2 }}
           >
-            <TerminalEngine embedded={false} onClose={() => setIsOpen(false)} />
+            <TerminalEngine
+              embedded={false}
+              onClose={() => setIsOpen(false)}
+              isFullscreen={isFullscreen}
+              onToggleFullscreen={() => setIsFullscreen((prev) => !prev)}
+            />
           </motion.div>
         </motion.div>
       )}
