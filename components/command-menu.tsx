@@ -10,13 +10,14 @@ import {
   TextIcon,
   ArrowUpDownIcon,
   ArrowUpRightIcon,
+  TerminalIcon,
   WrenchIcon,
   MonitorSmartphoneIcon,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 
 import {
   CommandDialog,
@@ -32,7 +33,7 @@ import { SOCIAL_LINKS } from "@/features/profile/data/social-links";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/hooks/use-sound";
 import { useAnimatedThemeToggle } from "@/hooks/use-animated-theme-toggle";
-import { showLabelsAtom } from "@/store/ui-store";
+import { showLabelsAtom, isTerminalOpenAtom } from "@/store/ui-store";
 
 
 import { Icons } from "./icons";
@@ -91,6 +92,7 @@ const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({
 export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], works?: WorkPost[] }) {
   const router = useRouter();
   const showLabels = useAtomValue(showLabelsAtom);
+  const setIsTerminalOpen = useSetAtom(isTerminalOpenAtom);
   const playHover = useSound("/sounds/hover.wav");
   const playTap = useSound("/sounds/tap.wav");
 
@@ -283,6 +285,22 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
             playTap={playTap}
             isModifierKeyPressed={isModifierKeyPressed}
           />
+
+          <CommandGroup heading="Developer Tools">
+            <CommandItem
+              onMouseEnter={playHover}
+              value="Developer Terminal (CLI)"
+              keywords={["terminal", "cli", "shell", "developer", "matrix"]}
+              onSelect={() => {
+                playTap();
+                setOpen(false);
+                setIsTerminalOpen(true);
+              }}
+            >
+              <TerminalIcon className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
+              Developer Terminal (CLI)
+            </CommandItem>
+          </CommandGroup>
 
           <CommandSeparator />
 

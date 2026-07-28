@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useAtom, useAtomValue } from "jotai";
 import { 
     genreIdxAtom, currentTrackIdxAtom, isPlayingAtom, 
@@ -14,6 +15,8 @@ import {
     Volume2,
     VolumeX,
     Disc3,
+    Maximize2,
+    Minimize2,
 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -38,12 +41,35 @@ export function MusicPlayer({ className }: { className?: string }) {
     const [isMuted, setIsMuted] = useAtom(isMusicMutedAtom);
     const [volumeOpen, setVolumeOpen] = useState(false);
     const [genreOpen, setGenreOpen] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     const audioLinesRef = useRef<AudioLinesIconHandle>(null);
 
     const [shuffledGenres] = useAtom(shuffledGenresAtom);
     const genre = shuffledGenres[genreIdx];
     const track = genre.tracks[currentTrack];
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Handle ESC key and scroll locking in fullscreen mode
+    useEffect(() => {
+        if (!isFullscreen) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                setIsFullscreen(false);
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            document.body.style.overflow = originalOverflow;
+        };
+    }, [isFullscreen]);
 
     // Control AudioLines animation based on play state
     useEffect(() => {
@@ -92,8 +118,6 @@ export function MusicPlayer({ className }: { className?: string }) {
         [isMuted, setIsMuted, setVolume]
     );
 
-
-
     const formatTime = (timeInSeconds: number) => {
         if (isNaN(timeInSeconds) || !isFinite(timeInSeconds)) return "0:00";
         const m = Math.floor(timeInSeconds / 60);
@@ -103,11 +127,13 @@ export function MusicPlayer({ className }: { className?: string }) {
 
     const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
-    return (
+    const playerContent = (
         <div
             className={cn(
-                "group/player relative h-full w-full overflow-hidden select-none",
-                className
+                "group/player relative select-none overflow-hidden transition-all duration-300",
+                isFullscreen
+                    ? "fixed inset-0 z-[100] w-screen h-screen bg-neutral-950 flex flex-col justify-between"
+                    : cn("h-full w-full", className)
             )}
         >
             {/* ── Background Blurred Art ───────────── */}
@@ -136,8 +162,18 @@ export function MusicPlayer({ className }: { className?: string }) {
             </div>
 
             {/* ── Center Sharp Album Art (Square, Zero rounding) ───────────── */}
-            <div className="absolute inset-x-0 top-10 bottom-[120px] flex items-center justify-center z-10 pointer-events-none">
-                <div className="relative w-3/5 aspect-square max-w-[200px] shadow-2xl overflow-hidden bg-black/20">
+            <div
+                className={cn(
+                    "absolute inset-x-0 flex items-center justify-center z-10 pointer-events-none transition-all duration-300",
+                    isFullscreen ? "top-14 bottom-[150px]" : "top-10 bottom-[120px]"
+                )}
+            >
+                <div
+                    className={cn(
+                        "relative w-3/5 aspect-square shadow-2xl overflow-hidden bg-black/20 transition-all duration-300",
+                        isFullscreen ? "max-w-[320px] md:max-w-[420px]" : "max-w-[200px]"
+                    )}
+                >
                     <AnimatePresence>
                         <motion.div
                             key={`cover-${genreIdx}-${currentTrack}`}
@@ -161,11 +197,12 @@ export function MusicPlayer({ className }: { className?: string }) {
 
                     {/* Track Info Inside Cover Art */}
                     <div className="absolute inset-x-0 bottom-0 p-2.5 pt-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                        <div className="space-y-0 overflow-hidden">
+                        <div className="space-y-0.5 overflow-hidden">
                             <h4
                                 key={`title-${genreIdx}-${currentTrack}`}
                                 className={cn(
-                                    "text-white text-[11px] font-semibold truncate leading-tight drop-shadow-sm",
+                                    "text-white font-semibold truncate leading-tight drop-shadow-sm",
+                                    isFullscreen ? "text-sm md:text-base" : "text-[11px]",
                                     "animate-[slideUp_0.35s_ease-out]"
                                 )}
                             >
@@ -174,7 +211,8 @@ export function MusicPlayer({ className }: { className?: string }) {
                             <p
                                 key={`artist-${genreIdx}-${currentTrack}`}
                                 className={cn(
-                                    "text-white/60 text-[9px] truncate drop-shadow-sm",
+                                    "text-white/60 truncate drop-shadow-sm",
+                                    isFullscreen ? "text-xs md:text-sm" : "text-[9px]",
                                     "animate-[slideUp_0.4s_ease-out]"
                                 )}
                             >
@@ -201,7 +239,22 @@ export function MusicPlayer({ className }: { className?: string }) {
                 ))}
             </div>
 
-
+            {/* Fullscreen toggle button — top right */}
+            <button
+                onClick={() => setIsFullscreen((prev) => !prev)}
+                className={cn(
+                    "absolute top-3 right-3 z-30 flex items-center justify-center size-8 text-white/70 hover:text-white transition-colors cursor-pointer",
+                    GLASS
+                )}
+                aria-label={isFullscreen ? "Exit full screen" : "Full screen"}
+                title={isFullscreen ? "Exit full screen (Esc)" : "Full screen"}
+            >
+                {isFullscreen ? (
+                    <Minimize2 className="size-3.5" />
+                ) : (
+                    <Maximize2 className="size-3.5" />
+                )}
+            </button>
 
             {/* ── Progressive blur overlay — bottom ───────────── */}
             <div
@@ -240,14 +293,19 @@ export function MusicPlayer({ className }: { className?: string }) {
             />
 
             {/* ── Controls — overlaid at bottom ───────────────── */}
-            <div className="absolute inset-x-0 bottom-0 z-20 px-4 pb-3.5 pt-6 flex flex-col gap-3">
-
+            <div
+                className={cn(
+                    "absolute inset-x-0 bottom-0 z-20 flex flex-col gap-3 transition-all duration-300",
+                    isFullscreen ? "max-w-3xl mx-auto px-6 md:px-10 pb-8 pt-6" : "px-4 pb-3.5 pt-6"
+                )}
+            >
                 {/* Progress / Seek Bar — glass effect */}
                 <div className="space-y-1">
                     <div
                         className={cn(
-                            "w-full h-[5px] cursor-pointer group/progress relative overflow-hidden",
-                            "bg-white/10 backdrop-blur-sm border border-white/10"
+                            "w-full cursor-pointer group/progress relative overflow-hidden",
+                            "bg-white/10 backdrop-blur-sm border border-white/10",
+                            isFullscreen ? "h-[6px]" : "h-[5px]"
                         )}
                         onClick={handleProgressClick}
                     >
@@ -465,4 +523,16 @@ export function MusicPlayer({ className }: { className?: string }) {
             `}</style>
         </div>
     );
+
+    if (isFullscreen && mounted) {
+        return (
+            <>
+                <div className={cn("h-full w-full opacity-0 pointer-events-none", className)} />
+                {createPortal(playerContent, document.body)}
+            </>
+        );
+    }
+
+    return playerContent;
 }
+

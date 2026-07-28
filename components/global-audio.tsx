@@ -108,7 +108,7 @@ export function GlobalAudio() {
     return (
         <audio
             ref={globalAudioRef}
-            src={isPlaying ? track.audioSrc : undefined}
+            src={track.audioSrc}
             preload="none"
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}

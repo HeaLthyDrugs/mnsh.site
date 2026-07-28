@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Settings, Volume2, VolumeX, Pause, Play, X } from "lucide-react";
+import { Settings, Volume2, VolumeX, Pause, Play, X, Terminal } from "lucide-react";
 import Image from "next/image";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { isSoundEnabledAtom } from "@/store/sound-store";
@@ -11,6 +11,7 @@ import {
     fontThemeAtom,
     isGalleryExpandedAtom,
     showLabelsAtom,
+    isTerminalOpenAtom,
 } from "@/store/ui-store";
 import { isPlayingAtom, genreIdxAtom, currentTrackIdxAtom, shuffledGenresAtom } from "@/store/music-store";
 import { AudioLinesIcon, type AudioLinesIconHandle } from "@/components/animated-icons/audio-lines";
@@ -44,6 +45,7 @@ export function FloatingControls() {
     const [isGalleryExpanded] = useAtom(isGalleryExpandedAtom);
     const [showLabels, setShowLabels] = useAtom(showLabelsAtom);
     const [fontTheme, setFontTheme] = useAtom(fontThemeAtom);
+    const setIsTerminalOpen = useSetAtom(isTerminalOpenAtom);
     const { toggleTheme, isDark } = useAnimatedThemeToggle();
 
     const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
@@ -158,7 +160,7 @@ export function FloatingControls() {
                 {isVisible && track && (
                     <div 
                         className={cn(
-                            "relative w-[81px] transition-all duration-300 ease-out overflow-hidden border-b border-border/50 bg-neutral-900 cursor-pointer group/player",
+                            "relative w-full transition-all duration-300 ease-out overflow-hidden border-b border-border/50 bg-neutral-900 cursor-pointer group/player",
                             isPlayerExpanded ? "h-[81px]" : "h-6"
                         )}
                         onMouseEnter={() => {
@@ -246,7 +248,7 @@ export function FloatingControls() {
                     </div>
                 )}
                 
-                <div className="flex h-10 items-stretch w-[81px]">
+                <div className="flex h-10 items-stretch w-[120px]">
                     <button
                         onClick={() => {
                             playTap();
@@ -260,6 +262,21 @@ export function FloatingControls() {
                         aria-label={!isSoundEnabled ? "Unmute" : "Mute"}
                     >
                         {!isSoundEnabled ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+                    </button>
+
+                    <div className="w-px bg-border/40" aria-hidden="true" />
+
+                    <button
+                        onClick={() => {
+                            playTap();
+                            setIsTerminalOpen(true);
+                        }}
+                        onMouseEnter={playHover}
+                        className="flex flex-1 cursor-pointer items-center justify-center text-muted-foreground/70 transition-all duration-300 hover:bg-muted hover:text-emerald-500 focus-visible:outline-none focus-visible:ring-0"
+                        aria-label="Open Developer Terminal"
+                        title="Open Developer Terminal (CLI Mode)"
+                    >
+                        <Terminal className="size-4" />
                     </button>
 
                     <div className="w-px bg-border/40" aria-hidden="true" />

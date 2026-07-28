@@ -24,6 +24,7 @@ import { useLoop } from "@/lib/animation/useLoop";
 import { ClockIcon } from "@/components/animated-icons/clock";
 import { Markdown } from "@/components/markdown";
 import Link from "next/link";
+import { BentoTerminal } from "@/components/developer-terminal";
 
 
 // Local time component
@@ -349,6 +350,9 @@ export function Overview() {
             )}
           </div>
         </div>
+
+        {/* Bento Direct CLI Terminal */}
+        <BentoTerminal />
       </PanelContent>
     </Panel>
   );

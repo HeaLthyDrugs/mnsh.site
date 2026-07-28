@@ -14,6 +14,12 @@ const FloatingControls = dynamic(
   { ssr: false }
 );
 
+const DeveloperTerminal = dynamic(
+  () =>
+    import("@/components/developer-terminal").then((mod) => mod.DeveloperTerminal),
+  { ssr: false }
+);
+
 function scheduleIdle(cb: () => void, timeout = 2000) {
   if (typeof window === "undefined") return;
 
@@ -68,6 +74,7 @@ export function DeferredGlobalUi() {
     <>
       <GlobalAudio />
       <FloatingControls />
+      <DeveloperTerminal />
     </>
   );
 }

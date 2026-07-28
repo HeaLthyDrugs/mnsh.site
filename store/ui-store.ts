@@ -7,6 +7,7 @@ import {
 } from '@/lib/font-theme';
 
 export const isGalleryExpandedAtom = atom(false);
+export const isTerminalOpenAtom = atom(false);
 export const showLabelsAtom = atomWithStorage('folio-show-labels', true);
 export const fontThemeAtom = atomWithStorage<FontThemeId>(
   FONT_THEME_STORAGE_KEY,

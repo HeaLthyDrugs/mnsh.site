@@ -5,6 +5,7 @@ import { EVENTS } from "../data/events";
 import { EventItem } from "./event-item";
 import { MusicPlayer } from "./music-player";
 import { GitHubContributionsCard } from "./github-contributions-card";
+import { BentoTerminal } from "@/components/developer-terminal";
 import { USER } from "../data/user";
 import { cn } from "@/lib/utils";
 
@@ -37,7 +38,10 @@ const sizeToGridClasses: Record<string, string> = {
 };
 
 // Music player grid placement — portrait tall card (2x2 standard units -> 4x4 grid units)
-const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-6 row-span-4";
+const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-6 lg:col-span-6 row-span-4";
+
+// CLI Terminal grid placement — full width (12 cols) row-span-4 placed at the bottom
+const CLI_TERMINAL_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
 
 // Index in the events array where we insert the music player
 const MUSIC_PLAYER_POSITION = 3;
@@ -119,6 +123,22 @@ export default function Events() {
 
                         return items;
                     })}
+
+                    {/* Full-width Bento CLI Terminal placed at the bottom below GitHub Contributions */}
+                    <div
+                        key="bento-terminal"
+                        className={cn(
+                            "overflow-hidden border border-edge bg-zinc-950",
+                            "animate-[fadeSlideUp_0.5s_ease-out_forwards]",
+                            "opacity-0",
+                            CLI_TERMINAL_CLASSES
+                        )}
+                        style={{
+                            animationDelay: "500ms",
+                        }}
+                    >
+                        <BentoTerminal />
+                    </div>
                 </div>
             </div>
 
