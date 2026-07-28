@@ -294,6 +294,8 @@ const COMMAND_LIST = [
   "font list",
   "cursor",
   "sound",
+  "crt",
+  "scanlines",
   "settings",
   "config",
   "cat",
@@ -321,7 +323,7 @@ const INITIAL_OUTPUT: OutputLine[] = [
     id: "banner-2",
     type: "system",
     text: `Welcome to Manish Vishwakarma's interactive terminal.
-Try typing: 'work', 'blog', 'snake', 'cat list', 'theme list', 'font fira', or 'settings'.`,
+Try typing: 'work', 'blog', 'snake', 'cat list', 'theme list', 'font fira', 'crt', or 'settings'.`,
   },
 ];
 
@@ -654,6 +656,7 @@ export function TerminalEngine({
   font [name|size]- Customize terminal font ('font list', 'font fira', 'font size 15')
   cursor <shape>  - Change cursor shape ('cursor block', 'cursor line', 'cursor underline')
   sound <on|off>  - Toggle typing sound effects
+  crt <on|off>    - Toggle CRT scanlines retro effect overlay ('crt on', 'crt off')
   settings        - Toggle visual Settings & Theme picker modal
   matrix          - Toggle Matrix rain background animation
   clear           - Clear terminal output log
@@ -791,6 +794,25 @@ Current Font Size: ${config.fontSize}px
             updateConfig({ soundEnabled: nextState });
             appendOutput(
               `Terminal typing sound ${nextState ? "ENABLED 🔊" : "MUTED 🔇"}`,
+              "system"
+            );
+          }
+          break;
+
+        case "crt":
+        case "scanline":
+        case "scanlines":
+          if (subCmd === "off" || subCmd === "false" || subCmd === "disable") {
+            updateConfig({ scanlines: false });
+            appendOutput("CRT scanlines overlay DISABLED 🔴", "system");
+          } else if (subCmd === "on" || subCmd === "true" || subCmd === "enable") {
+            updateConfig({ scanlines: true });
+            appendOutput("CRT scanlines overlay ENABLED 🟢", "system");
+          } else {
+            const nextState = !config.scanlines;
+            updateConfig({ scanlines: nextState });
+            appendOutput(
+              `CRT scanlines overlay ${nextState ? "ENABLED 🟢" : "DISABLED 🔴"}`,
               "system"
             );
           }
@@ -1699,6 +1721,26 @@ Hotkeys:
                       </span>
                       <span className="font-mono text-[11px]" style={{ color: currentTheme.promptColor }}>
                         {isMatrixActive ? "ACTIVE 🟢" : "OFF 🔴"}
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* CRT Scanlines Toggle */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold block">CRT Display Effect:</label>
+                    <button
+                      onClick={() => updateConfig({ scanlines: !config.scanlines })}
+                      className="w-full p-2 text-xs border text-left transition-all rounded-none flex items-center justify-between"
+                      style={{
+                        backgroundColor: config.scanlines ? currentTheme.badgeBg : "transparent",
+                        borderColor: currentTheme.borderColor,
+                      }}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Sliders className="size-3.5" /> CRT Scanlines Overlay
+                      </span>
+                      <span className="font-mono text-[11px]" style={{ color: currentTheme.promptColor }}>
+                        {config.scanlines ? "ENABLED 🟢" : "OFF 🔴"}
                       </span>
                     </button>
                   </div>

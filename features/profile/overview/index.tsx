@@ -350,9 +350,6 @@ export function Overview() {
             )}
           </div>
         </div>
-
-        {/* Bento Direct CLI Terminal */}
-        <BentoTerminal />
       </PanelContent>
     </Panel>
   );
