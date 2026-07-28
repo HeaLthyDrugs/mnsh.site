@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useAtom } from "jotai";
 import { AnimatePresence, motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import {
   Terminal,
   X,
+  Minus,
   ZoomIn,
   ZoomOut,
   RotateCcw,
@@ -295,7 +297,12 @@ const COMMAND_LIST = [
   "settings",
   "config",
   "cat",
-  "sudo hire",
+  "cat list",
+  "ls",
+  "snake",
+  "game",
+  "play",
+  "fullscreen",
   "matrix",
   "clear",
   "exit",
@@ -307,14 +314,14 @@ const INITIAL_OUTPUT: OutputLine[] = [
     type: "banner",
     text: `┌───────────────────────────────────────────────────────────┐
 │  M N S H  .  C L I   v1.4.0 (x86_64-apple-darwin)          │
-│  Type 'help' for commands | 'settings' for Theme & Fonts   │
+│  Type 'help' for commands | 'snake' to play mini-game      │
 └───────────────────────────────────────────────────────────┘`,
   },
   {
     id: "banner-2",
     type: "system",
     text: `Welcome to Manish Vishwakarma's interactive terminal.
-Try typing: 'work', 'blog', 'theme list', 'font fira', 'settings', or 'sudo hire'.`,
+Try typing: 'work', 'blog', 'snake', 'cat list', 'theme list', 'font fira', or 'settings'.`,
   },
 ];
 
@@ -342,9 +349,14 @@ export function TerminalEngine({
   const [isMatrixActive, setIsMatrixActive] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [internalFullscreen, setInternalFullscreen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"themes" | "fonts" | "effects">(
     "themes"
   );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isFullscreen = externalIsFullscreen ?? internalFullscreen;
 
@@ -359,6 +371,113 @@ export function TerminalEngine({
   const { setAnimatedTheme, isDark } = useAnimatedThemeToggle();
   const playTap = useSound("/sounds/tap.wav");
   const router = useRouter();
+
+  // Cyber Snake Mini-Game State
+  const GRID_WIDTH = 26;
+  const GRID_HEIGHT = 12;
+  const [isSnakeActive, setIsSnakeActive] = useState(false);
+  const [snake, setSnake] = useState<{ x: number; y: number }[]>([
+    { x: 5, y: 5 },
+    { x: 4, y: 5 },
+    { x: 3, y: 5 },
+  ]);
+  const [direction, setDirection] = useState<"UP" | "DOWN" | "LEFT" | "RIGHT">("RIGHT");
+  const [food, setFood] = useState<{ x: number; y: number }>({ x: 15, y: 5 });
+  const [snakeScore, setSnakeScore] = useState(0);
+  const [snakeHighScore, setSnakeHighScore] = useState(0);
+  const [isSnakeGameOver, setIsSnakeGameOver] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("mnsh_snake_highscore");
+      if (saved) setSnakeHighScore(Number(saved));
+    } catch {
+      // Ignore
+    }
+  }, []);
+
+  const spawnFood = useCallback((currentSnake: { x: number; y: number }[]) => {
+    let newX = Math.floor(Math.random() * GRID_WIDTH);
+    let newY = Math.floor(Math.random() * GRID_HEIGHT);
+    let attempts = 0;
+    while (attempts < 200) {
+      newX = Math.floor(Math.random() * GRID_WIDTH);
+      newY = Math.floor(Math.random() * GRID_HEIGHT);
+      if (!currentSnake.some((s) => s.x === newX && s.y === newY)) {
+        return { x: newX, y: newY };
+      }
+      attempts++;
+    }
+    return { x: 10, y: 5 };
+  }, [GRID_WIDTH, GRID_HEIGHT]);
+
+  const startSnakeGame = useCallback(() => {
+    const initSnake = [
+      { x: 5, y: 5 },
+      { x: 4, y: 5 },
+      { x: 3, y: 5 },
+    ];
+    setSnake(initSnake);
+    setDirection("RIGHT");
+    setFood(spawnFood(initSnake));
+    setSnakeScore(0);
+    setIsSnakeGameOver(false);
+    setIsSnakeActive(true);
+  }, [spawnFood]);
+
+  // Snake Game Loop Timer
+  useEffect(() => {
+    if (!isSnakeActive || isSnakeGameOver) return;
+
+    const interval = setInterval(() => {
+      setSnake((prevSnake) => {
+        const head = { ...prevSnake[0] };
+        if (direction === "UP") head.y -= 1;
+        if (direction === "DOWN") head.y += 1;
+        if (direction === "LEFT") head.x -= 1;
+        if (direction === "RIGHT") head.x += 1;
+
+        if (
+          head.x < 0 ||
+          head.x >= GRID_WIDTH ||
+          head.y < 0 ||
+          head.y >= GRID_HEIGHT
+        ) {
+          setIsSnakeGameOver(true);
+          return prevSnake;
+        }
+
+        if (prevSnake.some((s) => s.x === head.x && s.y === head.y)) {
+          setIsSnakeGameOver(true);
+          return prevSnake;
+        }
+
+        const nextSnake = [head, ...prevSnake];
+
+        if (head.x === food.x && head.y === food.y) {
+          if (config.soundEnabled) playTap();
+          setSnakeScore((prev) => {
+            const newScore = prev + 10;
+            setSnakeHighScore((prevHigh) => {
+              const maxHigh = Math.max(prevHigh, newScore);
+              try {
+                localStorage.setItem("mnsh_snake_highscore", String(maxHigh));
+              } catch {}
+              return maxHigh;
+            });
+            return newScore;
+          });
+          setFood(spawnFood(nextSnake));
+        } else {
+          nextSnake.pop();
+        }
+
+        return nextSnake;
+      });
+    }, 130);
+
+    return () => clearInterval(interval);
+  }, [isSnakeActive, isSnakeGameOver, direction, food, spawnFood, config.soundEnabled, playTap, GRID_WIDTH, GRID_HEIGHT]);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const logContainerRef = useRef<HTMLDivElement>(null);
@@ -527,22 +646,23 @@ export function TerminalEngine({
   gear            - List hardware setup & workstation gear
   tools           - List developer tools & software applications
   contact         - Get contact email & social links
-  theme [name]    - Switch terminal theme or list themes ('theme list', 'theme dracula', 'theme cyber-light')
-  theme site <mode> - Toggle portfolio website theme ('theme site dark', 'theme site light')
+  cat [file]      - Read text file or list available files ('cat list', 'cat bio.md')
+  ls              - List readable virtual text files
+  snake / play    - Play interactive Cyber Snake mini-game 🐍
+  fullscreen      - Toggle terminal full screen mode
+  theme [name]    - Switch terminal theme or list themes ('theme list', 'theme dracula')
   font [name|size]- Customize terminal font ('font list', 'font fira', 'font size 15')
   cursor <shape>  - Change cursor shape ('cursor block', 'cursor line', 'cursor underline')
   sound <on|off>  - Toggle typing sound effects
   settings        - Toggle visual Settings & Theme picker modal
-  sudo hire       - Execute hiring protocol 🚀
   matrix          - Toggle Matrix rain background animation
-  cat <file>      - Read text files ('cat bio.md', 'cat gear.txt')
-  clear           - Clear terminal output
+  clear           - Clear terminal output log
   exit            - Close terminal window
 
-Hotkeys:
-  Ctrl/Cmd + [+]  - Zoom In font size
-  Ctrl/Cmd + [-]  - Zoom Out font size
-  Ctrl/Cmd + [0]  - Reset font size`,
+Hotkeys & Controls:
+  Double Click Header - Toggle Fullscreen
+  F11 / Cmd+Shift+F   - Toggle Fullscreen
+  ESC                 - Exit Fullscreen / Settings / Snake Game`,
             "output"
           );
           break;
@@ -860,47 +980,94 @@ ${SOCIAL_LINKS.map((s) => `  - ${s.title.padEnd(12)} : ${s.href}`).join("\n")}`,
           break;
 
         case "cat":
-          if (parts[1] === "bio.md" || parts[1] === "bio") {
+          if (!subCmd || subCmd === "list" || subCmd === "ls" || subCmd === "--help") {
+            appendOutput(
+              `┌──────────────────────────────────────────────────────────┐
+│ READABLE TERMINAL FILES (cat <filename>)                 │
+└──────────────────────────────────────────────────────────┘
+  📄 bio.md       - Personal background, bio & career summary
+  📄 skills.txt   - Tech stack, programming languages & frameworks
+  📄 gear.txt     - Workstation setup, monitor & desk hardware
+  📄 tools.txt    - Developer applications, software & utilities
+  📄 contact.txt  - Direct email & social media links
+  📄 readme.txt   - Terminal CLI features & keyboard hotkeys guide
+
+💡 Type 'cat <filename>' to read file contents (e.g. 'cat bio.md', 'cat skills.txt').`,
+              "output"
+            );
+          } else if (subCmd === "bio.md" || subCmd === "bio") {
             appendOutput(USER.about, "output");
-          } else if (parts[1] === "gear.txt" || parts[1] === "gear") {
+          } else if (subCmd === "skills.txt" || subCmd === "skills") {
+            appendOutput(
+              `┌──────────────────────────────────────────────────────────┐
+│ TECH STACK & ENGINEERING SKILLS                          │
+└──────────────────────────────────────────────────────────┘
+Frontend: React 19, Next.js 16, TypeScript, TailwindCSS, Framer Motion, Radix UI
+Backend:  Node.js, Express, Next API Routes, REST, GraphQL, PostgreSQL, Appwrite
+Mobile:   React Native, Expo, Redux Toolkit
+DevOps:   Git, Docker, Cloudflare Workers, Vercel, Neovim, VS Code`,
+              "output"
+            );
+          } else if (subCmd === "gear.txt" || subCmd === "gear") {
             appendOutput(
               GEAR.map((g) => `${g.name}: ${g.description}`).join("\n"),
               "output"
             );
-          } else {
-            appendOutput(`Usage: cat <file> (Available: bio.md, gear.txt)`, "error");
-          }
-          break;
-
-        case "sudo":
-          if (parts.slice(1).join(" ") === "hire") {
-            confetti({
-              particleCount: 120,
-              spread: 80,
-              origin: { y: 0.6 },
-            });
+          } else if (subCmd === "tools.txt" || subCmd === "tools") {
             appendOutput(
-              `[SUCCESS] Hiring Protocol Initialized! 🚀
-Root privilege confirmed for Manish Vishwakarma.
-Email:   manishvishwakarma9960@gmail.com
-Status:  Open for freelance projects & engineering roles.`,
-              "system"
+              TOOLS.map((t) => `[${t.category}] ${t.name}: ${t.description}`).join("\n"),
+              "output"
+            );
+          } else if (subCmd === "contact.txt" || subCmd === "contact") {
+            appendOutput(
+              `Email:   manishvishwakarma9960@gmail.com\nWebsite: https://mnsh.online\nGitHub:  https://github.com/HeaLthyDrugs`,
+              "output"
+            );
+          } else if (subCmd === "readme.txt" || subCmd === "readme") {
+            appendOutput(
+              `┌──────────────────────────────────────────────────────────┐
+│ MNSH.CLI TERMINAL MANUAL & GUIDANCE                      │
+└──────────────────────────────────────────────────────────┘
+Commands: help, work, blog, cat list, ls, snake, settings, theme, font, clear, exit
+Hotkeys:
+  Double Click Header - Toggle Fullscreen
+  F11 / Cmd+Shift+F   - Toggle Fullscreen
+  ESC                 - Exit Fullscreen / Settings / Snake Game
+  Tab                 - Auto-complete command
+  Up / Down Arrow     - Command history navigation`,
+              "output"
             );
           } else {
-            appendOutput(`Permission denied: '${raw}'. Try 'sudo hire'`, "error");
+            appendOutput(
+              `cat: ${subCmd}: No such file or directory. Type 'cat list' or 'ls' to see available files.`,
+              "error"
+            );
           }
           break;
 
-        case "hire":
-          confetti({
-            particleCount: 90,
-            spread: 70,
-            origin: { y: 0.6 },
-          });
-          appendOutput(
-            `Hiring protocol active! Direct Email: manishvishwakarma9960@gmail.com`,
-            "system"
-          );
+        case "ls":
+        case "dir":
+          handleCommand("cat list");
+          break;
+
+        case "snake":
+        case "game":
+        case "play":
+          startSnakeGame();
+          appendOutput("Starting Cyber Snake CLI mini-game! 🐍 Use WASD or Arrow Keys to control.", "system");
+          break;
+
+        case "fullscreen":
+        case "max":
+        case "maximize":
+          toggleFullscreen();
+          break;
+
+        case "minimize":
+        case "min":
+          if (isFullscreen) toggleFullscreen();
+          else if (onClose) onClose();
+          else zoomReset();
           break;
 
         case "matrix":
@@ -954,6 +1121,49 @@ Status:  Open for freelance projects & engineering roles.`,
       }
     }, 0);
 
+    // Snake Game Keyboard Controls
+    if (isSnakeActive) {
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
+        e.preventDefault();
+        if (direction !== "DOWN") setDirection("UP");
+        return;
+      }
+      if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
+        e.preventDefault();
+        if (direction !== "UP") setDirection("DOWN");
+        return;
+      }
+      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+        e.preventDefault();
+        if (direction !== "RIGHT") setDirection("LEFT");
+        return;
+      }
+      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+        e.preventDefault();
+        if (direction !== "LEFT") setDirection("RIGHT");
+        return;
+      }
+      if (e.key === "r" || e.key === "R") {
+        if (isSnakeGameOver) {
+          e.preventDefault();
+          startSnakeGame();
+          return;
+        }
+      }
+      if (e.key === "q" || e.key === "Q") {
+        e.preventDefault();
+        setIsSnakeActive(false);
+        return;
+      }
+    }
+
+    // Fullscreen Hotkeys (F11 or Ctrl/Cmd + Shift + F)
+    if (e.key === "F11" || ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "f" || e.key === "F"))) {
+      e.preventDefault();
+      toggleFullscreen();
+      return;
+    }
+
     // Zoom hotkeys: Ctrl/Cmd + [+] / [-] / [0]
     if ((e.ctrlKey || e.metaKey) && (e.key === "+" || e.key === "=")) {
       e.preventDefault();
@@ -1005,8 +1215,12 @@ Status:  Open for freelance projects & engineering roles.`,
         appendOutput(`Matches: ${matches.join(", ")}`, "system");
       }
     } else if (e.key === "Escape") {
-      if (isSettingsOpen) {
+      if (isSnakeActive) {
+        setIsSnakeActive(false);
+      } else if (isSettingsOpen) {
         setIsSettingsOpen(false);
+      } else if (isFullscreen) {
+        toggleFullscreen();
       } else if (onClose) {
         onClose();
       }
@@ -1019,12 +1233,12 @@ Status:  Open for freelance projects & engineering roles.`,
   const charAtCursor = input.slice(safePos, safePos + 1);
   const textAfterCursor = input.slice(safePos + 1);
 
-  return (
+  const terminalContent = (
     <div
       className={cn(
         "relative flex flex-col w-full shadow-2xl overflow-hidden select-text rounded-none transition-all duration-200",
         isFullscreen
-          ? "fixed inset-0 z-[110] h-screen max-h-none w-screen max-w-none rounded-none border-0"
+          ? "fixed inset-0 z-[9999] h-screen max-h-none w-screen max-w-none rounded-none border-0"
           : embedded
           ? "h-[440px] max-h-[440px] rounded-none border-t"
           : "h-[85vh] max-h-[700px] rounded-none border max-w-4xl",
@@ -1051,98 +1265,119 @@ Status:  Open for freelance projects & engineering roles.`,
 
       {/* Header Bar */}
       <div
-        className="relative z-30 flex items-center justify-between px-3.5 py-2 border-b select-none transition-colors duration-200"
+        onDoubleClick={(e) => {
+          e.stopPropagation();
+          toggleFullscreen();
+        }}
+        className="relative z-30 flex items-center justify-between px-3.5 py-2 border-b select-none transition-colors duration-200 cursor-pointer"
         style={{
           backgroundColor: currentTheme.bgHeader,
           borderColor: currentTheme.borderColor,
         }}
       >
-        {/* Top-Left Window Action Control Squares with Tooltips */}
-        <div className="flex items-center gap-2">
-          {/* Red Square: Close Terminal */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onClose) onClose();
-              else setOutput([]);
-            }}
-            className="size-3 rounded-none bg-red-500 hover:bg-red-600 active:scale-95 transition-all cursor-pointer shadow-xs"
-            title="Close Terminal Window (ESC)"
-            aria-label="Close Terminal"
-          />
+        {/* Top-Left macOS Window Action Control Boxes */}
+        <div className="flex items-center gap-3">
+          <div className="group/mac-dots flex items-center gap-2">
+            {/* Red Box: Exit / Close Terminal */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isFullscreen && onToggleFullscreen) {
+                  onToggleFullscreen();
+                } else if (isFullscreen) {
+                  setInternalFullscreen(false);
+                } else if (onClose) {
+                  onClose();
+                }
+              }}
+              disabled={!onClose && !isFullscreen}
+              className={cn(
+                "size-3.5 rounded-none bg-[#ff5f56] transition-all flex items-center justify-center border border-black/10 shadow-xs",
+                !onClose && !isFullscreen
+                  ? "opacity-30 cursor-not-allowed"
+                  : "hover:bg-[#ff5f56]/90 active:scale-95 cursor-pointer"
+              )}
+              title={
+                isFullscreen
+                  ? "Exit Fullscreen (ESC)"
+                  : onClose
+                  ? "Close Terminal Window (ESC)"
+                  : "Close (Unavailable)"
+              }
+              aria-label="Close Terminal"
+            >
+              <X
+                className={cn(
+                  "size-2.5 text-red-950 font-bold transition-opacity",
+                  !onClose && !isFullscreen
+                    ? "opacity-30"
+                    : "opacity-0 group-hover/mac-dots:opacity-100"
+                )}
+              />
+            </button>
 
-          {/* Yellow Square: Reset Zoom & Window Size */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              zoomReset();
-            }}
-            className="size-3 rounded-none bg-amber-500 hover:bg-amber-600 active:scale-95 transition-all cursor-pointer shadow-xs"
-            title="Minimize / Reset Zoom & Layout Size (Ctrl 0)"
-            aria-label="Reset Terminal Size"
-          />
+            {/* Yellow Box: Minimize / Close Terminal */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isFullscreen && onToggleFullscreen) {
+                  onToggleFullscreen();
+                } else if (isFullscreen) {
+                  setInternalFullscreen(false);
+                } else if (onClose) {
+                  onClose();
+                } else {
+                  zoomReset();
+                }
+              }}
+              className="size-3.5 rounded-none bg-[#ffbd2e] hover:bg-[#ffbd2e]/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center border border-black/10 shadow-xs"
+              title={
+                isFullscreen
+                  ? "Minimize / Exit Fullscreen Mode"
+                  : onClose
+                  ? "Minimize / Close Terminal"
+                  : "Minimize / Reset Size"
+              }
+              aria-label="Minimize Terminal"
+            >
+              <Minus className="size-2.5 text-amber-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+            </button>
 
-          {/* Blue Square: Toggle Fullscreen */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleFullscreen();
-            }}
-            className="size-3 rounded-none bg-sky-500 hover:bg-sky-600 active:scale-95 transition-all cursor-pointer shadow-xs"
-            title={isFullscreen ? "Exit Fullscreen Mode" : "Toggle Fullscreen Mode"}
-            aria-label="Toggle Fullscreen"
-          />
+            {/* Green Box: Toggle Fullscreen */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFullscreen();
+              }}
+              className="size-3.5 rounded-none bg-[#27c93f] hover:bg-[#27c93f]/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center border border-black/10 shadow-xs"
+              title={isFullscreen ? "Exit Fullscreen Mode" : "Toggle Fullscreen Mode"}
+              aria-label="Toggle Fullscreen"
+            >
+              {isFullscreen ? (
+                <Minimize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+              ) : (
+                <Maximize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+              )}
+            </button>
+          </div>
 
           <span
-            className="ml-1 text-xs font-semibold tracking-wider flex items-center gap-1.5"
+            className="text-xs font-semibold tracking-wider flex items-center gap-1.5"
             style={{ color: currentTheme.promptColor }}
           >
             <Terminal className="size-3.5" /> mnsh.cli — bash
           </span>
-
-          <span
-            className="hidden sm:inline-block px-1.5 py-0.2 text-[10px] uppercase font-mono tracking-wider border rounded-none ml-1"
-            style={{
-              backgroundColor: currentTheme.badgeBg,
-              color: currentTheme.badgeText,
-              borderColor: currentTheme.borderColor,
-            }}
-          >
-            {currentTheme.name}
-          </span>
         </div>
 
-        {/* Header Controls: Settings, Sound, Zoom, CRT */}
-        <div className="flex items-center gap-1.5 text-xs">
-          {/* Fullscreen Toggle Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleFullscreen();
-            }}
-            className="p-1 border opacity-75 hover:opacity-100 transition-opacity rounded-none"
-            style={{
-              backgroundColor: currentTheme.badgeBg,
-              color: currentTheme.promptColor,
-              borderColor: currentTheme.borderColor,
-            }}
-            title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Mode"}
-          >
-            {isFullscreen ? (
-              <Minimize2 className="size-3.5" />
-            ) : (
-              <Maximize2 className="size-3.5" />
-            )}
-          </button>
-
-          {/* Settings Modal Toggle Button */}
+        {/* Header Controls: Settings button only (icon only, no text) */}
+        <div className="flex items-center gap-1.5">
           <button
             onClick={(e) => {
               e.stopPropagation();
               setIsSettingsOpen((prev) => !prev);
             }}
             className={cn(
-              "flex items-center gap-1 px-2 py-1 text-[11px] font-mono border transition-all rounded-none",
+              "p-1.5 border transition-all rounded-none flex items-center justify-center",
               isSettingsOpen
                 ? "font-semibold shadow-xs"
                 : "opacity-80 hover:opacity-100"
@@ -1155,99 +1390,10 @@ Status:  Open for freelance projects & engineering roles.`,
               borderColor: currentTheme.borderColor,
             }}
             title="Terminal Settings & Customization"
+            aria-label="Settings"
           >
-            <Settings className="size-3.5" />
-            <span className="hidden sm:inline">Settings</span>
+            <Settings className="size-4" />
           </button>
-
-          {/* Sound Mute Toggle */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              updateConfig({ soundEnabled: !config.soundEnabled });
-            }}
-            className="p-1 border opacity-75 hover:opacity-100 transition-opacity rounded-none"
-            style={{
-              backgroundColor: currentTheme.badgeBg,
-              color: currentTheme.promptColor,
-              borderColor: currentTheme.borderColor,
-            }}
-            title={config.soundEnabled ? "Mute Sounds" : "Enable Sounds"}
-          >
-            {config.soundEnabled ? (
-              <Volume2 className="size-3.5" />
-            ) : (
-              <VolumeX className="size-3.5 opacity-50" />
-            )}
-          </button>
-
-          {/* Zoom Controls */}
-          <div
-            className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 border text-[11px] rounded-none"
-            style={{
-              backgroundColor: currentTheme.bgToolbar,
-              borderColor: currentTheme.borderColor,
-            }}
-          >
-            <button
-              onClick={zoomOut}
-              className="hover:opacity-100 opacity-70 p-0.5 transition-opacity"
-              title="Zoom Out (Ctrl -)"
-            >
-              <ZoomOut className="size-3" />
-            </button>
-            <span className="text-[10px] font-mono min-w-[28px] text-center opacity-90">
-              {config.fontSize}px
-            </span>
-            <button
-              onClick={zoomIn}
-              className="hover:opacity-100 opacity-70 p-0.5 transition-opacity"
-              title="Zoom In (Ctrl +)"
-            >
-              <ZoomIn className="size-3" />
-            </button>
-            {config.fontSize !== 13 && (
-              <button
-                onClick={zoomReset}
-                className="hover:opacity-100 opacity-70 p-0.5 transition-opacity ml-0.5 text-amber-400"
-                title="Reset Zoom (Ctrl 0)"
-              >
-                <RotateCcw className="size-2.5" />
-              </button>
-            )}
-          </div>
-
-          {/* CRT Toggle */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              updateConfig({ scanlines: !config.scanlines });
-            }}
-            className={cn(
-              "px-2 py-0.5 text-[11px] border transition-colors rounded-none font-mono",
-              config.scanlines ? "font-semibold" : "opacity-50"
-            )}
-            style={{
-              backgroundColor: config.scanlines
-                ? currentTheme.badgeBg
-                : "transparent",
-              color: config.scanlines ? currentTheme.promptColor : "inherit",
-              borderColor: currentTheme.borderColor,
-            }}
-            title="Toggle CRT Scanline Effect"
-          >
-            CRT
-          </button>
-
-          {!embedded && onClose && (
-            <button
-              onClick={onClose}
-              className="p-1 opacity-70 hover:opacity-100 transition-opacity rounded-none ml-1"
-              aria-label="Close modal"
-            >
-              <X className="size-4" />
-            </button>
-          )}
         </div>
       </div>
 
@@ -1673,46 +1819,74 @@ Status:  Open for freelance projects & engineering roles.`,
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Quick Action Touch Toolbar */}
-      <div
-        className="relative z-10 flex items-center gap-1.5 p-2 border-t overflow-x-auto select-none rounded-none transition-colors duration-200"
-        style={{
-          backgroundColor: currentTheme.bgToolbar,
-          borderColor: currentTheme.borderColor,
-        }}
-      >
-        <span className="text-[10px] uppercase tracking-widest pl-1 mr-1 shrink-0 opacity-50">
-          Quick:
-        </span>
-        {[
-          "settings",
-          "theme list",
-          "help",
-          "whoami",
-          "skills",
-          "work",
-          "blog",
-          "gear",
-          "tools",
-          "sudo hire",
-          "matrix",
-          "clear",
-        ].map((action) => (
-          <button
-            key={action}
-            onClick={() => handleCommand(action)}
-            className="px-2 py-0.5 text-[11px] rounded-none border shrink-0 transition-all opacity-80 hover:opacity-100"
+        {/* Interactive ASCII Snake Game Panel */}
+        {isSnakeActive && (
+          <div
+            className="my-3 p-3 border font-mono select-none rounded-none"
             style={{
-              backgroundColor: currentTheme.badgeBg,
-              color: currentTheme.textColor,
-              borderColor: currentTheme.borderColor,
+              borderColor: currentTheme.borderActive,
+              backgroundColor: currentTheme.bgHeader,
             }}
           >
-            {action}
-          </button>
-        ))}
+            <div
+              className="flex items-center justify-between text-xs font-bold mb-2 pb-1 border-b"
+              style={{ borderColor: currentTheme.borderColor }}
+            >
+              <span style={{ color: currentTheme.promptColor }}>🐍 CYBER SNAKE CLI</span>
+              <span className="text-[11px] font-mono">
+                SCORE: {snakeScore} | HIGH SCORE: {snakeHighScore}
+              </span>
+            </div>
+
+            {/* Game Grid */}
+            <div className="flex flex-col items-center justify-center font-mono leading-none tracking-widest my-2 select-none">
+              {Array.from({ length: GRID_HEIGHT }).map((_, rIdx) => (
+                <div key={rIdx} className="flex">
+                  {Array.from({ length: GRID_WIDTH }).map((_, cIdx) => {
+                    const isHead = snake[0]?.x === cIdx && snake[0]?.y === rIdx;
+                    const isBody = snake.slice(1).some((s) => s.x === cIdx && s.y === rIdx);
+                    const isFood = food.x === cIdx && food.y === rIdx;
+
+                    return (
+                      <span
+                        key={cIdx}
+                        className="w-[1.15em] h-[1.15em] flex items-center justify-center text-xs"
+                        style={{
+                          color: isHead
+                            ? currentTheme.accentColor
+                            : isBody
+                            ? currentTheme.promptColor
+                            : isFood
+                            ? currentTheme.systemColor
+                            : "inherit",
+                        }}
+                      >
+                        {isHead ? "█" : isBody ? "░" : isFood ? "★" : "·"}
+                      </span>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+
+            {/* Footer Instructions */}
+            <div
+              className="flex items-center justify-between text-[11px] pt-1.5 border-t opacity-90"
+              style={{ borderColor: currentTheme.borderColor }}
+            >
+              {isSnakeGameOver ? (
+                <span className="text-red-400 font-bold animate-pulse">
+                  💥 GAME OVER! Final Score: {snakeScore}. Press [R] to Restart | [Q / ESC] to Quit
+                </span>
+              ) : (
+                <span>
+                  Controls: <kbd className="px-1 py-0.5 border" style={{ borderColor: currentTheme.borderColor }}>WASD</kbd> or <kbd className="px-1 py-0.5 border" style={{ borderColor: currentTheme.borderColor }}>Arrow Keys</kbd> | Press <kbd className="px-1 py-0.5 border" style={{ borderColor: currentTheme.borderColor }}>Q</kbd> to Quit
+                </span>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Footer Shortcuts */}
@@ -1737,6 +1911,12 @@ Status:  Open for freelance projects & engineering roles.`,
       )}
     </div>
   );
+
+  if (isFullscreen && mounted) {
+    return createPortal(terminalContent, document.body);
+  }
+
+  return terminalContent;
 }
 
 // Modal CLI Export
