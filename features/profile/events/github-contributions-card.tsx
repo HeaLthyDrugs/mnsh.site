@@ -235,7 +235,7 @@ export function GitHubContributionsCard({
   return (
     <div
       className={cn(
-        "bg-card overflow-hidden",
+        "bg-card overflow-hidden border-t border-edge",
         "animate-[fadeSlideUp_0.5s_ease-out_forwards]",
         "opacity-0",
         GITHUB_CONTRIBUTIONS_CLASSES

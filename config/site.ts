@@ -6,14 +6,14 @@ function normalizeSiteUrl(url: string) {
   const parsedUrl = new URL(url);
 
   // Keep a single canonical host to avoid crawler redirect ambiguity.
-  if (parsedUrl.hostname === "mnsh.online") {
-    parsedUrl.hostname = "www.mnsh.online";
+  if (parsedUrl.hostname === "mnsh.site") {
+    parsedUrl.hostname = "www.mnsh.site";
   }
 
   return parsedUrl.toString().replace(/\/$/, "");
 }
 
-const FALLBACK_SITE_URL = "https://www.mnsh.online";
+const FALLBACK_SITE_URL = "https://www.mnsh.site";
 const RESOLVED_SITE_URL = normalizeSiteUrl(process.env.APP_URL || FALLBACK_SITE_URL);
 const DEFAULT_OG_IMAGE_PATH = "/og/og-main.png";
 
@@ -70,11 +70,11 @@ export const MAIN_NAV: NavItem[] = [
 ];
 
 export const GITHUB_USERNAME = "HeaLthyDrugs";
-export const SOURCE_CODE_GITHUB_REPO = "HeaLthyDrugs/mnsh.online";
-export const SOURCE_CODE_GITHUB_URL = "https://github.com/HeaLthyDrugs/mnsh.online";
+export const SOURCE_CODE_GITHUB_REPO = "HeaLthyDrugs/mnsh.site";
+export const SOURCE_CODE_GITHUB_URL = "https://github.com/HeaLthyDrugs/mnsh.site";
 
 export const UTM_PARAMS = {
-  utm_source: "mnsh.online",
+  utm_source: "mnsh.site",
   utm_medium: "portfolio_website",
   utm_campaign: "referral",
 };

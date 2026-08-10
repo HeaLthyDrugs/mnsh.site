@@ -299,7 +299,7 @@ export function Overview() {
                   className="underline-offset-4 hover:underline"
                   aria-label="Portfolio website"
                 >
-                  mnsh.online
+                  mnsh.site
                 </a>
               </InfoRow>
             )}

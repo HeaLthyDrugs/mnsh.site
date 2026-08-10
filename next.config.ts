@@ -37,6 +37,10 @@ const nextConfig: NextConfig = {
 			},
 			{
 				protocol: 'https',
+				hostname: 'assets.mnsh.site',
+			},
+			{
+				protocol: 'https',
 				hostname: 'avatars.githubusercontent.com',
 			},
 			{

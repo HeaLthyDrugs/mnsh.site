@@ -25,7 +25,7 @@ export const USER: User = {
     phoneNumber: "KzkxODQzMjU2MzIyNw==", // E.164 format, base64 encoded (+918432563227)
     email: "bWFuaXNodmlzaHdha2FybWE5OTYwQGdtYWlsLmNvbQ==", // base64 encoded (manishvishwakarma9960@gmail.com)
 
-    website: "https://mnsh.online",
+    website: "https://mnsh.site",
     jobTitle: "Software Developer",
     about: `- Bachelor's in **Computer Science** (2024)
 - **Freelance Developer** working with Fiverr and Local Clients

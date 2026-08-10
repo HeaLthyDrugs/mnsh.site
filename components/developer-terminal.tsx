@@ -1258,22 +1258,22 @@ Hotkeys:
   const terminalContent = (
     <div
       className={cn(
-        "relative flex flex-col w-full shadow-2xl overflow-hidden select-text rounded-none transition-all duration-200",
+        "relative flex flex-col w-full overflow-hidden select-text rounded-none transition-all duration-200",
         isFullscreen
           ? "fixed inset-0 z-[9999] h-screen max-h-none w-screen max-w-none rounded-none border-0"
           : embedded
-          ? "h-[440px] max-h-[440px] rounded-none border-t"
-          : "h-[85vh] max-h-[700px] rounded-none border max-w-4xl",
+          ? "h-[440px] max-h-[440px] rounded-none border-0"
+          : "h-[85vh] max-h-[700px] rounded-none border max-w-4xl shadow-2xl",
         config.scanlines &&
           "before:pointer-events-none before:absolute before:inset-0 before:z-20 before:bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] before:bg-[length:100%_4px]",
         className
       )}
       style={{
         backgroundColor: currentTheme.bgContainer,
-        borderColor: currentTheme.borderColor,
+        borderColor: embedded ? "var(--color-edge)" : currentTheme.borderColor,
         color: currentTheme.textColor,
         fontFamily: currentFont.fontFamily,
-        boxShadow: isFullscreen ? "none" : `0 20px 40px -15px ${currentTheme.glowColor}`,
+        boxShadow: isFullscreen || embedded ? "none" : `0 20px 40px -15px ${currentTheme.glowColor}`,
       }}
       onClick={() => inputRef.current?.focus()}
     >
@@ -1294,7 +1294,7 @@ Hotkeys:
         className="relative z-30 flex items-center justify-between px-3.5 py-2 border-b select-none transition-colors duration-200 cursor-pointer"
         style={{
           backgroundColor: currentTheme.bgHeader,
-          borderColor: currentTheme.borderColor,
+          borderColor: embedded ? "var(--color-edge)" : currentTheme.borderColor,
         }}
       >
         {/* Top-Left macOS Window Action Control Boxes */}

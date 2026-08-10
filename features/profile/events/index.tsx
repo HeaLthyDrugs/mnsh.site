@@ -128,7 +128,7 @@ export default function Events() {
                     <div
                         key="bento-terminal"
                         className={cn(
-                            "overflow-hidden border border-edge bg-zinc-950",
+                            "overflow-hidden border-t border-edge bg-card",
                             "animate-[fadeSlideUp_0.5s_ease-out_forwards]",
                             "opacity-0",
                             CLI_TERMINAL_CLASSES
