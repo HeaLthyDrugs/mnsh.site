@@ -70,6 +70,14 @@ export type PostMetadata = {
    * URL to the source code repository.
    */
   repoUrl?: string;
+  /**
+   * URL to the Product Hunt product page.
+   */
+  productHuntUrl?: string;
+  /**
+   * URL to the Play Store page.
+   */
+  playstoreUrl?: string;
 };
 
 export type Post = {

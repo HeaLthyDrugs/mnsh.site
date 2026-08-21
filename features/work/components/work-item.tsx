@@ -4,28 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Post } from "../types/work-post";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { Tag } from "@/components/ui/tag";
 import { Icons } from "@/components/icons";
 import { ArrowUpRight } from "lucide-react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { useSound } from "@/hooks/use-sound";
-
-/**
- * Returns the appropriate icon component based on project type.
- */
-function getProjectTypeIcon(projectType?: string) {
-  switch (projectType) {
-    case "Freelance":
-    case "Client Work":
-      return <Icons.briefcase className="size-3.5" />;
-    case "Personal":
-    case "Open Source":
-      return <Icons.personal className="size-3.5" />;
-    default:
-      return null;
-  }
-}
 
 function getStatusConfig(status?: string) {
   switch (status) {
@@ -112,15 +94,14 @@ export function WorkItem({
     <>
       {metadata.image && (
         <div className="relative select-none block overflow-hidden">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={metadata.image}
             alt={metadata.title}
-            width={1200}
-            height={630}
-            quality={100}
-            priority={shouldPreloadImage}
+            loading={shouldPreloadImage ? "eager" : "lazy"}
+            decoding="async"
             className={cn(
-              "rounded-none aspect-1200/630 object-cover transition-all duration-300",
+              "rounded-none aspect-1200/630 w-full object-cover transition-all duration-300",
               working && "blur-sm scale-[1.02] opacity-80"
             )}
           />
@@ -160,7 +141,7 @@ export function WorkItem({
         </div>
       </div>
 
-      {(metadata.liveUrl || metadata.repoUrl || metadata.status) && (
+      {(metadata.liveUrl || metadata.repoUrl || metadata.productHuntUrl || metadata.playstoreUrl || metadata.status) && (
         <div className="mt-auto flex w-fit items-center gap-0 divide-x divide-edge border border-edge bg-background">
           {metadata.status && (() => {
             const statusConfig = getStatusConfig(metadata.status);
@@ -195,6 +176,44 @@ export function WorkItem({
               >
                 <Icons.github className="size-4" />
                 <span className="sr-only">View Source for {metadata.title}</span>
+              </button>
+            </SimpleTooltip>
+          )}
+
+          {metadata.productHuntUrl && (
+            <SimpleTooltip content="View on Product Hunt">
+              <button
+                type="button"
+                className="flex h-8 items-center px-3 text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground cursor-pointer outline-none"
+                onMouseEnter={playHover}
+                onClick={(e) => {
+                  playTap();
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(metadata.productHuntUrl, "_blank", "noopener,noreferrer");
+                }}
+              >
+                <Icons.producthunt className="size-4" />
+                <span className="sr-only">View on Product Hunt for {metadata.title}</span>
+              </button>
+            </SimpleTooltip>
+          )}
+
+          {metadata.playstoreUrl && (
+            <SimpleTooltip content="View on Google Play Store">
+              <button
+                type="button"
+                className="flex h-8 items-center px-3 text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground cursor-pointer outline-none"
+                onMouseEnter={playHover}
+                onClick={(e) => {
+                  playTap();
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(metadata.playstoreUrl, "_blank", "noopener,noreferrer");
+                }}
+              >
+                <Icons.playstore className="size-4" />
+                <span className="sr-only">View on Google Play Store for {metadata.title}</span>
               </button>
             </SimpleTooltip>
           )}

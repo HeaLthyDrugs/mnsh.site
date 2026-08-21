@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         url: `${SITE_INFO.url}/blog`,
         images: [
             {
-                url: "https://assets.mnsh.online/blog-covers/blog-headline.png",
+                url: "https://assets.mnsh.site/blog-covers/blog-headline.png",
                 width: 1200,
                 height: 630,
                 alt: "Blog",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         title: "Blog",
         description:
             "Thoughts, tutorials, and insights on technology, design, and development.",
-        images: ["https://assets.mnsh.online/blog-covers/blog-headline.png"],
+        images: ["https://assets.mnsh.site/blog-covers/blog-headline.png"],
     },
 };
 

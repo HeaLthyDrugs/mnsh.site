@@ -156,10 +156,10 @@ export default async function RootLayout({
       <head>
         <link
           rel="preconnect"
-          href="https://assets.mnsh.online"
+          href="https://assets.mnsh.site"
           crossOrigin="anonymous"
         />
-        <link rel="dns-prefetch" href="https://assets.mnsh.online" />
+        <link rel="dns-prefetch" href="https://assets.mnsh.site" />
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{ __html: darkModeScript }}

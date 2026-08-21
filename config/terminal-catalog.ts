@@ -61,12 +61,12 @@ export const TERMINAL_WORKS: TerminalWork[] = [
     technologies: ["React", "TypeScript", "Node.js", "MongoDB", "TailwindCSS"],
   },
   {
-    slug: "healthy-ui",
-    title: "HeaLthy UI",
-    description: "A collection of prebuilt UI templates, glassmorphism cards, and animated components available via CLI npm package.",
+    slug: "fixmyimport",
+    title: "Fixmyimport",
+    description: "A website where users can preview, validate, and fix their CSV files and access various data tools.",
     status: "In Development",
-    category: "Design System",
-    technologies: ["React", "TailwindCSS", "Framer Motion", "TypeScript", "CLI"],
+    category: "Web Application",
+    technologies: ["Next.js", "TypeScript", "TailwindCSS", "CSV Parser"],
   },
   {
     slug: "cbse-10th-question-bank",

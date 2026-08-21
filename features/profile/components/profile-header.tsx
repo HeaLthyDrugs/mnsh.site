@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { USER } from "../data/user";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLoop } from "@/lib/animation/useLoop";
@@ -8,13 +7,13 @@ import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status";
 import { useState, useRef } from "react";
 
 const FACES = [
-    "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(1).png",
-    "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(2).png",
-    "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(3).png",
-    "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(4).png",
-    "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(5).png",
-    "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(6).png",
-    "https://assets.mnsh.online/icons/faces/my-notion-face-transparent%20(7).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(1).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(2).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(3).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(4).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(5).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(6).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(7).png",
 ];
 
 const ROTATING_TEXTS = USER.flipSentences;
@@ -31,7 +30,6 @@ export default function ProfileHeader() {
             audioRef.current.currentTime = 0;
             audioRef.current.play().catch(() => {});
         }
-
         let newIndex;
         do {
             newIndex = Math.floor(Math.random() * FACES.length);
@@ -65,12 +63,12 @@ export default function ProfileHeader() {
                                 }}
                                 className="absolute inset-0"
                             >
-                                <Image
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
                                     src={FACES[faceIndex]}
                                     alt={`${USER.displayName}'s avatar`}
-                                    width={116}
-                                    height={116}
-                                    priority={faceIndex === 0}
+                                    loading={faceIndex === 0 ? "eager" : "lazy"}
+                                    decoding="async"
                                     className="size-full select-none object-contain"
                                 />
                             </motion.div>

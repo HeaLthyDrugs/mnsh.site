@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils";
 const SCENES = {
   light: {
     poster: "/scene/day-poster.jpg",
-    animated: "https://assets.mnsh.online/gifs/day.gif",
+    animated: "https://assets.mnsh.site/gifs/day.gif",
   },
   dark: {
     poster: "/scene/evening-poster.jpg",
-    animated: "https://assets.mnsh.online/gifs/morning-evening.gif",
+    animated: "https://assets.mnsh.site/gifs/morning-evening.gif",
   },
 } as const;
 

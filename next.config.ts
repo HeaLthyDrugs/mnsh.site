@@ -33,7 +33,7 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 'assets.mnsh.online',
+				hostname: 'assets.mnsh.site',
 			},
 			{
 				protocol: 'https',

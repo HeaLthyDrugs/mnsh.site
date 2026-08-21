@@ -10,7 +10,7 @@ export const SNAPS_INTRO = {
 export const SNAPS: Snap[] = [
   {
     id: "hanuman-tekdi-green-mountain",
-    src: "https://assets.mnsh.online/snaps/green-mountain.jpg",
+    src: "https://assets.mnsh.site/snaps/green-mountain.jpg",
     alt: "Misty hillside with bright green monsoon grass and wet rocks.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
@@ -20,7 +20,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "ryewood-garden-morning",
-    src: "https://assets.mnsh.online/snaps/IMG_0205.JPG",
+    src: "https://assets.mnsh.site/snaps/IMG_0205.JPG",
     alt: "Sunrays break through trees over a damp forest floor.",
     location: "Ryewood Garden, Lonavla",
     clickedBy: "Me",
@@ -30,7 +30,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "hanuman-tekdi-tree-silhouette",
-    src: "https://assets.mnsh.online/snaps/IMG_0212.JPG",
+    src: "https://assets.mnsh.site/snaps/IMG_0212.JPG",
     alt: "A lone tree silhouette against bright blue sky and clouds.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
@@ -40,7 +40,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "img-0214-16",
-    src: "https://assets.mnsh.online/snaps/IMG_0214.JPG",
+    src: "https://assets.mnsh.site/snaps/IMG_0214.JPG",
     alt: "Foggy railway yard with wet tracks fading into mist.",
     location: "Lonavla Rail Tracks",
     clickedBy: "Aditya",
@@ -50,7 +50,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "rani-sleeping",
-    src: "https://assets.mnsh.online/snaps/cat-sleep.jpg",
+    src: "https://assets.mnsh.site/snaps/cat-sleep.jpg",
     alt: "Close-up of a sleeping cat with soft morning light.",
     location: "Home, Lonavla",
     clickedBy: "Me",
@@ -60,7 +60,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "fog-land-18",
-    src: "https://assets.mnsh.online/snaps/fog-land.jpg",
+    src: "https://assets.mnsh.site/snaps/fog-land.jpg",
     alt: "Rocky grassland covered in thick monsoon fog.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
@@ -70,7 +70,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "goat-snap-19",
-    src: "https://assets.mnsh.online/snaps/goat-snap.jpg",
+    src: "https://assets.mnsh.site/snaps/goat-snap.jpg",
     alt: "Printed photo of grazing goats in warm field light.",
     location: "Lonavla Dam",
     clickedBy: "Abhishek",
@@ -80,7 +80,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "goat-20",
-    src: "https://assets.mnsh.online/snaps/goat.jpg",
+    src: "https://assets.mnsh.site/snaps/goat.jpg",
     alt: "Goats grazing across a dry field at golden hour.",
     location: "Lonavla Dam",
     clickedBy: "Abhishek",
@@ -90,7 +90,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "goat2-21",
-    src: "https://assets.mnsh.online/snaps/goat2.jpg",
+    src: "https://assets.mnsh.site/snaps/goat2.jpg",
     alt: "Close view of a goat grazing with herd in the distance.",
     location: "Lonavla Dam",
     clickedBy: "Abhishek",
@@ -100,7 +100,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "jaitpur-morning-22",
-    src: "https://assets.mnsh.online/snaps/jaitpur-morning.jpg",
+    src: "https://assets.mnsh.site/snaps/jaitpur-morning.jpg",
     alt: "Early morning haze over open fields and distant trees.",
     location: "Jaitpur, Uttar Pradesh",
     clickedBy: "Me",
@@ -110,7 +110,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "mountain-up-23",
-    src: "https://assets.mnsh.online/snaps/mountain-up.jpg",
+    src: "https://assets.mnsh.site/snaps/mountain-up.jpg",
     alt: "Misty ridge line with mixed green and brown shrubs.",
     location: "Hanuman Tekdi, Lonavla",
     clickedBy: "Me",
@@ -120,7 +120,7 @@ export const SNAPS: Snap[] = [
   },
   {
     id: "olkaiwadi-24",
-    src: "https://assets.mnsh.online/snaps/olkaiwadi.jpg",
+    src: "https://assets.mnsh.site/snaps/olkaiwadi.jpg",
     alt: "Rain clouds hanging over a hillside town view.",
     location: "Olkaiwadi, Lonavla",
     clickedBy: "Me",

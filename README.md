@@ -1,6 +1,6 @@
 # [mnsh.online](https://mnsh.online)
 
-![mnsh.online banner](https://assets.mnsh.online/og/og-main.png)
+![mnsh.online banner](https://assets.mnsh.site/og/og-main.png)
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)

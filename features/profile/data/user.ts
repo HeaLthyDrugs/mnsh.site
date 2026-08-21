@@ -38,7 +38,7 @@ export const USER: User = {
 - Currently working on [Leank.space](https://leank.space) & [JustWrite.sbs](https://justwrite.sbs)`,
     avatar: "https://avatars.githubusercontent.com/u/122515021?v=4",
     ogImage:
-        "https://assets.mnsh.online/og/og-main.png",
+        "https://assets.mnsh.site/og/og-main.png",
     keywords: [
         "manish",
         "mnsh",

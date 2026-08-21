@@ -289,7 +289,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
           <CommandGroup heading="Developer Tools">
             <CommandItem
               onMouseEnter={playHover}
-              value="Developer Terminal (CLI)"
+              value="Terminal"
               keywords={["terminal", "cli", "shell", "developer", "matrix"]}
               onSelect={() => {
                 playTap();
@@ -298,7 +298,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
               }}
             >
               <TerminalIcon className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
-              Developer Terminal (CLI)
+              Terminal 
             </CommandItem>
           </CommandGroup>
 

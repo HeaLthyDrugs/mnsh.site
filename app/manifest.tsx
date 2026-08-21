@@ -9,31 +9,31 @@ export default function manifest(): MetadataRoute.Manifest {
     description: SITE_INFO.description,
     icons: [
       {
-        src: "https://assets.mnsh.online/icons/platform/icon.svg",
+        src: "https://assets.mnsh.site/icons/platform/icon.svg",
         type: "image/svg+xml",
         sizes: "any",
         purpose: "any",
       },
       {
-        src: "https://assets.mnsh.online/icons/platform/2x.png",
+        src: "https://assets.mnsh.site/icons/platform/2x.png",
         type: "image/png",
         sizes: "96x96",
         purpose: "any",
       },
       {
-        src: "https://assets.mnsh.online/icons/platform/4x.png",
+        src: "https://assets.mnsh.site/icons/platform/4x.png",
         type: "image/png",
         sizes: "192x192",
         purpose: "any",
       },
       {
-        src: "https://assets.mnsh.online/icons/platform/512w.png",
+        src: "https://assets.mnsh.site/icons/platform/512w.png",
         type: "image/png",
         sizes: "512x512",
         purpose: "any",
       },
       {
-        src: "https://assets.mnsh.online/icons/platform/512w.png",
+        src: "https://assets.mnsh.site/icons/platform/512w.png",
         type: "image/png",
         sizes: "512x512",
         purpose: "maskable",
@@ -45,25 +45,25 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     // screenshots: [
     //   {
-    //     src: "https://assets.mnsh.online/images/screenshot-mobile-dark.webp",
+    //     src: "https://assets.mnsh.site/images/screenshot-mobile-dark.webp",
     //     type: "image/webp",
     //     sizes: "440x956",
     //     form_factor: "narrow",
     //   },
     //   {
-    //     src: "https://assets.mnsh.online/images/screenshot-mobile-light.webp",
+    //     src: "https://assets.mnsh.site/images/screenshot-mobile-light.webp",
     //     type: "image/webp",
     //     sizes: "440x956",
     //     form_factor: "narrow",
     //   },
     //   {
-    //     src: "https://assets.mnsh.online/images/screenshot-desktop-dark.webp",
+    //     src: "https://assets.mnsh.site/images/screenshot-desktop-dark.webp",
     //     type: "image/webp",
     //     sizes: "1920x1080",
     //     form_factor: "wide",
     //   },
     //   {
-    //     src: "https://assets.mnsh.online/images/screenshot-desktop-light.webp",
+    //     src: "https://assets.mnsh.site/images/screenshot-desktop-light.webp",
     //     type: "image/webp",
     //     sizes: "1920x1080",
     //     form_factor: "wide",

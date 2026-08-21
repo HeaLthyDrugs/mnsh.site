@@ -1,4 +1,6 @@
-const ASSETS_HOSTNAME = "assets.mnsh.online";
+import { ImageLoaderProps } from "next/image";
+
+const ASSETS_HOSTNAME = "assets.mnsh.site";
 const CLOUDFLARE_IMAGE_RESIZING_ENABLED =
   process.env.NEXT_PUBLIC_CLOUDFLARE_IMAGE_RESIZING === "true";
 
@@ -7,6 +9,44 @@ interface CloudflareTransformOptions {
   quality?: number;
   format?: "auto" | "webp" | "avif" | "jpeg" | "png";
   fit?: "scale-down" | "contain" | "cover" | "crop" | "pad";
+}
+
+export function shouldUseCloudflareLoader(src: string): boolean {
+  if (!src) return false;
+  try {
+    const url = new URL(src);
+    return url.hostname === ASSETS_HOSTNAME;
+  } catch {
+    return false;
+  }
+}
+
+export function cloudflareLoader({ src, width, quality }: ImageLoaderProps) {
+  if (!src) return "";
+  if (!src.startsWith("https://")) return src;
+
+  let parsed: URL;
+  try {
+    parsed = new URL(src);
+  } catch {
+    return src;
+  }
+
+  if (parsed.hostname !== ASSETS_HOSTNAME) {
+    return src;
+  }
+
+  if (!CLOUDFLARE_IMAGE_RESIZING_ENABLED) {
+    return src;
+  }
+
+  const transforms = [
+    `format=auto`,
+    `quality=${quality ?? 75}`,
+    `width=${width}`,
+  ];
+
+  return `https://${ASSETS_HOSTNAME}/cdn-cgi/image/${transforms.join(",")}${parsed.pathname}`;
 }
 
 export function toCloudflareTransformedUrl(
@@ -38,5 +78,5 @@ export function toCloudflareTransformedUrl(
     transforms.push(`fit=${options.fit}`);
   }
 
-  return `https://${ASSETS_HOSTNAME}/cdn-cgi/image/${transforms.join(",")}/${src}`;
+  return `https://${ASSETS_HOSTNAME}/cdn-cgi/image/${transforms.join(",")}${parsed.pathname}`;
 }
