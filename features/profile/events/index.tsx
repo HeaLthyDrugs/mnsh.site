@@ -33,12 +33,12 @@ const sizeToGridClasses: Record<string, string> = {
     xl: "col-span-4 md:col-span-4 lg:col-span-6 row-span-4",
     // hero: 4x4 mobile, 8x4 tablet/desktop
     hero: "col-span-4 md:col-span-8 lg:col-span-8 row-span-4",
-    // social: 1/4 width (1x1 on mobile, 2x2 on tablet, 3x2 on desktop)
-    social: "col-span-1 row-span-1 md:col-span-2 md:row-span-2 lg:col-span-3 lg:row-span-2",
+    // social: 1/3 width on desktop (4 cols), 1/2 on tablet (4 cols), full width on mobile (4 cols)
+    social: "col-span-4 row-span-1 md:col-span-4 md:row-span-1 lg:col-span-4 lg:row-span-1",
 };
 
-// Music player grid placement — portrait tall card (2x2 standard units -> 4x4 grid units)
-const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-6 lg:col-span-6 row-span-4";
+// Music player grid placement — full width row-span-4
+const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
 
 // CLI Terminal grid placement — full width (12 cols) row-span-4 placed at the bottom
 const CLI_TERMINAL_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
@@ -93,17 +93,6 @@ export default function Events() {
                             );
                         }
 
-                        // Insert GitHub contributions at the designated position
-                        if (index === GITHUB_CONTRIBUTIONS_POSITION) {
-                            items.push(
-                                <GitHubContributionsCard
-                                    key="github-contributions"
-                                    username={USER.username}
-                                    githubProfileUrl={githubProfileUrl}
-                                />
-                            );
-                        }
-
                         items.push(
                             <div
                                 key={event.id}
@@ -117,9 +106,28 @@ export default function Events() {
                                     animationDelay: `${delay + (index === MUSIC_PLAYER_POSITION ? 50 : 0)}ms`,
                                 }}
                             >
-                                <EventItem event={event} className="h-full" />
+                                <EventItem
+                                    event={event}
+                                    className={cn(
+                                        "h-full",
+                                        event.id === "twitter" && "border-t border-edge md:border-r",
+                                        event.id === "linkedin" && "border-t border-edge lg:border-r",
+                                        event.id === "github" && "border-t border-edge"
+                                    )}
+                                />
                             </div>
                         );
+
+                        // Insert GitHub contributions at the designated position
+                        if (index === GITHUB_CONTRIBUTIONS_POSITION) {
+                            items.push(
+                                <GitHubContributionsCard
+                                    key="github-contributions"
+                                    username={USER.username}
+                                    githubProfileUrl={githubProfileUrl}
+                                />
+                            );
+                        }
 
                         return items;
                     })}

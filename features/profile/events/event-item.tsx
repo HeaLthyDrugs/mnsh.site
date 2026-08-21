@@ -23,6 +23,51 @@ export function EventItem({
     const showInlineImage = event.showImage !== false && event.image;
     const isSocial = event.category === "Social";
 
+    if (isSocial && event.showImageFullSize) {
+        return (
+            <div
+                className={cn(
+                    "group/event relative flex h-full w-full items-center gap-3.5 px-4 py-2 overflow-hidden select-none",
+                    event.link && "cursor-pointer",
+                    event.backgroundColor || "bg-white",
+                    className
+                )}
+                onClick={() => {
+                    if (event.link) {
+                        window.open(event.link, "_blank");
+                    }
+                }}
+            >
+                {/* Left: Logo */}
+                <div className="relative shrink-0 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center">
+                    <img
+                        src={event.backgroundImage!}
+                        alt={event.title}
+                        className={cn(
+                            "w-full h-full object-contain p-0.5",
+                            "grayscale transition-all duration-300 group-hover/event:grayscale-0"
+                        )}
+                    />
+                </div>
+                {/* Right: Username */}
+                <div className="flex flex-col justify-center min-w-0">
+                    <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-bold leading-none mb-1">
+                        {event.title}
+                    </span>
+                    <span className="text-xs md:text-sm font-bold truncate text-zinc-900 leading-tight">
+                        {event.username || event.tagline || event.title}
+                    </span>
+                </div>
+                {/* Subtle external arrow indicator on hover */}
+                <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 z-20 opacity-0 transition-all duration-300 group-hover/event:opacity-100 group-hover/event:translate-x-1">
+                    <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div
             className={cn(
@@ -44,19 +89,22 @@ export function EventItem({
             }}
         >
             {/* Background Image (The Main Visual) */}
-            {hasBackgroundImage && !isSocial && (
-                <div className="absolute inset-0 z-0">
-                    <Image
+            {hasBackgroundImage && (!isSocial || event.showImageFullSize) && (
+                <div className="absolute inset-0 z-0 flex items-center justify-center">
+                    <img
                         src={event.backgroundImage!}
                         alt=""
-                        fill
-                        className="object-cover"
+                        className={cn(
+                            "w-full h-full",
+                            event.showImageFullSize ? "object-contain p-2" : "object-cover",
+                            event.showImageFullSize && "grayscale transition-all duration-300 group-hover/event:grayscale-0"
+                        )}
                     />
                 </div>
             )}
 
             {/* Social Card Visual System: background logo + blur + centered logo */}
-            {isSocial && hasBackgroundImage && (
+            {isSocial && hasBackgroundImage && !event.showImageFullSize && (
                 <>
                     <div className="absolute inset-0 z-0" style={{ filter: 'blur(25px)' }}>
                         <Image
@@ -142,11 +190,13 @@ export function EventItem({
 
                 {/* Tagline Overlay (Primarily for Socials) */}
                 {isSocial ? (
-                    <div className="relative z-20 mt-auto hidden md:block">
-                        <div className="text-[9px] font-medium leading-snug text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
-                            {SOCIAL_CAPTIONS[event.id] || event.tagline || event.title}
+                    event.showTitle !== false && (
+                        <div className="relative z-20 mt-auto hidden md:block">
+                            <div className="text-[9px] font-medium leading-snug text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                                {SOCIAL_CAPTIONS[event.id] || event.tagline || event.title}
+                            </div>
                         </div>
-                    </div>
+                    )
                 ) : (
                     <div className="relative z-10 flex flex-1 flex-col items-center justify-center">
                         <div className="mt-auto mb-2 md:mb-3">

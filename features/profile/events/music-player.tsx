@@ -42,9 +42,11 @@ export function MusicPlayer({ className }: { className?: string }) {
     const [volumeOpen, setVolumeOpen] = useState(false);
     const [genreOpen, setGenreOpen] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [showShortcuts, setShowShortcuts] = useState(false);
     const [mounted, setMounted] = useState(false);
 
     const audioLinesRef = useRef<AudioLinesIconHandle>(null);
+    const shortcutsTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const [shuffledGenres] = useAtom(shuffledGenresAtom);
     const genre = shuffledGenres[genreIdx];
@@ -54,14 +56,89 @@ export function MusicPlayer({ className }: { className?: string }) {
         setMounted(true);
     }, []);
 
-    // Handle ESC key and scroll locking in fullscreen mode
+    // Mouse movement / activity detection in fullscreen mode to smoothly show/fade shortcuts
     useEffect(() => {
-        if (!isFullscreen) return;
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") {
-                setIsFullscreen(false);
+        if (!isFullscreen) {
+            setShowShortcuts(false);
+            if (shortcutsTimerRef.current) clearTimeout(shortcutsTimerRef.current);
+            return;
+        }
+
+        const handleActivity = () => {
+            setShowShortcuts(true);
+            if (shortcutsTimerRef.current) {
+                clearTimeout(shortcutsTimerRef.current);
+            }
+            shortcutsTimerRef.current = setTimeout(() => {
+                setShowShortcuts(false);
+            }, 2500);
+        };
+
+        // Show briefly on entering fullscreen
+        handleActivity();
+
+        window.addEventListener("mousemove", handleActivity);
+        return () => {
+            window.removeEventListener("mousemove", handleActivity);
+            if (shortcutsTimerRef.current) {
+                clearTimeout(shortcutsTimerRef.current);
             }
         };
+    }, [isFullscreen]);
+
+    // Handle ESC key, keyboard controls and scroll locking in fullscreen mode
+    useEffect(() => {
+        if (!isFullscreen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            const active = document.activeElement;
+            if (
+                active &&
+                (active.tagName === "INPUT" ||
+                    active.tagName === "TEXTAREA" ||
+                    active.getAttribute("contenteditable") === "true")
+            ) {
+                return;
+            }
+
+            switch (e.key) {
+                case "Escape":
+                    setIsFullscreen(false);
+                    break;
+                case " ":
+                    e.preventDefault();
+                    setIsPlaying((p) => !p);
+                    break;
+                case "ArrowLeft":
+                    e.preventDefault();
+                    setCurrentTrack((p) => (p - 1 + genre.tracks.length) % genre.tracks.length);
+                    break;
+                case "ArrowRight":
+                    e.preventDefault();
+                    setCurrentTrack((p) => (p + 1) % genre.tracks.length);
+                    break;
+                case "ArrowUp":
+                    e.preventDefault();
+                    setVolume((v) => {
+                        const nv = Math.min(1, v + 0.1);
+                        if (nv > 0) setIsMuted(false);
+                        return nv;
+                    });
+                    break;
+                case "ArrowDown":
+                    e.preventDefault();
+                    setVolume((v) => Math.max(0, v - 0.1));
+                    break;
+                case "m":
+                case "M":
+                    e.preventDefault();
+                    setIsMuted((m) => !m);
+                    break;
+                default:
+                    break;
+            }
+        };
+
         window.addEventListener("keydown", handleKeyDown);
         const originalOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
@@ -69,7 +146,7 @@ export function MusicPlayer({ className }: { className?: string }) {
             window.removeEventListener("keydown", handleKeyDown);
             document.body.style.overflow = originalOverflow;
         };
-    }, [isFullscreen]);
+    }, [isFullscreen, genre.tracks.length, setIsPlaying, setCurrentTrack, setVolume, setIsMuted]);
 
     // Control AudioLines animation based on play state
     useEffect(() => {
@@ -222,6 +299,60 @@ export function MusicPlayer({ className }: { className?: string }) {
                     </div>
                 </div>
             </div>
+
+            {/* ── Top-Left Keyboard Shortcuts Column (Fullscreen only, auto-fading on cursor idle) ───── */}
+            <AnimatePresence>
+                {isFullscreen && showShortcuts && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -6, filter: "blur(6px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: -6, filter: "blur(6px)" }}
+                        transition={{ duration: 0.35, ease: "easeInOut" }}
+                        className="absolute top-3.5 left-4 z-30 pointer-events-none hidden md:flex flex-col gap-1.5 p-2.5 rounded-lg bg-black/25 backdrop-blur-md border border-white/10 shadow-2xl text-[10px] text-white/50 font-sans tracking-wide"
+                    >
+                        <div className="flex items-center gap-2.5">
+                            <kbd className="inline-flex items-center justify-center min-w-[38px] px-1.5 py-0.5 rounded bg-white/10 border border-white/10 text-white/75 text-[9px] font-mono shadow-sm">
+                                Space
+                            </kbd>
+                            <span>Play / Pause</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                            <div className="inline-flex items-center justify-center gap-0.5 min-w-[38px]">
+                                <kbd className="inline-flex items-center justify-center w-[17px] py-0.5 rounded bg-white/10 border border-white/10 text-white/75 text-[9px] font-mono shadow-sm">
+                                    ←
+                                </kbd>
+                                <kbd className="inline-flex items-center justify-center w-[17px] py-0.5 rounded bg-white/10 border border-white/10 text-white/75 text-[9px] font-mono shadow-sm">
+                                    →
+                                </kbd>
+                            </div>
+                            <span>Prev / Next track</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                            <div className="inline-flex items-center justify-center gap-0.5 min-w-[38px]">
+                                <kbd className="inline-flex items-center justify-center w-[17px] py-0.5 rounded bg-white/10 border border-white/10 text-white/75 text-[9px] font-mono shadow-sm">
+                                    ↑
+                                </kbd>
+                                <kbd className="inline-flex items-center justify-center w-[17px] py-0.5 rounded bg-white/10 border border-white/10 text-white/75 text-[9px] font-mono shadow-sm">
+                                    ↓
+                                </kbd>
+                            </div>
+                            <span>Volume</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                            <kbd className="inline-flex items-center justify-center min-w-[38px] px-1.5 py-0.5 rounded bg-white/10 border border-white/10 text-white/75 text-[9px] font-mono shadow-sm">
+                                M
+                            </kbd>
+                            <span>Mute / Unmute</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                            <kbd className="inline-flex items-center justify-center min-w-[38px] px-1.5 py-0.5 rounded bg-white/10 border border-white/10 text-white/75 text-[9px] font-mono shadow-sm">
+                                Esc
+                            </kbd>
+                            <span>Exit fullscreen</span>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Track indicator dots — top */}
             <div className="absolute top-3 left-0 right-0 flex justify-center gap-1.5 z-20">

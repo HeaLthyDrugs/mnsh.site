@@ -54,4 +54,8 @@ export type Event = {
     showActionButton?: boolean;
     /** Whether to show the title */
     showTitle?: boolean;
+    /** Whether to show the background image in full size without blur/centered box */
+    showImageFullSize?: boolean;
+    /** Social handle/username to display on the card */
+    username?: string;
 };
