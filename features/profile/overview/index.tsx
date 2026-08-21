@@ -19,6 +19,7 @@ import { EarthIcon } from "@/components/animated-icons/earth";
 import { cn } from "@/lib/utils";
 import { decodeEmail } from "@/utils/string";
 import { LayersIcon } from "@/components/animated-icons/layers";
+import { RocketIcon } from "@/components/animated-icons/rocket";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLoop } from "@/lib/animation/useLoop";
 import { ClockIcon } from "@/components/animated-icons/clock";
@@ -335,7 +336,7 @@ export function Overview() {
 
             {/* Currently Building */}
             {USER.currentlyBuilding && (
-              <InfoRow icon={<span className="text-lg leading-none grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all">🚀</span>} isLast>
+              <InfoRow icon={<RocketIcon size={18} />} isLast>
                 <div className="flex flex-col space-y-0.5">
                   <a
                     href={USER.currentlyBuilding.link}
