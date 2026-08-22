@@ -95,9 +95,8 @@ export function EventItem({
                         src={event.backgroundImage!}
                         alt=""
                         className={cn(
-                            "w-full h-full",
-                            event.showImageFullSize ? "object-contain p-2" : "object-cover",
-                            event.showImageFullSize && "grayscale transition-all duration-300 group-hover/event:grayscale-0"
+                            "w-full h-full grayscale transition-all duration-300 group-hover/event:grayscale-0",
+                            event.showImageFullSize ? "object-contain p-2" : "object-cover"
                         )}
                     />
                 </div>
