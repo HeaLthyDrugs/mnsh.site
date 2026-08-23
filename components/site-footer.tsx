@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, ExternalLinkIcon, MousePointerClick, RssIcon } from "lucide-react";
+import { CheckIcon, ExternalLinkIcon, RssIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { SITE_INFO } from "@/config/site";
@@ -19,21 +19,45 @@ export function SiteFooter() {
     <footer className="max-w-screen overflow-x-hidden px-2">
       <div className="border-t border-edge mx-auto border-x md:max-w-3xl">
         <div className="flex flex-col">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_200px]">
-            <div className="space-y-4 px-4 py-8">
-              <h3 className="flex items-center flex-wrap gap-x-4 gap-y-4 font-heading text-3xl leading-tight text-muted-foreground md:text-3xl">
-                <span>Got anything in mind ?</span>
-              </h3>
-              <p className="max-w-md text-sm leading-relaxed text-muted-foreground/80">
-                I&apos;m always open to interesting conversations - whether it&apos;s about building something together, sharing ideas, or just saying hello.
-              </p>
-
-              <div className="flex items-center gap-2 text-xs text-muted-foreground/60">
-                <LiveClock />
-              </div>
+          {/* Top Connected Status & Time Bar */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-edge border-b border-edge bg-muted/5">
+            <div className="flex items-center gap-2.5 px-4 py-2.5 transition-colors hover:bg-muted/15">
+              <span className="relative flex size-2 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+              </span>
+              <span className="font-mono text-xs text-foreground/90 font-medium">
+                {USER.availabilityText || "Open for freelance works"}
+              </span>
             </div>
 
-            <ContactTriggerBox />
+            <div className="flex items-center gap-2 px-4 py-2.5 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted/15 sm:justify-end">
+              <Icons.overviewClock className="size-3.5 text-muted-foreground/70 shrink-0" />
+              <LiveClock />
+            </div>
+          </div>
+
+          {/* Main Content Area with Left Connected Column and Right Smiley Icon Cell */}
+          <div className="flex items-stretch divide-x divide-edge">
+            <div className="hidden sm:flex w-11 shrink-0 items-center justify-center py-4 bg-muted/5 select-none">
+              <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] font-mono uppercase tracking-[0.35em] text-muted-foreground/70">
+                Contact
+              </span>
+            </div>
+
+            <div className="flex-1 p-5 md:p-6 space-y-1.5">
+              <h3 className="font-heading text-2xl md:text-3xl font-normal tracking-tight text-foreground/80">
+                Got something in mind?
+              </h3>
+              <p className="max-w-lg text-sm text-muted-foreground/80 leading-relaxed">
+                Open to freelance work, collaborations, or just a quick chat.
+              </p>
+            </div>
+
+            {/* Right Connected Cell with Smiley Icon */}
+            <div className="flex w-24 sm:w-28 md:w-32 shrink-0 items-center justify-center bg-muted/5 p-4 transition-colors hover:bg-muted/15 select-none">
+              <Icons.smiley className="size-14 sm:size-16 md:size-20 text-muted-foreground/80 transition-all duration-300 hover:scale-110 hover:text-foreground hover:rotate-6" />
+            </div>
           </div>
 
           <div className="border-t border-edge flex flex-col">
@@ -41,6 +65,18 @@ export function SiteFooter() {
               value="hey@mnsh.me"
               platform="mailto"
               href="mailto:hey@mnsh.me"
+            />
+            <div className="h-px w-full bg-edge" />
+            <ContactRow
+              value="+91 84325 63227"
+              platform="WhatsApp"
+              href="https://wa.me/918432563227"
+            />
+            <div className="h-px w-full bg-edge" />
+            <ContactRow
+              value="cal.com/mnsshh"
+              platform="Schedule a call"
+              href="https://cal.com/mnsshh"
             />
             <div className="h-px w-full bg-edge" />
             <ContactRow
@@ -103,10 +139,8 @@ function LiveClock() {
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      const formatted = now.toLocaleString("en-US", {
+      const formatted = now.toLocaleTimeString("en-US", {
         timeZone: "Asia/Kolkata",
-        month: "short",
-        day: "numeric",
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
@@ -121,7 +155,7 @@ function LiveClock() {
 
   if (!time) return null;
 
-  return <span>{time} IST (GMT+5:30) - Lonavla, India</span>;
+  return <span>{time} IST</span>;
 }
 
 function ContactRow({
@@ -191,8 +225,8 @@ function ContactRow({
 
       <a
         href={href}
-        target={platform === "mailto" ? undefined : "_blank"}
-        rel={platform === "mailto" ? undefined : "noopener noreferrer"}
+        target={href.startsWith("mailto:") ? undefined : "_blank"}
+        rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
         className="flex shrink-0 items-center gap-2 pr-4 py-3 text-xs text-muted-foreground transition-colors hover:text-foreground"
         onMouseEnter={playHover}
         onClick={playTap}
@@ -200,85 +234,6 @@ function ContactRow({
         <span>{platform}</span>
         <ExternalLinkIcon className="size-3" />
       </a>
-    </div>
-  );
-}
-
-function ContactTriggerBox() {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const playHover = useSound("/sounds/hover.wav");
-  const playTap = useSound("/sounds/tap.wav");
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  return (
-    <div
-      ref={containerRef}
-      onClick={() => {
-        if (!isOpen) {
-          playTap();
-          setIsOpen(true);
-        }
-      }}
-      onMouseEnter={!isOpen ? playHover : undefined}
-      className={cn(
-        "relative flex h-full min-h-[160px] w-full flex-col overflow-hidden border-t border-edge outline-none transition-all md:border-t-0 md:border-l",
-        !isOpen
-          ? "group cursor-pointer bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px] hover:bg-muted/10 dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)]"
-          : "bg-background"
-      )}
-    >
-      {isOpen ? (
-        <div className="absolute inset-0 z-20 flex flex-col justify-center divide-y divide-edge animate-in fade-in zoom-in-95 duration-200">
-          <a
-            href="https://wa.me/918432563227"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-1 items-center justify-center px-6 py-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-            onMouseEnter={playHover}
-            onClick={playTap}
-          >
-            <Icons.whatsapp className="mr-2 size-4 shrink-0" /> WhatsApp
-          </a>
-          <a
-            href={`mailto:${USER.email}`}
-            className="flex flex-1 items-center justify-center px-6 py-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-            onMouseEnter={playHover}
-            onClick={playTap}
-          >
-            <Icons.mail className="mr-2 size-4 shrink-0" /> Email
-          </a>
-          <a
-            href="https://cal.com/mnsshh"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-1 items-center justify-center px-6 py-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-            onMouseEnter={playHover}
-            onClick={playTap}
-          >
-            <Icons.phone className="mr-2 size-4 shrink-0" /> Schedule a call
-          </a>
-        </div>
-      ) : (
-        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-center opacity-40 transition-all duration-300 group-hover:opacity-80">
-          <MousePointerClick className="size-4 text-foreground" />
-          <span className="mt-1 block font-mono text-[10px] uppercase tracking-widest text-foreground">
-            Tap to start conversation
-          </span>
-        </div>
-      )}
     </div>
   );
 }

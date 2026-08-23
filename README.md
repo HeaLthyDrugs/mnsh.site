@@ -1,15 +1,15 @@
-# [mnsh.online](https://mnsh.online)
+# [mnsh.site](https://mnsh.site)
 
-![mnsh.online banner](https://assets.mnsh.site/og/og-main.png)
+![mnsh.site banner](https://assets.mnsh.site/og/og-main.png)
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![Repo Views](https://komarev.com/ghpvc/?username=HeaLthyDrugs&repo=mnsh.online&color=orange)](https://github.com/HeaLthyDrugs/mnsh.online)
+[![Repo Views](https://komarev.com/ghpvc/?username=HeaLthyDrugs&repo=mnsh.site&color=orange)](https://github.com/HeaLthyDrugs/mnsh.site)
 [![License](https://img.shields.io/badge/License-Private-red.svg)](#)
 
-The official repository for [mnsh.online](https://mnsh.online), a personal portfolio and digital space built with Next.js and React to showcase professional projects, technical insights, and development tools.
+The official repository for [mnsh.site](https://mnsh.site), a personal portfolio and digital space built with Next.js and React to showcase professional projects, technical insights, and development tools.
 
 ## Features
 
@@ -38,16 +38,16 @@ The official repository for [mnsh.online](https://mnsh.online), a personal portf
 
 For inquiries or connections:
 
--   **Website**: [mnsh.online](https://mnsh.online)
+-   **Website**: [mnsh.site](https://mnsh.site)
 -   **Twitter/X**: [@HeLLLthyDrug](https://x.com/HeLLLthyDrug)
 -   **LinkedIn**: [manishvv](https://www.linkedin.com/in/manishvv/)
--   **GitHub Issues**: [Report an issue](https://github.com/HeaLthyDrugs/mnsh.online/issues)
+-   **GitHub Issues**: [Report an issue](https://github.com/HeaLthyDrugs/mnsh.site/issues)
 
 ## Maintainer
 
 **Manish Vishwakarma**
 -   GitHub: [@HeaLthyDrugs](https://github.com/HeaLthyDrugs)
--   Portfolio: [mnsh.online](https://mnsh.online)
+-   Portfolio: [mnsh.site](https://mnsh.site)
 
 ---
 

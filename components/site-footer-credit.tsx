@@ -4,19 +4,25 @@ import { motion } from "framer-motion";
 import type { MouseEvent } from "react";
 import { useRef } from "react";
 import { SOURCE_CODE_GITHUB_URL } from "@/config/site";
+import { USER } from "@/features/profile/data/user";
 import {
   Confetti,
   type ConfettiRef,
   getNextHeartConfettiVariant,
 } from "@/components/ui/confetti";
+import { useSound } from "@/hooks/use-sound";
+import { SimpleTooltip } from "@/components/ui/tooltip";
 
 const INSPIRATION_URL = "https://chanhdai.com";
 
 export function SiteFooterCredit() {
   const confettiRef = useRef<ConfettiRef>(null);
   const previousVariantRef = useRef<number | null>(null);
+  const playHover = useSound("/sounds/hover.wav");
+  const playTap = useSound("/sounds/tap.wav");
 
   const handleHeartPress = (event: MouseEvent<HTMLButtonElement>) => {
+    playTap();
     const { variant, options } = getNextHeartConfettiVariant(previousVariantRef.current);
     previousVariantRef.current = variant;
     const rect = event.currentTarget.getBoundingClientRect();
@@ -40,23 +46,33 @@ export function SiteFooterCredit() {
         className="pointer-events-none fixed left-0 top-0 z-[9999] h-screen w-screen"
       />
       <section className="max-w-screen overflow-x-hidden px-2 pb-8">
-      <div className="relative mx-auto overflow-hidden border-x border-b border-edge md:max-w-3xl">
-        <div className="relative z-10 bg-[linear-gradient(to_bottom,transparent,rgba(127,127,127,0.04))] px-5 py-5 text-center md:px-16">
-          <div className="mb-4 flex justify-center">
-            <HeartIcon onPress={handleHeartPress} />
-          </div>
-          <p className="mt-2 text-balance text-sm font-heading text-muted-foreground/60 md:text-base">
-            Website heavily inspired by{" "}
-            <FooterCreditLink href={INSPIRATION_URL}>Chánh Đại</FooterCreditLink>.
-          </p>
-          <p className="text-balance text-sm font-heading text-muted-foreground/60 md:text-base">
-            Learning as I build. Here&apos;s the{" "}
-            <FooterCreditLink href={SOURCE_CODE_GITHUB_URL}>code</FooterCreditLink>{" "}
-          </p>
+        <div className="relative mx-auto overflow-hidden border-x border-b border-edge md:max-w-3xl">
+          <div className="relative z-10 space-y-3 bg-[linear-gradient(to_bottom,transparent,rgba(127,127,127,0.04))] px-5 py-6 text-center md:px-16">
+            <div className="flex justify-center">
+              <SimpleTooltip content="Confetti">
+                <div>
+                  <HeartIcon onPress={handleHeartPress} onMouseEnter={playHover} />
+                </div>
+              </SimpleTooltip>
+            </div>
 
+            <div className="space-y-1 text-xs md:text-sm text-muted-foreground font-heading">
+              <p className="text-balance">
+                Inspired by{" "}
+                <FooterCreditLink href={INSPIRATION_URL}>Chánh Đại</FooterCreditLink>.
+              </p>
+              <p className="text-balance">
+                Source code on{" "}
+                <FooterCreditLink href={SOURCE_CODE_GITHUB_URL}>GitHub</FooterCreditLink>.
+              </p>
+            </div>
+
+            <div className="pt-2 text-[11px] font-mono text-muted-foreground/50">
+              <span>&copy; {new Date().getFullYear()} {USER.fullName}</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </>
   );
 }
@@ -68,25 +84,37 @@ function FooterCreditLink({
   href: string;
   children: React.ReactNode;
 }) {
+  const playHover = useSound("/sounds/hover.wav");
+  const playTap = useSound("/sounds/tap.wav");
+
   return (
     <a
-      className="inline-flex text-muted-foreground/60 hover:text-primary transition-colors duration-200 underline underline-offset-2 decoration-muted-foreground/30 hover:decoration-primary"
+      className="inline-flex font-medium text-foreground underline underline-offset-3 decoration-muted-foreground/30 transition-colors duration-200 hover:text-primary hover:decoration-primary"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onMouseEnter={playHover}
+      onClick={playTap}
     >
       {children}
     </a>
   );
 }
 
-function HeartIcon({ onPress }: { onPress: (event: MouseEvent<HTMLButtonElement>) => void }) {
+function HeartIcon({
+  onPress,
+  onMouseEnter,
+}: {
+  onPress: (event: MouseEvent<HTMLButtonElement>) => void;
+  onMouseEnter?: () => void;
+}) {
   return (
     <motion.button
       type="button"
-      aria-label="Celebrate"
-      className="cursor-pointer text-red-500 drop-shadow-sm"
+      aria-label="Celebrate with confetti"
+      className="cursor-pointer text-red-500 drop-shadow-sm outline-none"
       onClick={onPress}
+      onMouseEnter={onMouseEnter}
       whileHover={{ scale: 1.3, rotate: 5 }}
       whileTap={{ scale: 0.8, rotate: -10 }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}

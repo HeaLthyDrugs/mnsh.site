@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Panel, PanelContent } from "../components/panel";
 import { USER } from "../data/user";
 import {
@@ -11,24 +11,15 @@ import {
   CheckIcon,
   CheckIconHandle,
 } from "@/components/animated-icons/check";
-import { UserIcon } from "@/components/animated-icons/user";
-import { MapPinIcon } from "@/components/animated-icons/map-pin";
-import { BriefcaseIcon } from "@/components/animated-icons/briefcase";
-import { MailIcon } from "@/components/animated-icons/mail";
-import { EarthIcon } from "@/components/animated-icons/earth";
+import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { decodeEmail } from "@/utils/string";
-import { LayersIcon } from "@/components/animated-icons/layers";
-import { RocketIcon } from "@/components/animated-icons/rocket";
 import { AnimatePresence, motion } from "framer-motion";
-import { useLoop } from "@/lib/animation/useLoop";
-import { ClockIcon } from "@/components/animated-icons/clock";
 import { Markdown } from "@/components/markdown";
 import Link from "next/link";
-import { BentoTerminal } from "@/components/developer-terminal";
 
 
-// Local time component
+// Local time component with balanced font styling
 function LocalTime({ timezone, label }: { timezone: string; label: string }) {
   const [time, setTime] = useState<string>("");
 
@@ -52,36 +43,10 @@ function LocalTime({ timezone, label }: { timezone: string; label: string }) {
   if (!time) return null;
 
   return (
-    <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-      <span className="text-xs">
-        {time} {label}
-      </span>
+    <span className="inline-flex items-baseline gap-1.5">
+      <span className="font-mono text-sm text-foreground/90">{time}</span>
+      <span className="text-xs text-muted-foreground">{label}</span>
     </span>
-  );
-}
-
-// Icon container with consistent styling
-function IconBox({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className={cn(
-        "flex size-7 shrink-0 items-center justify-center",
-        "bg-gradient-to-br from-muted via-muted to-muted/80",
-        "relative overflow-hidden",
-        "border border-dashed border-muted-foreground/20",
-        "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]",
-        "transition-all duration-300 ease-out",
-        "hover:border-muted-foreground/50 hover:border-solid",
-        "[&_svg]:pointer-events-none [&_svg]:text-muted-foreground [&_svg:not([class*='size-'])]:size-4",
-        "[&_svg]:relative [&_svg]:z-10 [&_svg]:transition-transform [&_svg]:duration-300",
-        "hover:[&_svg]:scale-110",
-        // Outer thin ring
-        "ring-1 ring-muted-foreground/15 ring-offset-2 ring-offset-background"
-      )}
-      aria-hidden="true"
-    >
-      {children}
-    </div>
   );
 }
 
@@ -120,7 +85,7 @@ function CopyableEmail({ email }: { email: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="group inline-flex cursor-pointer items-center gap-1.5 font-sans text-sm transition-colors hover:text-foreground"
+      className="group inline-flex cursor-pointer items-center gap-1.5 font-sans text-sm text-muted-foreground transition-colors hover:text-foreground"
       aria-label={copied ? "Email copied!" : `Copy email: ${emailDecoded}`}
     >
       <span className="underline-offset-4 group-hover:underline">
@@ -137,7 +102,7 @@ function CopyableEmail({ email }: { email: string }) {
               transition={{ duration: 0.15 }}
               className="text-emerald-500"
             >
-              <CheckIcon ref={checkIconRef} size={14} />
+              <CheckIcon ref={checkIconRef} size={13} />
             </motion.div>
           ) : (
             <motion.div
@@ -147,7 +112,7 @@ function CopyableEmail({ email }: { email: string }) {
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.15 }}
             >
-              <CopyIcon ref={copyIconRef} size={14} />
+              <CopyIcon ref={copyIconRef} size={13} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -156,37 +121,34 @@ function CopyableEmail({ email }: { email: string }) {
   );
 }
 
-// Info row component with full-height vertical separator
-function InfoRow({
+// Single info cell component with standardized icon column and full-height vertical separator
+function InfoCell({
   icon,
   children,
-  isLast = false,
   className,
 }: {
   icon: React.ReactNode;
   children: React.ReactNode;
-  isLast?: boolean;
   className?: string;
 }) {
   return (
     <div
       className={cn(
-        "flex items-stretch font-sans text-sm",
-        "transition-colors hover:bg-muted/20",
-        !isLast && "border-b border-edge",
+        "flex items-stretch font-sans text-sm min-h-[44px]",
+        "transition-colors hover:bg-muted/15",
         className
       )}
     >
-      {/* Icon column */}
-      <div className="flex items-center justify-center px-3 py-2">
-        <IconBox>{icon}</IconBox>
+      {/* Icon column with standardized fixed width */}
+      <div className="flex w-11 shrink-0 items-center justify-center text-muted-foreground">
+        {icon}
       </div>
 
       {/* Vertical separator - full height */}
       <div className="w-px self-stretch bg-edge/60" />
 
       {/* Content column */}
-      <div className="flex flex-1 items-center px-3 py-2">
+      <div className="flex flex-1 items-center px-3.5 py-2.5">
         {children}
       </div>
     </div>
@@ -194,28 +156,13 @@ function InfoRow({
 }
 
 function GreetingAboutSection() {
-  const [greeting, setGreeting] = useState("Hello");
-
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 5 || hour >= 18) {
-      setGreeting("Good evening");
-    } else if (hour < 12) {
-      setGreeting("Good morning");
-    } else {
-      setGreeting("Good afternoon");
-    }
-  }, []);
-
   return (
     <div className="flex items-stretch font-sans text-sm transition-colors hover:bg-muted/10 border-b border-edge">
-      {/* Left Column matching InfoRow Width */}
-      <div className="flex items-center justify-center px-3 py-4 shrink-0">
-        <div className="flex size-7 justify-center items-center">
-          <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] font-medium uppercase tracking-[0.4em] text-muted-foreground/80 whitespace-nowrap">
-            About Me
-          </span>
-        </div>
+      {/* Left Column matching InfoCell Icon Column Width */}
+      <div className="flex w-11 shrink-0 items-center justify-center py-4">
+        <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] font-medium uppercase tracking-[0.4em] text-muted-foreground/80 whitespace-nowrap select-none">
+          About Me
+        </span>
       </div>
 
       {/* Vertical separator - full height */}
@@ -238,18 +185,11 @@ function GreetingAboutSection() {
           </Link>
         </p>
       </div>
-
     </div>
   );
 }
 
 export function Overview() {
-  const { key } = useLoop(2000); // Change every 2 seconds for role animation
-
-  const currentItem = useMemo(() => {
-    return USER.flipSentences[key % USER.flipSentences.length];
-  }, [key]);
-
   return (
     <Panel>
       <h2 className="sr-only">About Me</h2>
@@ -257,19 +197,25 @@ export function Overview() {
       <PanelContent className="p-0">
         <GreetingAboutSection />
 
-        {/* Info list with dividers in grid layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 md:divide-x divide-edge">
-          {/* Column 1 */}
-          <div className="flex flex-col">
-            {/* Name */}
-            <InfoRow icon={<UserIcon />}>
-              <p className="text-balance" aria-label={`Name: ${USER.displayName}`}>
+        {/* 4 unified horizontal rows - guarantees identical row heights and aligned borders */}
+        <div className="divide-y divide-edge">
+          {/* Row 1: Name | Job Title */}
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
+            <InfoCell icon={<Icons.overviewProfile className="size-[17px]" />}>
+              <p className="text-balance text-foreground/90 font-medium" aria-label={`Name: ${USER.displayName}`}>
                 {USER.fullName}
               </p>
-            </InfoRow>
+            </InfoCell>
+            <InfoCell icon={<Icons.overviewWork className="size-[22px]" />}>
+              <p className="text-balance text-foreground/90 font-medium">
+                {USER.jobTitle}
+              </p>
+            </InfoCell>
+          </div>
 
-            {/* Location + Time */}
-            <InfoRow icon={<MapPinIcon />}>
+          {/* Row 2: Location | Local Time */}
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
+            <InfoCell icon={<Icons.overviewLocation className="size-[17px]" />}>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -277,66 +223,47 @@ export function Overview() {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline-offset-4 hover:underline"
+                  className="underline-offset-4 hover:underline text-muted-foreground hover:text-foreground transition-colors"
                   aria-label={`Location: ${USER.address}`}
                 >
                   {USER.address}
                 </a>
               </div>
-            </InfoRow>
+            </InfoCell>
+            <InfoCell icon={<Icons.overviewClock className="size-5" />}>
+              <LocalTime timezone={USER.timezone} label={USER.localTimeLabel} />
+            </InfoCell>
+          </div>
 
-            {/* Email */}
-            <InfoRow icon={<MailIcon />}>
+          {/* Row 3: Email | Availability Status */}
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
+            <InfoCell icon={<Icons.overviewMail className="size-[17px]" />}>
               <CopyableEmail email={USER.email} />
-            </InfoRow>
+            </InfoCell>
+            <InfoCell icon={<Icons.overviewStatus className="size-[21px] text-emerald-500 dark:text-emerald-400" />}>
+              <p className="text-balance text-foreground/90">
+                {USER.availabilityText}
+              </p>
+            </InfoCell>
+          </div>
 
-            {/* Website */}
-            {USER.website && (
-              <InfoRow icon={<EarthIcon />} className="border-b md:border-b-0">
+          {/* Row 4: Website | Currently Building */}
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
+            <InfoCell icon={<Icons.overviewWeb className="size-[17px]" />}>
+              {USER.website && (
                 <a
                   href={USER.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline-offset-4 hover:underline"
+                  className="underline-offset-4 hover:underline text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="Portfolio website"
                 >
                   mnsh.site
                 </a>
-              </InfoRow>
-            )}
-          </div>
-
-          {/* Column 2 */}
-          <div className="flex flex-col">
-            {/* Job Title */}
-            <InfoRow icon={<BriefcaseIcon />}>
-              <p className="text-balance text-foreground/90">
-                {USER.jobTitle}
-              </p>
-            </InfoRow>
-
-            {/* Experience */}
-            <InfoRow icon={<ClockIcon />}>
-              <LocalTime timezone={USER.timezone} label={USER.localTimeLabel} />
-            </InfoRow>
-
-            {/* Status */}
-            <InfoRow
-              icon={
-                <span className="relative flex size-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex size-2.5 rounded-full bg-emerald-500"></span>
-                </span>
-              }
-            >
-              <p className="text-balance text-foreground/90">
-                {USER.availabilityText}
-              </p>
-            </InfoRow>
-
-            {/* Currently Building */}
-            {USER.currentlyBuilding && (
-              <InfoRow icon={<RocketIcon size={18} />} isLast>
+              )}
+            </InfoCell>
+            <InfoCell icon={<Icons.overviewUpcoming className="size-[21px]" />}>
+              {USER.currentlyBuilding && (
                 <div className="flex flex-col space-y-0.5">
                   <a
                     href={USER.currentlyBuilding.link}
@@ -347,8 +274,8 @@ export function Overview() {
                     {USER.currentlyBuilding.name}
                   </a>
                 </div>
-              </InfoRow>
-            )}
+              )}
+            </InfoCell>
           </div>
         </div>
       </PanelContent>
