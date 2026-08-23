@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { Settings, Volume2, VolumeX, Pause, Play, X, Terminal } from "lucide-react";
 import Image from "next/image";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
@@ -41,6 +42,15 @@ type FontAnnouncement = {
 };
 
 export function FloatingControls() {
+    const pathname = usePathname();
+    const isCliRoute =
+        pathname === "/cli" ||
+        pathname?.startsWith("/cli/") ||
+        (typeof window !== "undefined" &&
+            (window.location.hostname.startsWith("cli.") ||
+                window.location.pathname === "/cli" ||
+                window.location.pathname.startsWith("/cli/")));
+
     const [isSoundEnabled, setIsSoundEnabled] = useAtom(isSoundEnabledAtom);
     const [isGalleryExpanded] = useAtom(isGalleryExpandedAtom);
     const [showLabels, setShowLabels] = useAtom(showLabelsAtom);
@@ -117,6 +127,10 @@ export function FloatingControls() {
             setFontAnnouncement(null);
         }, 1600);
     }, [fontTheme, setFontTheme]);
+
+    if (isCliRoute) {
+        return null;
+    }
 
     return (
         <>

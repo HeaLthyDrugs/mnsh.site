@@ -5,7 +5,6 @@ import { EVENTS } from "../data/events";
 import { EventItem } from "./event-item";
 import { MusicPlayer } from "./music-player";
 import { GitHubContributionsCard } from "./github-contributions-card";
-import { BentoTerminal } from "@/components/developer-terminal";
 import { USER } from "../data/user";
 import { cn } from "@/lib/utils";
 
@@ -39,9 +38,6 @@ const sizeToGridClasses: Record<string, string> = {
 
 // Music player grid placement — full width row-span-4
 const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
-
-// CLI Terminal grid placement — full width (12 cols) row-span-4 placed at the bottom
-const CLI_TERMINAL_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
 
 // Index in the events array where we insert the music player
 const MUSIC_PLAYER_POSITION = 3;
@@ -79,7 +75,7 @@ export default function Events() {
                                 <div
                                     key="music-player"
                                     className={cn(
-                                        "overflow-hidden",
+                                        "overflow-hidden border-t border-edge",
                                         "animate-[fadeSlideUp_0.5s_ease-out_forwards]",
                                         "opacity-0",
                                         MUSIC_PLAYER_CLASSES
@@ -110,6 +106,8 @@ export default function Events() {
                                     event={event}
                                     className={cn(
                                         "h-full",
+                                        event.id === "blog" && "border-b lg:border-b-0 lg:border-r border-edge",
+                                        event.id === "tools" && "border-r lg:border-r-0 lg:border-b border-edge",
                                         event.id === "twitter" && "border-t border-edge md:border-r",
                                         event.id === "linkedin" && "border-t border-edge lg:border-r",
                                         event.id === "github" && "border-t border-edge"
@@ -131,22 +129,6 @@ export default function Events() {
 
                         return items;
                     })}
-
-                    {/* Full-width Bento CLI Terminal placed at the bottom below GitHub Contributions */}
-                    <div
-                        key="bento-terminal"
-                        className={cn(
-                            "overflow-hidden border-t border-edge bg-card",
-                            "animate-[fadeSlideUp_0.5s_ease-out_forwards]",
-                            "opacity-0",
-                            CLI_TERMINAL_CLASSES
-                        )}
-                        style={{
-                            animationDelay: "500ms",
-                        }}
-                    >
-                        <BentoTerminal />
-                    </div>
                 </div>
             </div>
 

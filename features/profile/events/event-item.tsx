@@ -274,9 +274,6 @@ export function EventItem({
                     )}
                 />
             </div>
-
-            {/* Border */}
-            <div className="pointer-events-none absolute inset-0 ring-1 ring-black/5 ring-inset dark:ring-white/5" />
         </div>
     );
 }

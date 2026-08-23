@@ -329,6 +329,7 @@ Try typing: 'work', 'blog', 'snake', 'cat list', 'theme list', 'font fira', 'crt
 
 export interface TerminalEngineProps {
   embedded?: boolean;
+  standalone?: boolean;
   onClose?: () => void;
   className?: string;
   isFullscreen?: boolean;
@@ -337,6 +338,7 @@ export interface TerminalEngineProps {
 
 export function TerminalEngine({
   embedded = false,
+  standalone = false,
   onClose,
   className,
   isFullscreen: externalIsFullscreen,
@@ -1261,6 +1263,8 @@ Hotkeys:
         "relative flex flex-col w-full overflow-hidden select-text rounded-none transition-all duration-200",
         isFullscreen
           ? "fixed inset-0 z-[9999] h-screen max-h-none w-screen max-w-none rounded-none border-0"
+          : standalone
+          ? "h-[100dvh] min-h-screen max-h-none w-full rounded-none border-0"
           : embedded
           ? "h-[440px] max-h-[440px] rounded-none border-0"
           : "h-[85vh] max-h-[700px] rounded-none border max-w-4xl shadow-2xl",
@@ -1273,7 +1277,10 @@ Hotkeys:
         borderColor: embedded ? "var(--color-edge)" : currentTheme.borderColor,
         color: currentTheme.textColor,
         fontFamily: currentFont.fontFamily,
-        boxShadow: isFullscreen || embedded ? "none" : `0 20px 40px -15px ${currentTheme.glowColor}`,
+        boxShadow:
+          isFullscreen || embedded || standalone
+            ? "none"
+            : `0 20px 40px -15px ${currentTheme.glowColor}`,
       }}
       onClick={() => inputRef.current?.focus()}
     >
@@ -1299,89 +1306,91 @@ Hotkeys:
       >
         {/* Top-Left macOS Window Action Control Boxes */}
         <div className="flex items-center gap-3">
-          <div className="group/mac-dots flex items-center gap-2">
-            {/* Red Box: Exit / Close Terminal */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (isFullscreen && onToggleFullscreen) {
-                  onToggleFullscreen();
-                } else if (isFullscreen) {
-                  setInternalFullscreen(false);
-                } else if (onClose) {
-                  onClose();
-                }
-              }}
-              disabled={!onClose && !isFullscreen}
-              className={cn(
-                "size-3.5 rounded-none bg-[#ff5f56] transition-all flex items-center justify-center border border-black/10 shadow-xs",
-                !onClose && !isFullscreen
-                  ? "opacity-30 cursor-not-allowed"
-                  : "hover:bg-[#ff5f56]/90 active:scale-95 cursor-pointer"
-              )}
-              title={
-                isFullscreen
-                  ? "Exit Fullscreen (ESC)"
-                  : onClose
-                  ? "Close Terminal Window (ESC)"
-                  : "Close (Unavailable)"
-              }
-              aria-label="Close Terminal"
-            >
-              <X
+          {!standalone && (
+            <div className="group/mac-dots flex items-center gap-2">
+              {/* Red Box: Exit / Close Terminal */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isFullscreen && onToggleFullscreen) {
+                    onToggleFullscreen();
+                  } else if (isFullscreen) {
+                    setInternalFullscreen(false);
+                  } else if (onClose) {
+                    onClose();
+                  }
+                }}
+                disabled={!onClose && !isFullscreen}
                 className={cn(
-                  "size-2.5 text-red-950 font-bold transition-opacity",
+                  "size-3.5 rounded-none bg-[#ff5f56] transition-all flex items-center justify-center border border-black/10 shadow-xs",
                   !onClose && !isFullscreen
-                    ? "opacity-30"
-                    : "opacity-0 group-hover/mac-dots:opacity-100"
+                    ? "opacity-30 cursor-not-allowed"
+                    : "hover:bg-[#ff5f56]/90 active:scale-95 cursor-pointer"
                 )}
-              />
-            </button>
-
-            {/* Yellow Box: Minimize / Close Terminal */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (isFullscreen && onToggleFullscreen) {
-                  onToggleFullscreen();
-                } else if (isFullscreen) {
-                  setInternalFullscreen(false);
-                } else if (onClose) {
-                  onClose();
-                } else {
-                  zoomReset();
+                title={
+                  isFullscreen
+                    ? "Exit Fullscreen (ESC)"
+                    : onClose
+                    ? "Close Terminal Window (ESC)"
+                    : "Close (Unavailable)"
                 }
-              }}
-              className="size-3.5 rounded-none bg-[#ffbd2e] hover:bg-[#ffbd2e]/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center border border-black/10 shadow-xs"
-              title={
-                isFullscreen
-                  ? "Minimize / Exit Fullscreen Mode"
-                  : onClose
-                  ? "Minimize / Close Terminal"
-                  : "Minimize / Reset Size"
-              }
-              aria-label="Minimize Terminal"
-            >
-              <Minus className="size-2.5 text-amber-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
-            </button>
+                aria-label="Close Terminal"
+              >
+                <X
+                  className={cn(
+                    "size-2.5 text-red-950 font-bold transition-opacity",
+                    !onClose && !isFullscreen
+                      ? "opacity-30"
+                      : "opacity-0 group-hover/mac-dots:opacity-100"
+                  )}
+                />
+              </button>
 
-            {/* Green Box: Toggle Fullscreen */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFullscreen();
-              }}
-              className="size-3.5 rounded-none bg-[#27c93f] hover:bg-[#27c93f]/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center border border-black/10 shadow-xs"
-              title={isFullscreen ? "Exit Fullscreen Mode" : "Toggle Fullscreen Mode"}
-              aria-label="Toggle Fullscreen"
-            >
-              {isFullscreen ? (
-                <Minimize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
-              ) : (
-                <Maximize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
-              )}
-            </button>
-          </div>
+              {/* Yellow Box: Minimize / Close Terminal */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isFullscreen && onToggleFullscreen) {
+                    onToggleFullscreen();
+                  } else if (isFullscreen) {
+                    setInternalFullscreen(false);
+                  } else if (onClose) {
+                    onClose();
+                  } else {
+                    zoomReset();
+                  }
+                }}
+                className="size-3.5 rounded-none bg-[#ffbd2e] hover:bg-[#ffbd2e]/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center border border-black/10 shadow-xs"
+                title={
+                  isFullscreen
+                    ? "Minimize / Exit Fullscreen Mode"
+                    : onClose
+                    ? "Minimize / Close Terminal"
+                    : "Minimize / Reset Size"
+                }
+                aria-label="Minimize Terminal"
+              >
+                <Minus className="size-2.5 text-amber-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+              </button>
+
+              {/* Green Box: Toggle Fullscreen */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFullscreen();
+                }}
+                className="size-3.5 rounded-none bg-[#27c93f] hover:bg-[#27c93f]/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center border border-black/10 shadow-xs"
+                title={isFullscreen ? "Exit Fullscreen Mode" : "Toggle Fullscreen Mode"}
+                aria-label="Toggle Fullscreen"
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+                ) : (
+                  <Maximize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+                )}
+              </button>
+            </div>
+          )}
 
           <span
             className="text-xs font-semibold tracking-wider flex items-center gap-1.5"

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const GlobalAudio = dynamic(
@@ -68,7 +69,17 @@ export function DeferredGlobalUi() {
     };
   }, [shouldMount]);
 
+  const pathname = usePathname();
+  const isCli =
+    pathname === "/cli" ||
+    pathname?.startsWith("/cli/") ||
+    (typeof window !== "undefined" &&
+      (window.location.hostname.startsWith("cli.") ||
+        window.location.pathname === "/cli" ||
+        window.location.pathname.startsWith("/cli/")));
+
   if (!shouldMount) return null;
+  if (isCli) return null;
 
   return (
     <>

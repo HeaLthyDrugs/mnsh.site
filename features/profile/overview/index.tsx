@@ -85,7 +85,7 @@ function CopyableEmail({ email }: { email: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="group inline-flex cursor-pointer items-center gap-1.5 font-sans text-sm text-muted-foreground transition-colors hover:text-foreground"
+      className="group inline-flex cursor-pointer items-center gap-1.5 font-sans text-sm text-foreground/90 transition-colors hover:text-foreground"
       aria-label={copied ? "Email copied!" : `Copy email: ${emailDecoded}`}
     >
       <span className="underline-offset-4 group-hover:underline">
@@ -201,12 +201,12 @@ export function Overview() {
         <div className="divide-y divide-edge">
           {/* Row 1: Name | Job Title */}
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
-            <InfoCell icon={<Icons.overviewProfile className="size-[17px]" />}>
+            <InfoCell icon={<Icons.overviewProfile className="size-5" />}>
               <p className="text-balance text-foreground/90 font-medium" aria-label={`Name: ${USER.displayName}`}>
                 {USER.fullName}
               </p>
             </InfoCell>
-            <InfoCell icon={<Icons.overviewWork className="size-[22px]" />}>
+            <InfoCell icon={<Icons.overviewWork className="size-5" />}>
               <p className="text-balance text-foreground/90 font-medium">
                 {USER.jobTitle}
               </p>
@@ -215,7 +215,7 @@ export function Overview() {
 
           {/* Row 2: Location | Local Time */}
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
-            <InfoCell icon={<Icons.overviewLocation className="size-[17px]" />}>
+            <InfoCell icon={<Icons.overviewLocation className="size-5" />}>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -223,7 +223,7 @@ export function Overview() {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline-offset-4 hover:underline text-muted-foreground hover:text-foreground transition-colors"
+                  className="underline-offset-4 hover:underline text-foreground/90 hover:text-foreground transition-colors"
                   aria-label={`Location: ${USER.address}`}
                 >
                   {USER.address}
@@ -237,10 +237,10 @@ export function Overview() {
 
           {/* Row 3: Email | Availability Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
-            <InfoCell icon={<Icons.overviewMail className="size-[17px]" />}>
+            <InfoCell icon={<Icons.overviewMail className="size-5" />}>
               <CopyableEmail email={USER.email} />
             </InfoCell>
-            <InfoCell icon={<Icons.overviewStatus className="size-[21px] text-emerald-500 dark:text-emerald-400" />}>
+            <InfoCell icon={<Icons.overviewStatus className="size-5" />}>
               <p className="text-balance text-foreground/90">
                 {USER.availabilityText}
               </p>
@@ -249,20 +249,20 @@ export function Overview() {
 
           {/* Row 4: Website | Currently Building */}
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-edge">
-            <InfoCell icon={<Icons.overviewWeb className="size-[17px]" />}>
+            <InfoCell icon={<Icons.overviewWeb className="size-5" />}>
               {USER.website && (
                 <a
                   href={USER.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline-offset-4 hover:underline text-muted-foreground hover:text-foreground transition-colors"
+                  className="underline-offset-4 hover:underline text-foreground/90 hover:text-foreground transition-colors"
                   aria-label="Portfolio website"
                 >
                   mnsh.site
                 </a>
               )}
             </InfoCell>
-            <InfoCell icon={<Icons.overviewUpcoming className="size-[21px]" />}>
+            <InfoCell icon={<Icons.overviewUpcoming className="size-5" />}>
               {USER.currentlyBuilding && (
                 <div className="flex flex-col space-y-0.5">
                   <a

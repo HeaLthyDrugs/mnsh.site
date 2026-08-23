@@ -636,9 +636,6 @@ export function MusicPlayer({ className }: { className?: string }) {
                 </div>
             </div>
 
-            {/* Inner ring */}
-            <div className="pointer-events-none absolute inset-0 ring-1 ring-white/5 ring-inset z-30" />
-
             {/* ── Inline keyframes ────────────────────────────── */}
             <style jsx>{`
                 @keyframes slideUp {
