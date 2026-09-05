@@ -1,20 +1,10 @@
 "use client";
 
-import { USER } from "../data/user";
+import { USER, FACES } from "../data/user";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLoop } from "@/lib/animation/useLoop";
 import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status";
 import { useState, useRef, useEffect } from "react";
-
-const FACES = [
-    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(1).png",
-    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(2).png",
-    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(3).png",
-    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(4).png",
-    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(5).png",
-    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(6).png",
-    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(7).png",
-];
 
 const ROTATING_TEXTS = USER.flipSentences;
 

@@ -9,11 +9,13 @@ import { USER } from "@/features/profile/data/user";
 import {
   fontFraunces,
   fontGeist,
+  fontInter,
   fontManrope,
   fontNewsreader,
   fontPlusJakartaSans,
 } from "@/lib/fonts";
 import {
+  FONT_THEME_IDS,
   FONT_THEME_STORAGE_KEY,
   resolveFontTheme,
 } from "@/lib/font-theme";
@@ -118,7 +120,7 @@ const darkModeScript = String.raw`
 
   try {
     const fontTheme = localStorage.getItem('${FONT_THEME_STORAGE_KEY}')
-    if (fontTheme === 'editorial' || fontTheme === 'minimal' || fontTheme === 'aesthetic') {
+    if (${JSON.stringify(FONT_THEME_IDS)}.includes(fontTheme)) {
       document.documentElement.dataset.fontTheme = fontTheme
     }
   } catch (_) {}
@@ -145,6 +147,7 @@ export default async function RootLayout({
       lang="en"
       data-font-theme={selectedFontTheme}
       className={cn(
+        fontInter.variable,
         fontGeist.variable,
         fontNewsreader.variable,
         fontManrope.variable,

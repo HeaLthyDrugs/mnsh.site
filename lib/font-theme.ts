@@ -1,11 +1,16 @@
 export const FONT_THEME_STORAGE_KEY = "font-theme";
 export const FONT_THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
-export const FONT_THEME_IDS = ["editorial", "minimal", "aesthetic"] as const;
+export const FONT_THEME_IDS = [
+  "inter",
+  "editorial",
+  "minimal",
+  "aesthetic",
+] as const;
 
 export type FontThemeId = (typeof FONT_THEME_IDS)[number];
 
-export const DEFAULT_FONT_THEME: FontThemeId = "editorial";
+export const DEFAULT_FONT_THEME: FontThemeId = "inter";
 
 export const FONT_THEME_OPTIONS: Record<
   FontThemeId,
@@ -14,6 +19,10 @@ export const FONT_THEME_OPTIONS: Record<
     preview: string;
   }
 > = {
+  inter: {
+    label: "Default",
+    preview: "Inter",
+  },
   editorial: {
     label: "Editorial",
     preview: "Geist + Newsreader",

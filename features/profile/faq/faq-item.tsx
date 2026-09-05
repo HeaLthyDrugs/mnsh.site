@@ -8,7 +8,7 @@ import {
     CollapsibleWithContext,
 } from "@/components/ui/collapsible";
 import { ProseMono } from "@/components/ui/typography";
-import { USER } from "../data/user";
+import { USER, FACES } from "../data/user";
 import { Faq } from "../types/faq";
 import { FaqAnimatedIcon } from "./faq-animated-icon";
 
@@ -48,11 +48,11 @@ export function FaqItem({
                             <div className="flex flex-col items-center shrink-0 pl-4 pt-4">
                                 <div className="relative">
                                     <Image
-                                        src={USER.avatar}
+                                        src={FACES[0]}
                                         alt={USER.displayName}
                                         width={28}
                                         height={28}
-                                        className="size-7 rounded-none"
+                                        className="size-7 rounded-none object-contain"
                                     />
                                     <div className="pointer-events-none absolute inset-0 rounded-none ring-1 ring-black/10 ring-inset dark:ring-white/10" />
                                 </div>

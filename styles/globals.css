@@ -186,8 +186,8 @@
 }
 
 :root {
-  --font-body-current: var(--font-geist);
-  --font-heading-current: var(--font-newsreader);
+  --font-body-current: var(--font-inter);
+  --font-heading-current: var(--font-inter);
 
   /* white */
 
@@ -566,6 +566,16 @@ html {
 :where(.font-heading) {
   font-family: var(--font-heading-current) !important;
   font-optical-sizing: auto;
+}
+
+html[data-font-theme="inter"] {
+  --font-body-current: var(--font-inter);
+  --font-heading-current: var(--font-inter);
+}
+
+html[data-font-theme="editorial"] {
+  --font-body-current: var(--font-geist);
+  --font-heading-current: var(--font-newsreader);
 }
 
 html[data-font-theme="minimal"] {

@@ -1,5 +1,15 @@
 import { User } from "../types/user";
 
+export const FACES = [
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(1).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(2).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(3).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(4).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(5).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(6).png",
+    "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(7).png",
+];
+
 export const USER: User = {
     firstName: "Manish",
     lastName: "Vishwakarma",
