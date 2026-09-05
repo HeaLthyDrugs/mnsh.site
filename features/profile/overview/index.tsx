@@ -17,6 +17,8 @@ import { decodeEmail } from "@/utils/string";
 import { AnimatePresence, motion } from "framer-motion";
 import { Markdown } from "@/components/markdown";
 import Link from "next/link";
+import { useSound } from "@/hooks/use-sound";
+import { copyText } from "@/utils/copy";
 
 
 // Local time component with balanced font styling
@@ -56,10 +58,12 @@ function CopyableEmail({ email }: { email: string }) {
   const emailDecoded = decodeEmail(email);
   const checkIconRef = useRef<CheckIconHandle>(null);
   const copyIconRef = useRef<CopyIconHandle>(null);
+  const playCopy = useSound("/sounds/copy.wav");
 
   const handleCopy = async () => {
+    playCopy();
     try {
-      await navigator.clipboard.writeText(emailDecoded);
+      await copyText(emailDecoded);
       setCopied(true);
       checkIconRef.current?.startAnimation();
       setTimeout(() => {

@@ -5,6 +5,7 @@ import { Volume2Icon, Share2Icon, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useSound } from "@/hooks/use-sound";
 
 interface BlogCoverActionsProps {
     title: string;
@@ -15,6 +16,7 @@ interface BlogCoverActionsProps {
 export function BlogCoverActions({ title, content, slug }: BlogCoverActionsProps) {
     const [isReading, setIsReading] = useState(false);
     const [copied, setCopied] = useState(false);
+    const playCopy = useSound("/sounds/copy.wav");
 
     // Text-to-speech functionality
     const handleReadAloud = () => {
@@ -64,6 +66,7 @@ export function BlogCoverActions({ title, content, slug }: BlogCoverActionsProps
             }
         } else {
             // Fallback: copy to clipboard
+            playCopy();
             await navigator.clipboard.writeText(url);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);

@@ -8,6 +8,7 @@ import { USER } from "@/features/profile/data/user";
 import { useSound } from "@/hooks/use-sound";
 import { cn } from "@/lib/utils";
 import { decodeEmail } from "@/utils/string";
+import { copyText } from "@/utils/copy";
 import { CopyIcon, type CopyIconHandle } from "./animated-icons/copy";
 import { Icons } from "./icons";
 import { SimpleTooltip } from "./ui/tooltip";
@@ -174,12 +175,14 @@ function ContactRow({
   const copyIconRef = useRef<CopyIconHandle>(null);
   const playHover = useSound("/sounds/hover.wav");
   const playTap = useSound("/sounds/tap.wav");
+  const playCopy = useSound("/sounds/copy.wav");
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    playCopy();
     try {
-      await navigator.clipboard.writeText(value);
+      await copyText(value);
       setCopied(true);
       copyIconRef.current?.startAnimation();
       setTimeout(() => {
@@ -195,7 +198,6 @@ function ContactRow({
     <div className="group relative flex items-stretch">
       <button
         onClick={(e) => {
-          playTap();
           handleCopy(e);
         }}
         onMouseEnter={playHover}

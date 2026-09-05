@@ -12,8 +12,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { copyText } from "@/utils/copy"
+import { useSound } from "@/hooks/use-sound"
 
 export function PostShareMenu({ title, url }: { title: string; url: string }) {
+    const playCopy = useSound("/sounds/copy.wav")
     const absoluteUrl = url.startsWith("http")
         ? url
         : typeof window !== "undefined"
@@ -43,6 +45,7 @@ export function PostShareMenu({ title, url }: { title: string; url: string }) {
                 <DropdownMenuItem
                     className="rounded-none px-4"
                     onClick={() => {
+                        playCopy()
                         copyText(absoluteUrl)
                         toast.success("Link copied")
                     }}

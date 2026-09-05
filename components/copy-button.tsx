@@ -4,6 +4,7 @@ import { CheckIcon, CircleXIcon, CopyIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
+import { useSound } from "@/hooks/use-sound";
 import { cn } from "@/lib/utils";
 import { copyText } from "@/utils/copy";
 
@@ -32,6 +33,7 @@ export function CopyButton({
 }) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const playCopy = useSound("/sounds/copy.wav");
 
   useEffect(() => {
     return () => {
@@ -53,6 +55,7 @@ export function CopyButton({
       if (!value) {
         throw new Error("Nothing to copy");
       }
+      playCopy();
       await copyText(value);
       setState("copied");
     } catch {
@@ -63,7 +66,7 @@ export function CopyButton({
       setState("idle");
       resetTimerRef.current = null;
     }, 1500);
-  }, [state, value]);
+  }, [playCopy, state, value]);
 
   return (
     <Button

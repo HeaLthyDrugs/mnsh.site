@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils"
 import { motionIconProps } from "@/components/copy-button"
 import { copyText } from "@/utils/copy"
+import { useSound } from "@/hooks/use-sound"
 
 const cache = new Map<string, string>()
 
@@ -43,11 +44,13 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
     const [state, setState] = useState<"idle" | "done" | "error">("idle")
     const [isCopying, setIsCopying] = useState(false)
     const operationRef = useRef(false)
+    const playCopy = useSound("/sounds/copy.wav")
 
     const handleCopy = async () => {
         if (operationRef.current) return
 
         operationRef.current = true
+        playCopy()
 
         const loadingTimer = setTimeout(() => {
             setIsCopying(true)
