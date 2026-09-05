@@ -4,7 +4,7 @@ import { USER } from "../data/user";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLoop } from "@/lib/animation/useLoop";
 import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const FACES = [
     "https://assets.mnsh.site/icons/faces/my-notion-face-transparent%20(1).png",
@@ -25,6 +25,14 @@ export default function ProfileHeader() {
     const [faceIndex, setFaceIndex] = useState(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
+    useEffect(() => {
+        // Preload all face images into browser cache immediately
+        FACES.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+        });
+    }, []);
+
     const handleFaceClick = () => {
         if (audioRef.current) {
             audioRef.current.currentTime = 0;
@@ -43,7 +51,7 @@ export default function ProfileHeader() {
             <div className="flex flex-col sm:flex-row">
                 {/* Avatar section */}
                 <div className="flex justify-start border-b border-dashed border-edge p-2 sm:justify-start sm:border-b-0 sm:border-r">
-                    <audio ref={audioRef} src="/sounds/tap.wav" preload="none" />
+                    <audio ref={audioRef} src="/sounds/tap.wav" preload="auto" />
                     <motion.div
                         className="relative size-24 cursor-pointer overflow-hidden sm:size-29"
                         whileTap={{ scale: 0.9, rotate: Math.random() > 0.5 ? 2 : -2 }}
@@ -67,7 +75,7 @@ export default function ProfileHeader() {
                                 <img
                                     src={FACES[faceIndex]}
                                     alt={`${USER.displayName}'s avatar`}
-                                    loading={faceIndex === 0 ? "eager" : "lazy"}
+                                    loading="eager"
                                     decoding="async"
                                     className="size-full select-none object-contain"
                                 />
