@@ -1,8 +1,7 @@
 import { ImageLoaderProps } from "next/image";
 
 const ASSETS_HOSTNAME = "assets.mnsh.site";
-const CLOUDFLARE_IMAGE_RESIZING_ENABLED =
-  process.env.NEXT_PUBLIC_CLOUDFLARE_IMAGE_RESIZING === "true";
+const CLOUDFLARE_IMAGE_RESIZING_ENABLED = false;
 
 interface CloudflareTransformOptions {
   width?: number;

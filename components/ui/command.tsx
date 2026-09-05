@@ -36,15 +36,6 @@ function CommandDialog({
 }) {
   return (
     <Dialog {...props}>
-      <DialogHeader className="sr-only">
-        <DialogTitle asChild>
-          <p>{title}</p>
-        </DialogTitle>
-        <DialogDescription asChild>
-          <p>{description}</p>
-        </DialogDescription>
-      </DialogHeader>
-
       <DialogContent
         className={cn(
           "overflow-hidden p-0 max-sm:top-16 max-sm:translate-y-0 rounded-none",
@@ -52,6 +43,14 @@ function CommandDialog({
         )}
         data-slot="command-dialog-content"
       >
+        <DialogHeader className="sr-only">
+          <DialogTitle asChild>
+            <p>{title}</p>
+          </DialogTitle>
+          <DialogDescription asChild>
+            <p>{description}</p>
+          </DialogDescription>
+        </DialogHeader>
         <Command
           {...commandProps}
           className={cn(

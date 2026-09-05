@@ -4,7 +4,6 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 import { Gear, SpeakerHigh, SpeakerX, Pause, Play, X, Terminal } from "@phosphor-icons/react";
 import Image from "next/image";
-import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { AnimatePresence, motion } from "motion/react";
@@ -195,7 +194,6 @@ export function FloatingControls() {
                         aria-label="Music Controls"
                     >
                         <Image
-                            loader={shouldUseCloudflareLoader(track.cover) ? cloudflareLoader : undefined}
                             src={track.cover}
                             alt={`${track.title} Cover`}
                             fill

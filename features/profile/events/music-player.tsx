@@ -19,7 +19,6 @@ import {
     CornersIn as Minimize2,
 } from "@phosphor-icons/react";
 import Image from "next/image";
-import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
@@ -227,7 +226,6 @@ export function MusicPlayer({ className }: { className?: string }) {
                         className="absolute inset-0"
                     >
                         <Image
-                            loader={shouldUseCloudflareLoader(track.cover) ? cloudflareLoader : undefined}
                             src={track.cover}
                             alt={`${track.title} background`}
                             fill
@@ -265,7 +263,6 @@ export function MusicPlayer({ className }: { className?: string }) {
                             className="absolute inset-0"
                         >
                             <Image
-                                loader={shouldUseCloudflareLoader(track.cover) ? cloudflareLoader : undefined}
                                 src={track.cover}
                                 alt={track.title}
                                 fill

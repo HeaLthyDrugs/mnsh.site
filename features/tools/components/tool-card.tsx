@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
@@ -36,7 +35,6 @@ export function ToolCard({ tool }: ToolCardProps) {
                 <div className="relative size-12 shrink-0 overflow-hidden border border-dashed border-edge bg-muted/20">
                     {tool.image ? (
                         <Image
-                            loader={shouldUseCloudflareLoader(tool.image) ? cloudflareLoader : undefined}
                             src={tool.image}
                             alt={tool.name}
                             fill

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
@@ -32,7 +31,6 @@ export function GearCard({ item }: GearCardProps) {
                 <div className="relative w-full aspect-square">
                     {item.image ? (
                         <Image
-                            loader={shouldUseCloudflareLoader(item.image) ? cloudflareLoader : undefined}
                             src={item.image}
                             alt={item.name}
                             fill

@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import type { BlogPost } from "../types/blog-post";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 
 /**
  * Formats the date string for display.
@@ -35,7 +34,6 @@ export function BlogItem({
             {metadata.image && (
                 <div className="relative select-none [&_img]:aspect-1200/630 [&_img]:rounded-none">
                     <Image
-                        loader={shouldUseCloudflareLoader(metadata.image) ? cloudflareLoader : undefined}
                         src={metadata.image}
                         alt={metadata.title}
                         width={1200}

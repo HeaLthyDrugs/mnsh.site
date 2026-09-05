@@ -1,7 +1,6 @@
 import { ArrowUpRight } from "@phosphor-icons/react";
 import Image from "next/image";
 import { Event } from "../types/events";
-import { cloudflareLoader, shouldUseCloudflareLoader, toCloudflareTransformedUrl } from "@/lib/cloudflare-image";
 import { cn } from "@/lib/utils";
 import { YoutubePlaylistPlayer } from "./youtube-player";
 
@@ -41,7 +40,7 @@ export function EventItem({
                 {/* Left: Logo */}
                 <div className="relative shrink-0 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center">
                     <img
-                        src={toCloudflareTransformedUrl(event.backgroundImage!, { width: 256, quality: 72 })}
+                        src={event.backgroundImage!}
                         alt={event.title}
                         className={cn(
                             "w-full h-full object-contain p-0.5",
@@ -92,7 +91,7 @@ export function EventItem({
             {hasBackgroundImage && (!isSocial || event.showImageFullSize) && (
                 <div className="absolute inset-0 z-0 flex items-center justify-center">
                     <img
-                        src={toCloudflareTransformedUrl(event.backgroundImage!, { width: 256, quality: 72 })}
+                        src={event.backgroundImage!}
                         alt=""
                         className={cn(
                             "w-full h-full grayscale transition-all duration-300 group-hover/event:grayscale-0",
@@ -107,7 +106,6 @@ export function EventItem({
                 <>
                     <div className="absolute inset-0 z-0" style={{ filter: 'blur(25px)' }}>
                         <Image
-                            loader={shouldUseCloudflareLoader(event.backgroundImage!) ? cloudflareLoader : undefined}
                             src={event.backgroundImage!}
                             alt=""
                             fill
@@ -119,7 +117,6 @@ export function EventItem({
                     <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center p-3 md:p-4">
                         <div className="relative aspect-square w-full max-w-[72%] md:max-w-[68%]">
                             <Image
-                                loader={shouldUseCloudflareLoader(event.backgroundImage!) ? cloudflareLoader : undefined}
                                 src={event.backgroundImage!}
                                 alt={event.title}
                                 fill
@@ -158,7 +155,6 @@ export function EventItem({
             {showInlineImage && (
                 <div className="relative aspect-video w-full overflow-hidden bg-muted">
                     <Image
-                        loader={shouldUseCloudflareLoader(event.image!) ? cloudflareLoader : undefined}
                         src={event.image!}
                         alt={event.title}
                         fill

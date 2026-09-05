@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 
 
 import { Icons } from "@/components/icons";
@@ -41,8 +40,7 @@ export function ServiceItem({
                 <div className="flex items-center hover:bg-accent2">
                     {service.logo ? (
                         <Image
-                            loader={shouldUseCloudflareLoader(service.logo) ? cloudflareLoader : undefined}
-                        src={service.logo}
+                            src={service.logo}
                             alt={service.title}
                             width={32}
                             height={32}

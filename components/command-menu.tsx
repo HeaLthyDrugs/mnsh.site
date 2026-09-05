@@ -15,7 +15,6 @@ import {
   DeviceMobile,
 } from "@phosphor-icons/react";
 import Image from "next/image";
-import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -389,7 +388,6 @@ function CommandLinkGroup({
               <div className="relative h-5 w-8 shrink-0 bg-muted">
                 <Image
                   className="h-full w-full rounded-none object-cover"
-                  loader={shouldUseCloudflareLoader(link.coverImage!) ? cloudflareLoader : undefined}
                   src={link.coverImage}
                   alt={link.title}
                   width={32}
@@ -401,7 +399,6 @@ function CommandLinkGroup({
               <div className="relative size-5 shrink-0">
                 <Image
                   className="rounded-none object-contain"
-                  loader={shouldUseCloudflareLoader(link.iconImage!) ? cloudflareLoader : undefined}
                   src={link.iconImage}
                   alt={link.title}
                   width={20}

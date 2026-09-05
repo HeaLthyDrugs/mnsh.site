@@ -1,6 +1,6 @@
 "use client";
 
-import { toCloudflareTransformedUrl } from "@/lib/cloudflare-image";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Post } from "../types/work-post";
@@ -95,10 +95,12 @@ export function WorkItem({
     <>
       {metadata.image && (
         <div className="relative select-none block overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={toCloudflareTransformedUrl(metadata.image!, { width: 800, quality: 75 })}
+          <Image
+            src={metadata.image}
             alt={metadata.title}
+            width={1200}
+            height={630}
+            priority={shouldPreloadImage}
             loading={shouldPreloadImage ? "eager" : "lazy"}
             decoding="async"
             className={cn(
