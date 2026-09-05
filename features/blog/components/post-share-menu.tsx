@@ -1,6 +1,6 @@
 "use client"
 
-import { EllipsisIcon, LinkIcon, ShareIcon } from "lucide-react"
+import { DotsThree, Link as LinkIcon, Export } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -32,7 +32,7 @@ export function PostShareMenu({ title, url }: { title: string; url: string }) {
                     variant="secondary"
                     size="icon-sm"
                 >
-                    <ShareIcon />
+                    <Export />
                 </Button>
             </DropdownMenuTrigger>
 
@@ -84,7 +84,7 @@ export function PostShareMenu({ title, url }: { title: string; url: string }) {
                             navigator.share({ title, url: absoluteUrl }).catch(() => { })
                         }}
                     >
-                        <EllipsisIcon className="size-3.5" />
+                        <DotsThree className="size-3.5" />
                         Other app
                     </DropdownMenuItem>
                 )}

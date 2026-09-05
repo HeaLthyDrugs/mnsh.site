@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { TOCItemType } from "fumadocs-core/toc";
 import { cn } from "@/lib/utils";
-import { ListIcon, XIcon } from "lucide-react";
+import { List, X } from "@phosphor-icons/react";
 import { useAtom } from "jotai";
 import { isGalleryExpandedAtom } from "@/store/ui-store";
 import { useSound } from "@/hooks/use-sound";
@@ -191,7 +191,7 @@ export function FloatingTOC({ items }: { items: TOCItemType[] }) {
                             : "bg-background text-foreground border-border hover:bg-accent"
                     )}
                 >
-                    {isOpenMobile ? <XIcon className="size-4" /> : <ListIcon className="size-4" />}
+                    {isOpenMobile ? <X className="size-4" /> : <List className="size-4" />}
                 </button>
             </div>
         </>

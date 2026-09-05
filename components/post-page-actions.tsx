@@ -2,7 +2,7 @@
 
 "use client"
 
-import { CheckIcon, ChevronDownIcon, CircleXIcon, CopyIcon } from "lucide-react"
+import { Check, CaretDown, XCircle, Copy } from "@phosphor-icons/react"
 import { useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 
@@ -103,15 +103,15 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
             <AnimatePresence mode="popLayout" initial={false}>
                 {state === "idle" ? (
                     <motion.span key="idle" {...motionIconProps}>
-                        <CopyIcon className="size-3" />
+                        <Copy className="size-3" />
                     </motion.span>
                 ) : state === "done" ? (
                     <motion.span key="done" {...motionIconProps}>
-                        <CheckIcon className="size-3" strokeWidth={3} />
+                        <Check className="size-3" strokeWidth={3} />
                     </motion.span>
                 ) : state === "error" ? (
                     <motion.span key="error" {...motionIconProps}>
-                        <CircleXIcon className="size-3" />
+                        <XCircle className="size-3" />
                     </motion.span>
                 ) : null}
             </AnimatePresence>
@@ -215,7 +215,7 @@ export function ViewOptions({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button className="flex size-7 items-center justify-center gap-2 text-sm hover:rounded-none focus:rounded-none rounded-none outline-none">
-                    <ChevronDownIcon className="mt-0.5 size-4" />
+                    <CaretDown className="mt-0.5 size-4" />
                     <span className="sr-only">View Options</span>
                 </button>
             </DropdownMenuTrigger>

@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useTransition } from "react";
 import { cn } from "@/lib/utils";
-import { SearchIcon, XIcon } from "lucide-react";
+import { MagnifyingGlass, X } from "@phosphor-icons/react";
 
 export function BlogSearchInput() {
     const router = useRouter();
@@ -35,7 +35,7 @@ export function BlogSearchInput() {
 
     return (
         <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <MagnifyingGlass className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
                 type="text"
                 placeholder="Search blogs..."
@@ -56,7 +56,7 @@ export function BlogSearchInput() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="Clear search"
                 >
-                    <XIcon className="size-4" />
+                    <X className="size-4" />
                 </button>
             )}
         </div>

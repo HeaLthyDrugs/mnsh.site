@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, ExternalLinkIcon, RssIcon } from "lucide-react";
+import { Check, ArrowSquareOut, Rss } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 
 import { SITE_INFO } from "@/config/site";
@@ -126,7 +126,7 @@ export function SiteFooter() {
                 onMouseEnter={playHover}
                 onClick={playTap}
               >
-                <RssIcon className="size-4" />
+                <Rss className="size-4" />
                 <span className="sr-only">RSS</span>
               </a>
             </SimpleTooltip>
@@ -204,7 +204,7 @@ function ContactRow({
         className="flex items-center gap-2.5 pl-4 py-3 text-muted-foreground transition-colors hover:text-foreground"
       >
         <span className="relative size-3.5 shrink-0 cursor-pointer">
-          <CheckIcon
+          <Check
             className={cn(
               "absolute inset-0 size-3.5 text-green-500 transition-all duration-200",
               copied ? "opacity-100 scale-100" : "opacity-0 scale-75"
@@ -237,7 +237,7 @@ function ContactRow({
         onClick={playTap}
       >
         <span>{platform}</span>
-        <ExternalLinkIcon className="size-3" />
+        <ArrowSquareOut className="size-3" />
       </a>
     </div>
   );

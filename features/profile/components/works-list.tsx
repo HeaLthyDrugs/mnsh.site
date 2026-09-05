@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { WorkItem } from "@/features/work/components/work-item";
 import type { Post } from "@/features/work/types/work-post";
 

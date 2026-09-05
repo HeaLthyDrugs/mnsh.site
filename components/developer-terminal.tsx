@@ -3,28 +3,28 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useAtom } from "jotai";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import confetti from "canvas-confetti";
 import {
   Terminal,
   X,
   Minus,
-  ZoomIn,
-  ZoomOut,
-  RotateCcw,
-  Settings,
+  MagnifyingGlassPlus,
+  MagnifyingGlassMinus,
+  ArrowCounterClockwise,
+  Gear,
   Sliders,
-  Volume2,
-  VolumeX,
+  SpeakerHigh,
+  SpeakerX,
   Palette,
-  Type,
+  TextAa,
   Check,
-  RefreshCw,
+  ArrowsClockwise,
   Monitor,
-  MousePointer,
-  Maximize2,
-  Minimize2,
-} from "lucide-react";
+  Cursor,
+  CornersOut,
+  CornersIn,
+} from "@phosphor-icons/react";
 import { isTerminalOpenAtom } from "@/store/ui-store";
 import { USER } from "@/features/profile/data/user";
 import { SOCIAL_LINKS } from "@/features/profile/data/social-links";
@@ -316,7 +316,7 @@ const INITIAL_OUTPUT: OutputLine[] = [
     type: "banner",
     text: `┌───────────────────────────────────────────────────────────┐
 │  M N S H  .  C L I   v1.4.0 (x86_64-apple-darwin)          │
-│  Type 'help' for commands | 'snake' to play mini-game      │
+│  TextAa 'help' for commands | 'snake' to play mini-game      │
 └───────────────────────────────────────────────────────────┘`,
   },
   {
@@ -659,7 +659,7 @@ export function TerminalEngine({
   cursor <shape>  - Change cursor shape ('cursor block', 'cursor line', 'cursor underline')
   sound <on|off>  - Toggle typing sound effects
   crt <on|off>    - Toggle CRT scanlines retro effect overlay ('crt on', 'crt off')
-  settings        - Toggle visual Settings & Theme picker modal
+  settings        - Toggle visual Gear & Theme picker modal
   matrix          - Toggle Matrix rain background animation
   clear           - Clear terminal output log
   exit            - Close terminal window
@@ -667,7 +667,7 @@ export function TerminalEngine({
 Hotkeys & Controls:
   Double Click Header - Toggle Fullscreen
   F11 / Cmd+Shift+F   - Toggle Fullscreen
-  ESC                 - Exit Fullscreen / Settings / Snake Game`,
+  ESC                 - Exit Fullscreen / Gear / Snake Game`,
             "output"
           );
           break;
@@ -677,7 +677,7 @@ Hotkeys & Controls:
         case "customize":
           setIsSettingsOpen((prev) => !prev);
           appendOutput(
-            `Settings panel ${!isSettingsOpen ? "OPENED ⚙️" : "CLOSED 🔴"}`,
+            `Gear panel ${!isSettingsOpen ? "OPENED ⚙️" : "CLOSED 🔴"}`,
             "system"
           );
           break;
@@ -697,8 +697,8 @@ Hotkeys & Controls:
 └──────────────────────────────────────────────────────────┘
 ${listStr}
 
-💡 Type 'theme <name>' to apply (e.g. 'theme cyber-light', 'theme dracula', 'theme tokyo-night').
-💡 Type 'theme site <light|dark|system>' to toggle main website theme.`,
+💡 TextAa 'theme <name>' to apply (e.g. 'theme cyber-light', 'theme dracula', 'theme tokyo-night').
+💡 TextAa 'theme site <light|dark|system>' to toggle main website theme.`,
               "output"
             );
           } else if (subCmd === "site" && parts[2]) {
@@ -718,7 +718,7 @@ ${listStr}
               appendOutput(`Terminal theme changed to: ${targetTheme.name} ✨`, "system");
             } else {
               appendOutput(
-                `Theme not found: '${subCmd}'. Type 'theme list' to see all themes.`,
+                `Theme not found: '${subCmd}'. TextAa 'theme list' to see all themes.`,
                 "error"
               );
             }
@@ -739,8 +739,8 @@ ${listStr}
 ${listStr}
 Current Font Size: ${config.fontSize}px
 
-💡 Type 'font <id>' to change font (e.g. 'font fira', 'font geist', 'font courier').
-💡 Type 'font size <px>' to set font size (e.g. 'font size 15').`,
+💡 TextAa 'font <id>' to change font (e.g. 'font fira', 'font geist', 'font courier').
+💡 TextAa 'font size <px>' to set font size (e.g. 'font size 15').`,
               "output"
             );
           } else if (subCmd === "size" && valArg) {
@@ -760,7 +760,7 @@ Current Font Size: ${config.fontSize}px
               appendOutput(`Font changed to: ${targetFont.name} 🔤`, "system");
             } else {
               appendOutput(
-                `Font not found: '${subCmd}'. Type 'font list' to see options.`,
+                `Font not found: '${subCmd}'. TextAa 'font list' to see options.`,
                 "error"
               );
             }
@@ -864,7 +864,7 @@ DevOps:   Git, Docker, Cloudflare Workers, Vercel, Neovim, VS Code`,
 └──────────────────────────────────────────────────────────┘
 ${listStr}
 
-💡 Type 'work <slug>' to inspect details or 'work open <slug>' to open page.`,
+💡 TextAa 'work <slug>' to inspect details or 'work open <slug>' to open page.`,
               "output"
             );
           } else if (subCmd === "open" && parts[2]) {
@@ -885,12 +885,12 @@ Category:    ${found.category}
 Status:      ${found.status}
 Tech Stack:  ${found.technologies.join(", ")}
 ${found.liveUrl ? `Live URL:    ${found.liveUrl}\n` : ""}${found.repoUrl ? `Repository:  ${found.repoUrl}\n` : ""}
-Type 'work open ${found.slug}' to view project page.`,
+TextAa 'work open ${found.slug}' to view project page.`,
                 "output"
               );
             } else {
               appendOutput(
-                `Project not found: '${subCmd}'. Type 'work' to view all projects.`,
+                `Project not found: '${subCmd}'. TextAa 'work' to view all projects.`,
                 "error"
               );
             }
@@ -911,7 +911,7 @@ Type 'work open ${found.slug}' to view project page.`,
 └──────────────────────────────────────────────────────────┘
 ${blogStr}
 
-💡 Type 'blog <slug>' for summary or 'blog open <slug>' to read full article page.`,
+💡 TextAa 'blog <slug>' for summary or 'blog open <slug>' to read full article page.`,
               "output"
             );
           } else if (subCmd === "open" && parts[2]) {
@@ -932,12 +932,12 @@ Category:    ${foundBlog.category}
 Tags:        ${foundBlog.tags.join(", ")}
 Summary:     ${foundBlog.description}
 
-Type 'blog open ${foundBlog.slug}' to read complete post on website.`,
+TextAa 'blog open ${foundBlog.slug}' to read complete post on website.`,
                 "output"
               );
             } else {
               appendOutput(
-                `Article not found: '${subCmd}'. Type 'blog' to list all posts.`,
+                `Article not found: '${subCmd}'. TextAa 'blog' to list all posts.`,
                 "error"
               );
             }
@@ -959,7 +959,7 @@ Type 'blog open ${foundBlog.slug}' to read complete post on website.`,
 └──────────────────────────────────────────────────────────┘
 ${gearStr}
 
-Type 'gear open' or click 'Gear' in navigation to view images & links.`,
+TextAa 'gear open' or click 'Gear' in navigation to view images & links.`,
               "output"
             );
           }
@@ -980,7 +980,7 @@ Type 'gear open' or click 'Gear' in navigation to view images & links.`,
 └──────────────────────────────────────────────────────────┘
 ${toolsStr}
 
-Type 'tools open' to view full tools showcase page.`,
+TextAa 'tools open' to view full tools showcase page.`,
               "output"
             );
           }
@@ -1016,7 +1016,7 @@ ${SOCIAL_LINKS.map((s) => `  - ${s.title.padEnd(12)} : ${s.href}`).join("\n")}`,
   📄 contact.txt  - Direct email & social media links
   📄 readme.txt   - Terminal CLI features & keyboard hotkeys guide
 
-💡 Type 'cat <filename>' to read file contents (e.g. 'cat bio.md', 'cat skills.txt').`,
+💡 TextAa 'cat <filename>' to read file contents (e.g. 'cat bio.md', 'cat skills.txt').`,
               "output"
             );
           } else if (subCmd === "bio.md" || subCmd === "bio") {
@@ -1056,14 +1056,14 @@ Commands: help, work, blog, cat list, ls, snake, settings, theme, font, clear, e
 Hotkeys:
   Double Click Header - Toggle Fullscreen
   F11 / Cmd+Shift+F   - Toggle Fullscreen
-  ESC                 - Exit Fullscreen / Settings / Snake Game
+  ESC                 - Exit Fullscreen / Gear / Snake Game
   Tab                 - Auto-complete command
   Up / Down Arrow     - Command history navigation`,
               "output"
             );
           } else {
             appendOutput(
-              `cat: ${subCmd}: No such file or directory. Type 'cat list' or 'ls' to see available files.`,
+              `cat: ${subCmd}: No such file or directory. TextAa 'cat list' or 'ls' to see available files.`,
               "error"
             );
           }
@@ -1116,7 +1116,7 @@ Hotkeys:
 
         default:
           appendOutput(
-            `Command not found: '${cmd}'. Type 'help' for available commands or 'settings' for customization.`,
+            `Command not found: '${cmd}'. TextAa 'help' for available commands or 'settings' for customization.`,
             "error"
           );
           break;
@@ -1384,9 +1384,9 @@ Hotkeys:
                 aria-label="Toggle Fullscreen"
               >
                 {isFullscreen ? (
-                  <Minimize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+                  <CornersIn className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
                 ) : (
-                  <Maximize2 className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
+                  <CornersOut className="size-2.5 text-emerald-950 font-bold opacity-0 group-hover/mac-dots:opacity-100 transition-opacity" />
                 )}
               </button>
             </div>
@@ -1400,7 +1400,7 @@ Hotkeys:
           </span>
         </div>
 
-        {/* Header Controls: Settings button only (icon only, no text) */}
+        {/* Header Controls: Gear button only (icon only, no text) */}
         <div className="flex items-center gap-1.5">
           <button
             onClick={(e) => {
@@ -1420,15 +1420,15 @@ Hotkeys:
               color: isSettingsOpen ? "#ffffff" : currentTheme.promptColor,
               borderColor: currentTheme.borderColor,
             }}
-            title="Terminal Settings & Customization"
-            aria-label="Settings"
+            title="Terminal Gear & Customization"
+            aria-label="Gear"
           >
-            <Settings className="size-4" />
+            <Gear className="size-4" />
           </button>
         </div>
       </div>
 
-      {/* Settings Modal Overlay Drawer */}
+      {/* Gear Modal Overlay Drawer */}
       <AnimatePresence>
         {isSettingsOpen && (
           <motion.div
@@ -1444,7 +1444,7 @@ Hotkeys:
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-4 space-y-4 max-h-[360px] overflow-y-auto scrollbar-thin">
-              {/* Settings Header Tabs */}
+              {/* Gear Header Tabs */}
               <div className="flex items-center justify-between border-b pb-2" style={{ borderColor: currentTheme.borderColor }}>
                 <div className="flex items-center gap-2">
                   <Sliders className="size-4" style={{ color: currentTheme.promptColor }} />
@@ -1480,7 +1480,7 @@ Hotkeys:
                       borderColor: currentTheme.borderColor,
                     }}
                   >
-                    <Type className="size-3.5" /> Fonts & Size
+                    <TextAa className="size-3.5" /> Fonts & Size
                   </button>
                   <button
                     onClick={() => setActiveTab("effects")}
@@ -1494,7 +1494,7 @@ Hotkeys:
                       borderColor: currentTheme.borderColor,
                     }}
                   >
-                    <MousePointer className="size-3.5" /> Cursor & FX
+                    <Cursor className="size-3.5" /> Cursor & FX
                   </button>
                 </div>
               </div>
@@ -1705,7 +1705,7 @@ Hotkeys:
                       }}
                     >
                       <span className="flex items-center gap-1.5">
-                        {config.soundEnabled ? <Volume2 className="size-3.5" /> : <VolumeX className="size-3.5 opacity-50" />}
+                        {config.soundEnabled ? <SpeakerHigh className="size-3.5" /> : <SpeakerX className="size-3.5 opacity-50" />}
                         Typing Sound Feedback
                       </span>
                       <span className="font-mono text-[11px]" style={{ color: currentTheme.promptColor }}>
@@ -1762,7 +1762,7 @@ Hotkeys:
                   onClick={() => updateConfig(DEFAULT_CONFIG)}
                   className="flex items-center gap-1 text-[11px] opacity-70 hover:opacity-100 hover:text-amber-400 transition-colors"
                 >
-                  <RefreshCw className="size-3" /> Restore Factory Defaults
+                  <ArrowsClockwise className="size-3" /> Restore Factory Defaults
                 </button>
                 <button
                   onClick={() => setIsSettingsOpen(false)}
@@ -1953,7 +1953,7 @@ Hotkeys:
             Press <kbd className="px-1 py-0.5 border text-xs" style={{ borderColor: currentTheme.borderColor }}>Tab</kbd> for completion
           </span>
           <span>
-            Type <kbd className="px-1 py-0.5 border text-xs" style={{ borderColor: currentTheme.borderColor }}>settings</kbd> or click ⚙️ for Themes
+            TextAa <kbd className="px-1 py-0.5 border text-xs" style={{ borderColor: currentTheme.borderColor }}>settings</kbd> or click ⚙️ for Themes
           </span>
           <span>
             Press <kbd className="px-1 py-0.5 border text-xs" style={{ borderColor: currentTheme.borderColor }}>ESC</kbd> to exit

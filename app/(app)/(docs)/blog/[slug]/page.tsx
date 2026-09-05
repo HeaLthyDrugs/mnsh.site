@@ -1,9 +1,10 @@
 import dayjs from "dayjs";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
 import { getTableOfContents } from "fumadocs-core/content/toc";
 import type { BlogPosting as PageSchema, WithContext } from "schema-dts";
 
@@ -175,7 +176,7 @@ export default async function Page({
                     asChild
                 >
                     <Link href="/blog">
-                        <ArrowLeftIcon />
+                        <ArrowLeft />
                         Blog
                     </Link>
                 </Button>
@@ -201,7 +202,7 @@ export default async function Page({
                                     asChild
                                 >
                                     <Link href={`/blog/${previous.slug}`}>
-                                        <ArrowLeftIcon />
+                                        <ArrowLeft />
                                         <span className="sr-only">Previous</span>
                                     </Link>
                                 </Button>
@@ -210,7 +211,7 @@ export default async function Page({
                                 <div className="flex items-center gap-3">
                                     Previous Post
                                     <Kbd className="rounded-none">
-                                        <ArrowLeftIcon />
+                                        <ArrowLeft />
                                     </Kbd>
                                 </div>
                             </TooltipContent>
@@ -228,7 +229,7 @@ export default async function Page({
                                 >
                                     <Link href={`/blog/${next.slug}`}>
                                         <span className="sr-only">Next</span>
-                                        <ArrowRightIcon />
+                                        <ArrowRight />
                                     </Link>
                                 </Button>
                             </TooltipTrigger>
@@ -236,7 +237,7 @@ export default async function Page({
                                 <div className="flex items-center gap-3">
                                     Next Post
                                     <Kbd className="rounded-none">
-                                        <ArrowRightIcon />
+                                        <ArrowRight />
                                     </Kbd>
                                 </div>
                             </TooltipContent>
@@ -261,11 +262,12 @@ export default async function Page({
                     <div className="relative py-4 not-prose">
                         <div className="relative overflow-hidden rounded-none ring-1 ring-black/10 ring-inset dark:ring-white/10">
                             <Image
+                                loader={shouldUseCloudflareLoader(blog.metadata.image) ? cloudflareLoader : undefined}
                                 src={blog.metadata.image}
                                 alt={blog.metadata.title}
                                 width={1200}
                                 height={630}
-                                quality={100}
+                                quality={75}
                                 priority
                                 className="w-full h-auto object-cover aspect-[1200/630]"
                             />

@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { usePathname } from "next/navigation";
-import { Settings, Volume2, VolumeX, Pause, Play, X, Terminal } from "lucide-react";
+import { Gear, SpeakerHigh, SpeakerX, Pause, Play, X, Terminal } from "@phosphor-icons/react";
 import Image from "next/image";
+import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
+
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -193,9 +195,11 @@ export function FloatingControls() {
                         aria-label="Music Controls"
                     >
                         <Image
+                            loader={shouldUseCloudflareLoader(track.cover) ? cloudflareLoader : undefined}
                             src={track.cover}
                             alt={`${track.title} Cover`}
                             fill
+                            sizes="48px"
                             className={cn(
                                 "object-cover transition-all duration-700 ease-in-out",
                                 isPlayerExpanded ? "opacity-80 scale-110" : "opacity-40 blur-[2px] brightness-75 scale-100"
@@ -275,7 +279,7 @@ export function FloatingControls() {
                         )}
                         aria-label={!isSoundEnabled ? "Unmute" : "Mute"}
                     >
-                        {!isSoundEnabled ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+                        {!isSoundEnabled ? <SpeakerX className="size-4" /> : <SpeakerHigh className="size-4" />}
                     </button>
 
                     <div className="w-px bg-border/40" aria-hidden="true" />
@@ -301,9 +305,9 @@ export function FloatingControls() {
                                 onMouseEnter={playHover}
                                 onClick={playTap}
                                 className="flex flex-1 cursor-pointer items-center justify-center text-muted-foreground/70 transition-all duration-300 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-0"
-                                aria-label="Open Settings"
+                                aria-label="Open Gear"
                             >
-                                <Settings className="size-4" />
+                                <Gear className="size-4" />
                             </button>
                         </FamilyDrawerTrigger>
                         <FamilyDrawerPortal>

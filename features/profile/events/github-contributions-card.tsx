@@ -1,6 +1,6 @@
 "use client";
 
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import {
   Tooltip,
   TooltipContent,
@@ -17,7 +17,7 @@ import {
 import type { Activity } from "@/components/contribution-graph";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { LoaderIcon } from "lucide-react";
+import { SpinnerGap } from "@phosphor-icons/react";
 
 const GITHUB_CONTRIBUTIONS_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-2";
 const CACHE_TTL_MS = 60 * 60 * 1000;
@@ -35,7 +35,7 @@ interface GitHubContributionsCardProps {
 function GitHubContributionsFallback() {
   return (
     <div className="flex h-40.5 w-full items-center justify-center">
-      <LoaderIcon className="animate-spin text-muted-foreground" />
+      <SpinnerGap className="animate-spin text-muted-foreground" />
     </div>
   );
 }
@@ -188,7 +188,7 @@ function GitHubContributionsContent({
             <TooltipContent className="font-sans">
               <p>
                 {activity.count} contribution{activity.count > 1 ? "s" : null}{" "}
-                on {format(new Date(activity.date), "dd.MM.yyyy")}
+                on {dayjs(activity.date).format("DD.MM.YYYY")}
               </p>
             </TooltipContent>
           </Tooltip>

@@ -12,15 +12,17 @@ import {
     Play,
     SkipBack,
     SkipForward,
-    Volume2,
-    VolumeX,
-    Disc3,
-    Maximize2,
-    Minimize2,
-} from "lucide-react";
+    SpeakerHigh as Volume2,
+    SpeakerX as VolumeX,
+    Disc,
+    CornersOut as Maximize2,
+    CornersIn as Minimize2,
+} from "@phosphor-icons/react";
 import Image from "next/image";
+import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
+
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import {
     AudioLinesIcon,
     type AudioLinesIconHandle,
@@ -225,9 +227,11 @@ export function MusicPlayer({ className }: { className?: string }) {
                         className="absolute inset-0"
                     >
                         <Image
+                            loader={shouldUseCloudflareLoader(track.cover) ? cloudflareLoader : undefined}
                             src={track.cover}
                             alt={`${track.title} background`}
                             fill
+                            sizes="256px"
                             className={cn(
                                 "object-cover blur-[25px] scale-125 opacity-70",
                             )}
@@ -261,9 +265,11 @@ export function MusicPlayer({ className }: { className?: string }) {
                             className="absolute inset-0"
                         >
                             <Image
+                                loader={shouldUseCloudflareLoader(track.cover) ? cloudflareLoader : undefined}
                                 src={track.cover}
                                 alt={track.title}
                                 fill
+                                sizes="(max-width: 768px) 200px, 320px"
                                 className={cn(
                                     "object-cover rounded-none",
                                     "group-hover/player:scale-105 transition-transform duration-700"
@@ -623,7 +629,7 @@ export function MusicPlayer({ className }: { className?: string }) {
                                 className="absolute bottom-0 right-0 flex items-center justify-center min-h-8 min-w-8 text-white/70 hover:text-white transition-colors z-10 shrink-0"
                                 aria-label="Change genre"
                             >
-                                <Disc3
+                                <Disc
                                     className={cn(
                                         "size-3.5 transition-transform duration-700",
                                         isPlaying && !genreOpen && "animate-[spin_3s_linear_infinite]",

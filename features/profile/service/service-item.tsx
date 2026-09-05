@@ -1,5 +1,6 @@
-import { InfinityIcon, LinkIcon } from "lucide-react";
 import Image from "next/image";
+import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
+
 
 import { Icons } from "@/components/icons";
 import { Markdown } from "@/components/markdown";
@@ -40,11 +41,12 @@ export function ServiceItem({
                 <div className="flex items-center hover:bg-accent2">
                     {service.logo ? (
                         <Image
-                            src={service.logo}
+                            loader={shouldUseCloudflareLoader(service.logo) ? cloudflareLoader : undefined}
+                        src={service.logo}
                             alt={service.title}
                             width={32}
                             height={32}
-                            quality={100}
+                            quality={75}
                             className="mx-4 flex size-6 shrink-0 select-none"
                             aria-hidden="true"
                         />

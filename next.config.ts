@@ -2,8 +2,17 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 	/* config options here */
-	turbopack: {
-		root: ".",
+	experimental: {
+		optimizePackageImports: [
+			'@phosphor-icons/react',
+			'motion',
+			'date-fns',
+			'jotai',
+			'radix-ui',
+		],
+	},
+	compiler: {
+		removeConsole: process.env.NODE_ENV === 'production',
 	},
 	async rewrites() {
 		const rewrites = [
@@ -34,10 +43,6 @@ const nextConfig: NextConfig = {
 		qualities: [68, 75, 82],
 		minimumCacheTTL: 31536000,
 		remotePatterns: [
-			{
-				protocol: 'https',
-				hostname: 'assets.mnsh.site',
-			},
 			{
 				protocol: 'https',
 				hostname: 'assets.mnsh.site',
@@ -115,6 +120,33 @@ const nextConfig: NextConfig = {
 			},
 			{
 				source: "/scene/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/fonts/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/backgrounds/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=31536000, immutable",
+					},
+				],
+			},
+			{
+				source: "/favicon/:path*",
 				headers: [
 					{
 						key: "Cache-Control",

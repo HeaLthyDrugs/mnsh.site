@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { GripHorizontal } from "lucide-react";
+import { motion } from "motion/react";
+import { DotsSixVertical as GripHorizontal } from "@phosphor-icons/react";
 import { useTheme } from "next-themes";
 import React, { useCallback, useEffect, useState } from "react";
 

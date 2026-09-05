@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export function NotFound({ className }: { className?: string }) {
         <Button variant="default" size="lg" className="gap-2 rounded-full px-8 text-base shadow-lg" asChild>
           <Link href="/">
             Go home
-            <ArrowRightIcon className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>
       </div>

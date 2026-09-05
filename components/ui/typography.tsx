@@ -1,4 +1,4 @@
-import { LinkIcon } from "lucide-react";
+import { Link } from "@phosphor-icons/react/dist/ssr";
 import { Slot as SlotPrimitive } from "radix-ui";
 import React from "react";
 
@@ -85,7 +85,7 @@ function Heading<T extends HeadingTypes = "h1">({
         {props.children}
       </a>
 
-      <LinkIcon
+      <Link
         className="size-4 shrink-0 text-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100"
         aria-label="Link to section"
       />

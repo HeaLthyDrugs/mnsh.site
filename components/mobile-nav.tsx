@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Briefcase, FileText, Mail, User, X, Zap, Wrench, MonitorSmartphone } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { Briefcase, FileText, Envelope, User, X, Lightning, Wrench, DeviceMobile } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,11 +17,11 @@ const getIconForTitle = (title: string) => {
   if (lowercaseTitle.includes("me") || lowercaseTitle.includes("home")) return MnshMark;
   if (lowercaseTitle.includes("work")) return Briefcase;
   if (lowercaseTitle.includes("blog") || lowercaseTitle.includes("post")) return FileText;
-  if (lowercaseTitle.includes("contact")) return Mail;
+  if (lowercaseTitle.includes("contact")) return Envelope;
   if (lowercaseTitle.includes("about")) return User;
   if (lowercaseTitle.includes("tool")) return Wrench;
-  if (lowercaseTitle.includes("gear")) return MonitorSmartphone;
-  return Zap;
+  if (lowercaseTitle.includes("gear")) return DeviceMobile;
+  return Lightning;
 };
 
 export function MobileNav({

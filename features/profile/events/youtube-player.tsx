@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type MouseEvent } from "react";
-import { Volume2, VolumeX, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { SpeakerHigh as Volume2, SpeakerX as VolumeX, CaretLeft as ChevronLeft, CaretRight as ChevronRight, Play, Pause } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 type YouTubePlayer = {

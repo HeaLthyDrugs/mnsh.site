@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
+
 
 import { Markdown } from "@/components/markdown";
 import { useSound } from "@/hooks/use-sound";
@@ -48,6 +50,7 @@ export function FaqItem({
                             <div className="flex flex-col items-center shrink-0 pl-4 pt-4">
                                 <div className="relative">
                                     <Image
+                                        loader={shouldUseCloudflareLoader(FACES[0]) ? cloudflareLoader : undefined}
                                         src={FACES[0]}
                                         alt={USER.displayName}
                                         width={28}

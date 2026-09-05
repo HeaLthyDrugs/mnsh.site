@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { CaretDown } from "@phosphor-icons/react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import Link from "next/link";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -46,7 +46,7 @@ export function MoreOptions() {
                     <button className="flex h-full px-4 font-sans items-center justify-center text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground gap-1.5 cursor-pointer">
                         <span>More</span>
                         <Kbd className="hidden sm:inline-flex">S</Kbd>
-                        <ChevronDownIcon
+                        <CaretDown
                             className={`size-3.5 transition-transform duration-500 ${open ? "rotate-180" : ""}`}
                         />
                     </button>

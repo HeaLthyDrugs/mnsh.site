@@ -8,7 +8,9 @@ import {
   useState,
   type ReactNode,
 } from "react"
-import { Slot } from "@radix-ui/react-slot"
+import { Slot as SlotPrimitive } from "radix-ui"
+
+const Slot = SlotPrimitive.Root;
 import { AnimatePresence, motion } from "motion/react"
 import useMeasure from "react-use-measure"
 import { Drawer } from "vaul"

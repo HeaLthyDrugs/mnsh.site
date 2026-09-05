@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpIcon } from "lucide-react";
+import { ArrowUp } from "@phosphor-icons/react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useState } from "react";
 
@@ -39,7 +39,7 @@ export function ScrollTop({
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       {...props}
     >
-      <ArrowUpIcon className="size-5" />
+      <ArrowUp className="size-5" />
       <span className="sr-only">Scroll to top</span>
     </Button>
   );

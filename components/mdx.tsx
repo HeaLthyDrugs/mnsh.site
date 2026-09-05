@@ -1,4 +1,4 @@
-import { WrenchIcon } from "lucide-react";
+import { Wrench } from "@phosphor-icons/react/dist/ssr";
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeExternalLinks from "rehype-external-links";
@@ -134,7 +134,7 @@ const components: MDXRemoteProps["components"] = {
       </TabsTrigger>
 
       <TabsTrigger value="manual">
-        <WrenchIcon />
+        <Wrench />
         Manual
       </TabsTrigger>
     </TabsList>

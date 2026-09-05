@@ -1,6 +1,6 @@
 // ─── Genre & Track Definitions ─────────────────────────────────────
 
-import { Flame, Globe, type LucideIcon } from "lucide-react";
+import { Flame, Globe, type Icon as LucideIcon } from "@phosphor-icons/react";
 
 export interface Track {
     title: string;

@@ -1,11 +1,12 @@
 "use client";
 
+import { toCloudflareTransformedUrl } from "@/lib/cloudflare-image";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Post } from "../types/work-post";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { useSound } from "@/hooks/use-sound";
 
@@ -96,7 +97,7 @@ export function WorkItem({
         <div className="relative select-none block overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={metadata.image}
+            src={toCloudflareTransformedUrl(metadata.image!, { width: 800, quality: 75 })}
             alt={metadata.title}
             loading={shouldPreloadImage ? "eager" : "lazy"}
             decoding="async"

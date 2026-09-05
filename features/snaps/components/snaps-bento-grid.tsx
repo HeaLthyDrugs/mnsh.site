@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { CaretLeft as ChevronLeft, CaretRight as ChevronRight, X } from "@phosphor-icons/react";
 import Image from "next/image";
 
 import type { Snap } from "@/features/snaps/types/snap";

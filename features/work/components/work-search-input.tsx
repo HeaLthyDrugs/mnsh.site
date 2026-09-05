@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useTransition } from "react";
 import { cn } from "@/lib/utils";
-import { SearchIcon, XIcon } from "lucide-react";
+import { MagnifyingGlass, X as XIcon } from "@phosphor-icons/react";
 
 export function WorkSearchInput() {
     const router = useRouter();
@@ -35,7 +35,7 @@ export function WorkSearchInput() {
 
     return (
         <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <MagnifyingGlass className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
                 type="text"
                 placeholder="Search works..."

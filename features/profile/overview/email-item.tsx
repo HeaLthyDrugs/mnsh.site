@@ -1,6 +1,6 @@
 "use client";
 
-import { MailIcon } from "lucide-react";
+import { Envelope as MailIcon } from "@phosphor-icons/react";
 
 import { useIsClient } from "@/hooks/use-is-client";
 import { decodeEmail } from "@/utils/string";

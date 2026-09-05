@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { isGalleryExpandedAtom } from "@/store/ui-store";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { CaretLeft as ChevronLeft, CaretRight as ChevronRight, Play, X } from "@phosphor-icons/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { cn } from "@/lib/utils";
 

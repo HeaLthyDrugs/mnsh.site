@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, CircleXIcon, CopyIcon } from "lucide-react";
+import { Check, XCircle, Copy } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
@@ -87,15 +87,15 @@ export function CopyButton({
       <AnimatePresence mode="popLayout" initial={false}>
         {state === "idle" ? (
           <motion.span key="idle" {...motionIconProps}>
-            <CopyIcon className="size-3" />
+            <Copy className="size-3" />
           </motion.span>
         ) : state === "copied" ? (
           <motion.span key="copied" {...motionIconProps}>
-            <CheckIcon className="size-3" strokeWidth={3} />
+            <Check className="size-3" strokeWidth={3} />
           </motion.span>
         ) : (
           <motion.span key="failed" {...motionIconProps}>
-            <CircleXIcon className="size-3" />
+            <XCircle className="size-3" />
           </motion.span>
         )}
       </AnimatePresence>

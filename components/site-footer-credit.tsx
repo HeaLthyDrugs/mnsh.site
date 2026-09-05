@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import type { MouseEvent } from "react";
 import { useRef } from "react";
 import { SOURCE_CODE_GITHUB_URL } from "@/config/site";

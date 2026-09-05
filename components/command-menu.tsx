@@ -1,20 +1,22 @@
 "use client";
 
-import type { LucideProps } from "lucide-react";
+import type { IconProps } from "@phosphor-icons/react";
 import {
-  BriefcaseBusinessIcon,
-  CornerDownLeftIcon,
-  MoonStarIcon,
-  RssIcon,
-  SunIcon,
-  TextIcon,
-  ArrowUpDownIcon,
-  ArrowUpRightIcon,
-  TerminalIcon,
-  WrenchIcon,
-  MonitorSmartphoneIcon,
-} from "lucide-react";
+  Briefcase,
+  ArrowElbowDownLeft,
+  MoonStars,
+  Rss,
+  Sun,
+  TextT,
+  ArrowsDownUp,
+  ArrowUpRight,
+  Terminal,
+  Wrench,
+  DeviceMobile,
+} from "@phosphor-icons/react";
 import Image from "next/image";
+import { cloudflareLoader, shouldUseCloudflareLoader } from "@/lib/cloudflare-image";
+
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -47,7 +49,7 @@ type CommandLinkItem = {
   title: string;
   href: string;
 
-  icon?: React.ComponentType<LucideProps>;
+  icon?: React.ComponentType<IconProps>;
   iconImage?: string;
   coverImage?: string;
   keywords?: string[];
@@ -63,22 +65,22 @@ const MENU_LINKS: CommandLinkItem[] = [
   {
     title: "Works",
     href: "/work",
-    icon: BriefcaseBusinessIcon,
+    icon: Briefcase,
   },
   {
     title: "Blog",
     href: "/blog",
-    icon: RssIcon,
+    icon: Rss,
   },
   {
     title: "Tools",
     href: "/tools",
-    icon: WrenchIcon,
+    icon: Wrench,
   },
   {
     title: "Gear",
     href: "/gear",
-    icon: MonitorSmartphoneIcon,
+    icon: DeviceMobile,
   },
 ];
 
@@ -256,7 +258,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
           <CommandLinkGroup
             heading="Blogs"
             links={blogLinks}
-            fallbackIcon={TextIcon}
+            fallbackIcon={TextT}
             onLinkSelect={handleOpenLink}
             playHover={playHover}
             playTap={playTap}
@@ -268,7 +270,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
           <CommandLinkGroup
             heading="Works"
             links={workLinks}
-            fallbackIcon={BriefcaseBusinessIcon}
+            fallbackIcon={Briefcase}
             onLinkSelect={handleOpenLink}
             playHover={playHover}
             playTap={playTap}
@@ -297,7 +299,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
                 setIsTerminalOpen(true);
               }}
             >
-              <TerminalIcon className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
+              <Terminal className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
               Terminal 
             </CommandItem>
           </CommandGroup>
@@ -314,7 +316,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
                 handleThemeChange("light");
               }}
             >
-              <SunIcon />
+              <Sun />
               Light
             </CommandItem>
             <CommandItem
@@ -326,7 +328,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
                 handleThemeChange("dark");
               }}
             >
-              <MoonStarIcon />
+              <MoonStars />
               Dark
             </CommandItem>
             <CommandItem
@@ -361,7 +363,7 @@ function CommandLinkGroup({
 }: {
   heading: string;
   links: CommandLinkItem[];
-  fallbackIcon?: React.ComponentType<LucideProps>;
+  fallbackIcon?: React.ComponentType<IconProps>;
   onLinkSelect: (href: string, openInNewTab?: boolean) => void;
   playHover: () => void;
   playTap: () => void;
@@ -387,6 +389,7 @@ function CommandLinkGroup({
               <div className="relative h-5 w-8 shrink-0 bg-muted">
                 <Image
                   className="h-full w-full rounded-none object-cover"
+                  loader={shouldUseCloudflareLoader(link.coverImage!) ? cloudflareLoader : undefined}
                   src={link.coverImage}
                   alt={link.title}
                   width={32}
@@ -398,6 +401,7 @@ function CommandLinkGroup({
               <div className="relative size-5 shrink-0">
                 <Image
                   className="rounded-none object-contain"
+                  loader={shouldUseCloudflareLoader(link.iconImage!) ? cloudflareLoader : undefined}
                   src={link.iconImage}
                   alt={link.title}
                   width={20}
@@ -425,7 +429,7 @@ function CommandLinkGroup({
                       : "opacity-100 scale-100"
                   )}
                 >
-                  <CornerDownLeftIcon />
+                  <ArrowElbowDownLeft />
                 </span>
 
                 {/* Open in New Tab Action */}
@@ -437,7 +441,7 @@ function CommandLinkGroup({
                       : "opacity-0 scale-75 pointer-events-none"
                   )}
                 >
-                  <ArrowUpRightIcon />
+                  <ArrowUpRight />
                 </span>
               </CommandMenuKbd>
             </div>
@@ -458,21 +462,21 @@ function CommandMenuFooter() {
 
         <div className="hidden h-full items-center border-l border-border px-4 gap-2 sm:flex">
           <CommandMenuKbd>
-            <ArrowUpDownIcon />
+            <ArrowsDownUp />
           </CommandMenuKbd>
           <span className="text-muted-foreground">Select</span>
         </div>
 
         <div className="hidden h-full items-center border-l border-border px-4 gap-2 sm:flex">
           <CommandMenuKbd>
-            <CornerDownLeftIcon />
+            <ArrowElbowDownLeft />
           </CommandMenuKbd>
           <span className="text-muted-foreground">Open</span>
         </div>
 
         <div className="hidden h-full items-center border-l border-border px-4 gap-2 sm:flex">
           <CommandMenuKbd>
-            Ctrl <CornerDownLeftIcon />
+            Ctrl <ArrowElbowDownLeft />
           </CommandMenuKbd>
           <span className="text-muted-foreground">Open in new tab</span>
         </div>

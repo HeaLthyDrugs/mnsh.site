@@ -1,7 +1,7 @@
 "use client"
 
 import { format } from "date-fns"
-import { LoaderIcon } from "lucide-react"
+import { SpinnerGap } from "@phosphor-icons/react"
 import { use } from "react"
 
 import {
@@ -88,7 +88,7 @@ export function GitHubContributions({
 export function GitHubContributionsFallback() {
   return (
     <div className="flex h-40.5 w-full items-center justify-center">
-      <LoaderIcon className="animate-spin text-muted-foreground" />
+      <SpinnerGap className="animate-spin text-muted-foreground" />
     </div>
   )
 }

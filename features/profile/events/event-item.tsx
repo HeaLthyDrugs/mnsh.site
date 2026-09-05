@@ -1,8 +1,8 @@
-import { CalendarIcon, MapPinIcon, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import Image from "next/image";
 import { Event } from "../types/events";
+import { cloudflareLoader, shouldUseCloudflareLoader, toCloudflareTransformedUrl } from "@/lib/cloudflare-image";
 import { cn } from "@/lib/utils";
-import { Tag } from "@/components/ui/tag";
 import { YoutubePlaylistPlayer } from "./youtube-player";
 
 const SOCIAL_CAPTIONS: Record<string, string> = {
@@ -41,7 +41,7 @@ export function EventItem({
                 {/* Left: Logo */}
                 <div className="relative shrink-0 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center">
                     <img
-                        src={event.backgroundImage!}
+                        src={toCloudflareTransformedUrl(event.backgroundImage!, { width: 256, quality: 72 })}
                         alt={event.title}
                         className={cn(
                             "w-full h-full object-contain p-0.5",
@@ -92,7 +92,7 @@ export function EventItem({
             {hasBackgroundImage && (!isSocial || event.showImageFullSize) && (
                 <div className="absolute inset-0 z-0 flex items-center justify-center">
                     <img
-                        src={event.backgroundImage!}
+                        src={toCloudflareTransformedUrl(event.backgroundImage!, { width: 256, quality: 72 })}
                         alt=""
                         className={cn(
                             "w-full h-full grayscale transition-all duration-300 group-hover/event:grayscale-0",
@@ -107,9 +107,11 @@ export function EventItem({
                 <>
                     <div className="absolute inset-0 z-0" style={{ filter: 'blur(25px)' }}>
                         <Image
+                            loader={shouldUseCloudflareLoader(event.backgroundImage!) ? cloudflareLoader : undefined}
                             src={event.backgroundImage!}
                             alt=""
                             fill
+                            sizes="256px"
                             className="object-cover scale-[1.1] opacity-95 transition-transform duration-500 group-hover/event:scale-[1.14]"
                         />
                     </div>
@@ -117,9 +119,11 @@ export function EventItem({
                     <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center p-3 md:p-4">
                         <div className="relative aspect-square w-full max-w-[72%] md:max-w-[68%]">
                             <Image
+                                loader={shouldUseCloudflareLoader(event.backgroundImage!) ? cloudflareLoader : undefined}
                                 src={event.backgroundImage!}
                                 alt={event.title}
                                 fill
+                                sizes="(max-width: 768px) 50vw, 200px"
                                 className="object-contain drop-shadow-[0_12px_30px_rgba(0,0,0,0.6)] transition-transform duration-300 group-hover/event:scale-[1.03]"
                             />
                         </div>
@@ -154,9 +158,11 @@ export function EventItem({
             {showInlineImage && (
                 <div className="relative aspect-video w-full overflow-hidden bg-muted">
                     <Image
+                        loader={shouldUseCloudflareLoader(event.image!) ? cloudflareLoader : undefined}
                         src={event.image!}
                         alt={event.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, 400px"
                         className="object-cover"
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />

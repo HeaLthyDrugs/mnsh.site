@@ -14,7 +14,7 @@ import {
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { decodeEmail } from "@/utils/string";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { Markdown } from "@/components/markdown";
 import Link from "next/link";
 import { useSound } from "@/hooks/use-sound";

@@ -1,5 +1,5 @@
 import type { TOCItemType } from "fumadocs-core/toc";
-import { TextIcon } from "lucide-react";
+import { TextT } from "@phosphor-icons/react/dist/ssr";
 
 import type { Collapsible } from "@/components/ui/collapsible";
 import {
@@ -34,7 +34,7 @@ export function InlineTOC({
       {...props}
     >
       <CollapsibleTrigger className="group/toc ring ring-inset ring-black/10 dark:ring-white/10 inline-flex w-full items-center gap-2 p-3 pl-4 text-sm font-medium [&_svg]:size-4">
-        <TextIcon />
+        <TextT />
         {children ?? "On this page"}
         <div className="ml-auto shrink-0 text-muted-foreground" aria-hidden>
           <CollapsibleChevronsIcon />

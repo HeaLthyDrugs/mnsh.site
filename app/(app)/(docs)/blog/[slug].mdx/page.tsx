@@ -1,7 +1,7 @@
 import { getBlogPostBySlug, getAllBlogPosts } from "@/features/blog/data/posts";
 import { notFound } from "next/navigation";
 import { CopyButton } from "@/components/copy-button";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     asChild
                 >
                     <Link href={`/blog/${slug}`}>
-                        <ArrowLeftIcon className="w-4 h-4" />
+                        <ArrowLeft className="w-4 h-4" />
                         Back to Rendered View
                     </Link>
                 </Button>

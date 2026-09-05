@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Volume2Icon, Share2Icon, CheckIcon } from "lucide-react";
+import { SpeakerHigh, ShareNetwork, Check } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -86,7 +86,7 @@ export function BlogCoverActions({ title, content, slug }: BlogCoverActionsProps
                         isReading && "bg-primary text-primary-foreground"
                     )}
                 >
-                    <Volume2Icon className={cn("size-4", isReading && "animate-pulse")} />
+                    <SpeakerHigh className={cn("size-4", isReading && "animate-pulse")} />
                 </Button>
             </SimpleTooltip>
 
@@ -99,9 +99,9 @@ export function BlogCoverActions({ title, content, slug }: BlogCoverActionsProps
                     className="rounded-none"
                 >
                     {copied ? (
-                        <CheckIcon className="size-4 text-green-500" />
+                        <Check className="size-4 text-green-500" />
                     ) : (
-                        <Share2Icon className="size-4" />
+                        <ShareNetwork className="size-4" />
                     )}
                 </Button>
             </SimpleTooltip>

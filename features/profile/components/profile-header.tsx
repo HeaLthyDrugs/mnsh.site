@@ -1,7 +1,7 @@
 "use client";
 
 import { USER, FACES } from "../data/user";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useLoop } from "@/lib/animation/useLoop";
 import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status";
 import { useState, useRef, useEffect } from "react";

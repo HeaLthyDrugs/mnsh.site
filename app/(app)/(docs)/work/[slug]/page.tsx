@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -131,7 +131,7 @@ export default async function Page({
           asChild
         >
           <Link href="/work">
-            <ArrowLeftIcon />
+            <ArrowLeft />
             Works
           </Link>
         </Button>
@@ -151,7 +151,7 @@ export default async function Page({
                   asChild
                 >
                   <Link href={`/work/${previous.slug}`}>
-                    <ArrowLeftIcon />
+                    <ArrowLeft />
                     <span className="sr-only">Previous: {previous.metadata.title}</span>
                   </Link>
                 </Button>
@@ -160,7 +160,7 @@ export default async function Page({
                 <div className="flex items-center gap-3">
                   Previous Post
                   <Kbd>
-                    <ArrowLeftIcon />
+                    <ArrowLeft />
                   </Kbd>
                 </div>
               </TooltipContent>
@@ -178,7 +178,7 @@ export default async function Page({
                 >
                   <Link href={`/work/${next.slug}`}>
                     <span className="sr-only">Next: {next.metadata.title}</span>
-                    <ArrowRightIcon />
+                    <ArrowRight />
                   </Link>
                 </Button>
               </TooltipTrigger>
@@ -186,7 +186,7 @@ export default async function Page({
                 <div className="flex items-center gap-3">
                   Next Post
                   <Kbd>
-                    <ArrowRightIcon />
+                    <ArrowRight />
                   </Kbd>
                 </div>
               </TooltipContent>

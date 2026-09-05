@@ -1,4 +1,4 @@
-import { Lightbulb, Map, Palette, Rocket, Code2, Scaling } from "lucide-react";
+import { Lightbulb, MapTrifold as Map, Palette, Rocket, Code, ArrowsOutCardinal as Scaling } from "@phosphor-icons/react";
 import { Panel, PanelHeader, PanelTitle } from "../components/panel";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ const STEPS = [
         id: 4,
         title: "Development",
         description: "Building robust, scalable, and high-performance solutions.",
-        icon: Code2,
+        icon: Code,
     },
     {
         id: 5,

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon } from "lucide-react";
+import { CaretDown } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { Slot as SlotPrimitive } from "radix-ui";
 import React, { useState } from "react";
@@ -62,7 +62,7 @@ export function CollapsibleList({
                 Show Less
               </span>
 
-              <ChevronDownIcon
+              <CaretDown
                 className="group-data-[state=open]/collapsible-trigger:rotate-180"
                 aria-hidden
               />
