@@ -993,8 +993,8 @@ Type 'tools open' to view full tools showcase page.`,
             `┌──────────────────────────────────────────────────────────┐
 │ CONTACT & SOCIAL MEDIA LINKS                             │
 └──────────────────────────────────────────────────────────┘
-Email:   manishvishwakarma9960@gmail.com
-Website: https://mnsh.online
+Email:   hey@mnsh.site
+Website: https://mnsh.site
 GitHub:  https://github.com/HeaLthyDrugs
 
 Social Handles:
@@ -1044,7 +1044,7 @@ DevOps:   Git, Docker, Cloudflare Workers, Vercel, Neovim, VS Code`,
             );
           } else if (subCmd === "contact.txt" || subCmd === "contact") {
             appendOutput(
-              `Email:   manishvishwakarma9960@gmail.com\nWebsite: https://mnsh.online\nGitHub:  https://github.com/HeaLthyDrugs`,
+              `Email:   hey@mnsh.site\nWebsite: https://mnsh.site\nGitHub:  https://github.com/HeaLthyDrugs`,
               "output"
             );
           } else if (subCmd === "readme.txt" || subCmd === "readme") {

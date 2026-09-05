@@ -21,7 +21,7 @@ export const USER: User = {
     ],
     address: "Lonavala City, Maharashtra, India",
     phoneNumber: "KzkxODQzMjU2MzIyNw==", // E.164 format, base64 encoded (+918432563227)
-    email: "bWFuaXNodmlzaHdha2FybWE5OTYwQGdtYWlsLmNvbQ==", // base64 encoded (manishvishwakarma9960@gmail.com)
+    email: "bWFuaXNodmlzaHdha2FybWE5OTYwQGdtYWlsLmNvbQ==", // base64 encoded (hey@mnsh.site)
 
     website: "https://mnsh.site",
     jobTitle: "Software Engineer",

@@ -7,6 +7,7 @@ import { SITE_INFO } from "@/config/site";
 import { USER } from "@/features/profile/data/user";
 import { useSound } from "@/hooks/use-sound";
 import { cn } from "@/lib/utils";
+import { decodeEmail } from "@/utils/string";
 import { CopyIcon, type CopyIconHandle } from "./animated-icons/copy";
 import { Icons } from "./icons";
 import { SimpleTooltip } from "./ui/tooltip";
@@ -14,6 +15,7 @@ import { SimpleTooltip } from "./ui/tooltip";
 export function SiteFooter() {
   const playHover = useSound("/sounds/hover.wav");
   const playTap = useSound("/sounds/tap.wav");
+  const email = decodeEmail(USER.email);
 
   return (
     <footer className="max-w-screen overflow-x-hidden px-2">
@@ -62,16 +64,17 @@ export function SiteFooter() {
 
           <div className="border-t border-edge flex flex-col">
             <ContactRow
-              value="hey@mnsh.me"
+              value={email}
               platform="mailto"
-              href="mailto:hey@mnsh.me"
+              href={`mailto:${email}`}
             />
-            <div className="h-px w-full bg-edge" />
+            {/* WhatsApp/Mobile hidden for now */}
+            {/* <div className="h-px w-full bg-edge" />
             <ContactRow
               value="+91 84325 63227"
               platform="WhatsApp"
               href="https://wa.me/918432563227"
-            />
+            /> */}
             <div className="h-px w-full bg-edge" />
             <ContactRow
               value="cal.com/mnsshh"
