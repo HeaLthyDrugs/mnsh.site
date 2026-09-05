@@ -249,12 +249,9 @@ export function SnapsBentoGrid({
               />
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 border-t border-white/20 bg-black/48 opacity-0 backdrop-blur-lg transition-opacity duration-200 group-hover:opacity-100 dark:border-white/12 dark:bg-black/36">
-                <div className="flex h-full items-center justify-between gap-2 px-1.5">
+                <div className="flex h-full items-center px-1.5">
                   <p className="truncate text-[9px] font-medium tracking-[0.02em] text-zinc-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                     {snap.location}
-                  </p>
-                  <p className="truncate text-[8px] uppercase tracking-[0.18em] text-zinc-200/80">
-                    {snap.clickedBy}
                   </p>
                 </div>
               </div>
@@ -347,9 +344,6 @@ export function SnapsBentoGrid({
 
               <figcaption className="absolute bottom-0 left-1/2 w-full max-w-[90vw] -translate-x-1/2 text-center">
                 <p className="text-[11px] font-medium text-zinc-100">{activeSnap.location}</p>
-                <p className="text-[9px] uppercase tracking-[0.16em] text-zinc-400">
-                  Clicked by {activeSnap.clickedBy}
-                </p>
               </figcaption>
             </figure>
           </div>

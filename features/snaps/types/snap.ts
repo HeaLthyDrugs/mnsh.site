@@ -3,7 +3,6 @@ export interface Snap {
   src: string;
   alt: string;
   location: string;
-  clickedBy: string;
   width: number;
   height: number;
   capturedAt?: string;
