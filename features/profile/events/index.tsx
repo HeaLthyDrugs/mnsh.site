@@ -64,9 +64,6 @@ export default function Events() {
                         const size = event.size || "medium";
                         const gridClasses = sizeToGridClasses[size] || sizeToGridClasses.medium;
 
-                        // Staggered animation delay (max 600ms to keep it snappy)
-                        const delay = Math.min(index * 50, 600);
-
                         const items = [];
 
                         // Insert music player at the designated position
@@ -76,13 +73,8 @@ export default function Events() {
                                     key="music-player"
                                     className={cn(
                                         "overflow-hidden border-t border-edge",
-                                        "animate-[fadeSlideUp_0.5s_ease-out_forwards]",
-                                        "opacity-0",
                                         MUSIC_PLAYER_CLASSES
                                     )}
-                                    style={{
-                                        animationDelay: `${delay}ms`,
-                                    }}
                                 >
                                     <MusicPlayer className="h-full" />
                                 </div>
@@ -94,13 +86,8 @@ export default function Events() {
                                 key={event.id}
                                 className={cn(
                                     "overflow-hidden",
-                                    "animate-[fadeSlideUp_0.5s_ease-out_forwards]",
-                                    "opacity-0",
                                     gridClasses
                                 )}
-                                style={{
-                                    animationDelay: `${delay + (index === MUSIC_PLAYER_POSITION ? 50 : 0)}ms`,
-                                }}
                             >
                                 <EventItem
                                     event={event}
@@ -131,20 +118,6 @@ export default function Events() {
                     })}
                 </div>
             </div>
-
-            {/* Entry Animation Keyframes */}
-            <style jsx>{`
-                @keyframes fadeSlideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            `}</style>
         </Panel>
     );
 }
