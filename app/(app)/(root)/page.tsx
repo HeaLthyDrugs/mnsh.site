@@ -11,6 +11,7 @@ import Work from "@/features/profile/components/work";
 import { Overview } from "@/features/profile/overview";
 import { DeferredEvents } from "@/features/profile/events/deferred-events";
 import Faq from "@/features/profile/faq";
+import Blog from "@/features/profile/blog";
 import AnimatedScene from "@/features/Scene/page";
 
 export const metadata: Metadata = {
@@ -60,7 +61,8 @@ export default function Page() {
         <Separator />
 
         {/* Blog  */}
-        {/* <Blog /> */}
+        <Blog />
+        <Separator />
       </div>
     </>
   );

@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import dayjs from "dayjs";
 import type { BlogPost } from "../types/blog-post";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useSound } from "@/hooks/use-sound";
 
 /**
  * Formats the date string for display.
@@ -15,20 +18,26 @@ export function BlogItem({
     post,
     shouldPreloadImage,
     showNewBadge = false,
+    className,
 }: {
     post: BlogPost;
     shouldPreloadImage?: boolean;
     showNewBadge?: boolean;
+    className?: string;
 }) {
     const { metadata } = post;
+    const playHover = useSound("/sounds/hover.wav");
+    const playTap = useSound("/sounds/tap.wav");
 
     return (
         <Link
             href={`/blog/${post.slug}`}
+            onMouseEnter={playHover}
+            onClick={playTap}
             className={cn(
                 "group/post flex flex-col gap-2 p-2",
-                "max-sm:border-y max-sm:border-edge",
-                "sm:nth-[2n+1]:border-y sm:nth-[2n+1]:border-edge"
+                "border-y border-edge",
+                className
             )}
         >
             {metadata.image && (

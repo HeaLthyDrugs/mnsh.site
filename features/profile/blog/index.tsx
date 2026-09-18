@@ -1,27 +1,43 @@
 import { Panel, PanelHeader, PanelTitle } from "../components/panel";
 import { getAllBlogs } from "@/features/blog/lib/blogs";
-import { BlogItem } from "@/features/blog/components/blog-item";
+import { BlogsList } from "./blogs-list";
+import type { BlogPost } from "@/features/blog/types/blog-post";
 
-export default function Blog() {
-    const allBlogs = getAllBlogs();
+export interface BlogSectionProps {
+    posts?: BlogPost[];
+    limit?: number;
+    title?: string;
+    id?: string;
+    showToggle?: boolean;
+    className?: string;
+}
+
+export default function Blog({
+    posts,
+    limit = 4,
+    title = "Blog",
+    id = "blog",
+    showToggle = true,
+    className,
+}: BlogSectionProps = {}) {
+    const allBlogs = posts ?? getAllBlogs();
+
+    if (allBlogs.length === 0) return null;
 
     return (
-        <Panel>
+        <Panel id={id} className={className}>
             <PanelHeader>
-                <PanelTitle>Blog</PanelTitle>
+                <PanelTitle>{title}</PanelTitle>
             </PanelHeader>
 
-            <div className="relative py-4">
-                <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
-                    <div className="border-r border-edge"></div>
-                    <div className="border-l border-edge"></div>
-                </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {allBlogs.slice(0, 4).map((post) => (
-                        <BlogItem key={post.slug} post={post} />
-                    ))}
-                </div>
-            </div>
+            <BlogsList
+                allBlogs={allBlogs}
+                initialLimit={limit}
+                showToggle={showToggle}
+            />
         </Panel>
     );
 }
+
+export { BlogsList };
+
