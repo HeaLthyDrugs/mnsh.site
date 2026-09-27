@@ -44,7 +44,7 @@ export const MAIN_NAV: NavItem[] = [
     description: "View my works",
   },
   {
-    title: "Blog",
+    title: "Blogs",
     href: "/blog",
     shortcut: "B",
     description: "Read my thoughts",
