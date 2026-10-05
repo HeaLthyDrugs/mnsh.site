@@ -58,7 +58,7 @@ export function Nav({
             key={href} 
             href={href} 
             active={active} 
-            className="flex h-full items-center gap-1.5 px-4 border-r border-border"
+            className="flex h-full items-center gap-1.5 px-3"
             onMouseEnter={playHover}
             onClick={playTap}
           >
@@ -100,7 +100,7 @@ export const NavItem = React.forwardRef<
     <Link
       ref={ref}
       className={cn(
-        "font-sans text-sm font-medium text-muted-foreground transition-all duration-300",
+        "font-sans text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground",
         active && "text-foreground",
         className
       )}
