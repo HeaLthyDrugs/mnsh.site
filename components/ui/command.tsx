@@ -5,6 +5,7 @@ import * as React from "react";
 
 
 import { cn } from "@/lib/utils";
+import { Icons } from "@/components/icons";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 
 function Command({
@@ -76,20 +77,7 @@ function CommandInput({
       data-slot="command-input-wrapper"
       className="flex h-10 items-center gap-2 border-b px-4"
     >
-      <svg
-        className="size-4 shrink-0 opacity-50"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 16 16"
-        aria-hidden
-      >
-        <path
-          d="M10.278 11.514a5.824 5.824 0 1 1 1.235-1.235l3.209 3.208A.875.875 0 0 1 14.111 15a.875.875 0 0 1-.624-.278l-3.209-3.208Zm.623-4.69a4.077 4.077 0 1 1-8.154 0 4.077 4.077 0 0 1 8.154 0Z"
-          fill="currentColor"
-          fillRule="evenodd"
-          clipRule="evenodd"
-        />
-      </svg>
+      <Icons.freehandSearch className="size-4 shrink-0 opacity-60 text-muted-foreground" />
 
       <CommandPrimitive.Input
         data-slot="command-input"

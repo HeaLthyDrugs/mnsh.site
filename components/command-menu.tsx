@@ -1,23 +1,15 @@
 "use client";
 
-import type { IconProps } from "@phosphor-icons/react";
 import {
-  Briefcase,
   ArrowElbowDownLeft,
-  MoonStars,
-  Rss,
-  Sun,
-  TextT,
   ArrowsDownUp,
   ArrowUpRight,
-  Terminal,
-  Books,
 } from "@phosphor-icons/react";
 import Image from "next/image";
 
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 
 import {
   CommandDialog,
@@ -33,7 +25,7 @@ import { SOCIAL_LINKS } from "@/features/profile/data/social-links";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/hooks/use-sound";
 import { useAnimatedThemeToggle } from "@/hooks/use-animated-theme-toggle";
-import { showLabelsAtom, isTerminalOpenAtom } from "@/store/ui-store";
+import { isTerminalOpenAtom } from "@/store/ui-store";
 
 
 import { Icons } from "./icons";
@@ -47,7 +39,7 @@ type CommandLinkItem = {
   title: string;
   href: string;
 
-  icon?: React.ComponentType<IconProps>;
+  icon?: React.ComponentType<{ className?: string }>;
   iconImage?: string;
   coverImage?: string;
   keywords?: string[];
@@ -63,17 +55,17 @@ const MENU_LINKS: CommandLinkItem[] = [
   {
     title: "Works",
     href: "/work",
-    icon: Briefcase,
+    icon: Icons.freehandBriefcase,
   },
   {
     title: "Blog",
     href: "/blog",
-    icon: Rss,
+    icon: Icons.freehandFileText,
   },
   {
     title: "Resources",
     href: "/resources",
-    icon: Books,
+    icon: Icons.freehandBooks,
     keywords: ["tools", "apps", "software", "utilities"],
   },
   // GEAR (disabled)
@@ -93,7 +85,6 @@ const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({
 
 export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], works?: WorkPost[] }) {
   const router = useRouter();
-  const showLabels = useAtomValue(showLabelsAtom);
   const setIsTerminalOpen = useSetAtom(isTerminalOpenAtom);
   const playHover = useSound("/sounds/hover.wav");
   const playTap = useSound("/sounds/tap.wav");
@@ -194,42 +185,31 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
       <Button
         variant="secondary"
         className={cn(
-          "h-8 gap-1.5 shadow-sm rounded-none bg-zinc-50 px-2.5 text-muted-foreground select-none hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-900",
+          "h-8 gap-2 shadow-sm rounded-none bg-zinc-50 px-2 text-muted-foreground select-none hover:bg-zinc-100 hover:text-foreground dark:bg-zinc-900 dark:hover:bg-zinc-800",
           "not-dark:border dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15"
         )}
         onClick={() => {
           playTap();
           setOpen(true);
         }}
+        aria-label="Search"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 16 16"
-          aria-hidden
-        >
-          <path
-            d="M10.278 11.514a5.824 5.824 0 1 1 1.235-1.235l3.209 3.208A.875.875 0 0 1 14.111 15a.875.875 0 0 1-.624-.278l-3.209-3.208Zm.623-4.69a4.077 4.077 0 1 1-8.154 0 4.077 4.077 0 0 1 8.154 0Z"
-            fill="currentColor"
-            fillRule="evenodd"
-            clipRule="evenodd"
-          />
-        </svg>
+        <Icons.freehandSearch className="size-4 shrink-0 text-foreground/80" />
 
-        <span className="mr-8 font-sans text-sm/4 font-medium text-muted-foreground/50">
-          Search...
-        </span>
-        
-        {showLabels && (
-          <>
-            <CommandMenuKbd className="hidden tracking-wider sm:in-[.os-macos_&]:flex">
-              ⌘K
-            </CommandMenuKbd>
-            <CommandMenuKbd className="hidden sm:not-[.os-macos_&]:flex">
-              ctrl + K
-            </CommandMenuKbd>
-          </>
-        )}
+        <div className="flex items-center gap-1">
+          {/* macOS */}
+          <kbd className="pointer-events-none hidden h-5 min-w-5 items-center justify-center rounded-none border border-border/60 bg-black/5 px-1 font-sans text-[11px] font-medium leading-none text-muted-foreground select-none dark:border-white/10 dark:bg-white/10 in-[.os-macos_&]:flex">
+            ⌘
+          </kbd>
+          {/* Non-macOS */}
+          <kbd className="pointer-events-none hidden h-5 min-w-6 items-center justify-center rounded-none border border-border/60 bg-black/5 px-1 font-sans text-[11px] font-medium leading-none text-muted-foreground select-none dark:border-white/10 dark:bg-white/10 not-[.os-macos_&]:flex">
+            Ctrl
+          </kbd>
+          {/* K */}
+          <kbd className="pointer-events-none flex h-5 min-w-5 items-center justify-center rounded-none border border-border/60 bg-black/5 px-1 font-sans text-[11px] font-medium leading-none text-muted-foreground select-none dark:border-white/10 dark:bg-white/10">
+            K
+          </kbd>
+        </div>
       </Button>
 
       <CommandDialog
@@ -258,7 +238,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
           <CommandLinkGroup
             heading="Blogs"
             links={blogLinks}
-            fallbackIcon={TextT}
+            fallbackIcon={Icons.freehandFileText}
             onLinkSelect={handleOpenLink}
             playHover={playHover}
             playTap={playTap}
@@ -270,7 +250,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
           <CommandLinkGroup
             heading="Works"
             links={workLinks}
-            fallbackIcon={Briefcase}
+            fallbackIcon={Icons.freehandBriefcase}
             onLinkSelect={handleOpenLink}
             playHover={playHover}
             playTap={playTap}
@@ -299,7 +279,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
                 setIsTerminalOpen(true);
               }}
             >
-              <Terminal className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
+              <Icons.freehandTerminal className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
               Terminal 
             </CommandItem>
           </CommandGroup>
@@ -316,7 +296,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
                 handleThemeChange("light");
               }}
             >
-              <Sun />
+              <Icons.freehandSun className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
               Light
             </CommandItem>
             <CommandItem
@@ -328,7 +308,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
                 handleThemeChange("dark");
               }}
             >
-              <MoonStars />
+              <Icons.freehandMoon className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
               Dark
             </CommandItem>
             <CommandItem
@@ -340,7 +320,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
                 handleThemeChange("system");
               }}
             >
-              <Icons.contrast />
+              <Icons.freehandMonitor className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
               Auto
             </CommandItem>
           </CommandGroup>
@@ -363,7 +343,7 @@ function CommandLinkGroup({
 }: {
   heading: string;
   links: CommandLinkItem[];
-  fallbackIcon?: React.ComponentType<IconProps>;
+  fallbackIcon?: React.ComponentType<{ className?: string }>;
   onLinkSelect: (href: string, openInNewTab?: boolean) => void;
   playHover: () => void;
   playTap: () => void;
