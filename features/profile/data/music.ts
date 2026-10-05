@@ -1,6 +1,7 @@
 // ─── Genre & Track Definitions ─────────────────────────────────────
 
-import { Flame, Globe, type Icon as LucideIcon } from "@phosphor-icons/react";
+import type React from "react";
+import { Icons } from "@/components/icons";
 
 export interface Track {
     title: string;
@@ -14,14 +15,14 @@ export interface Track {
 
 export interface Genre {
     label: string;
-    icon: LucideIcon;
+    icon: React.ComponentType<{ className?: string }>;
     tracks: Track[];
 }
 
 export const GENRES: Genre[] = [
     {
         label: "#2",
-        icon: Globe,
+        icon: Icons.freehandGlobe,
         tracks: [
             {
                 title: "AAAHH MEN!",
@@ -75,7 +76,7 @@ export const GENRES: Genre[] = [
     },
     {
         label: "#1",
-        icon: Flame,
+        icon: Icons.freehandFlame,
         tracks: [
             {
                 title: "In Dino",

@@ -8,16 +8,7 @@ import {
     currentTimeAtom, durationAtom, volumeAtom, isMusicMutedAtom, 
     shuffledGenresAtom, globalAudioRef 
 } from "@/store/music-store";
-import {
-    Play,
-    SkipBack,
-    SkipForward,
-    SpeakerHigh as Volume2,
-    SpeakerX as VolumeX,
-    Disc,
-    CornersOut as Maximize2,
-    CornersIn as Minimize2,
-} from "@phosphor-icons/react";
+import { Icons } from "@/components/icons";
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
@@ -384,9 +375,9 @@ export function MusicPlayer({ className }: { className?: string }) {
                 title={isFullscreen ? "Exit full screen (Esc)" : "Full screen"}
             >
                 {isFullscreen ? (
-                    <Minimize2 className="size-3.5" />
+                    <Icons.freehandMinimize className="size-3.5" />
                 ) : (
-                    <Maximize2 className="size-3.5" />
+                    <Icons.freehandMaximize className="size-3.5" />
                 )}
             </button>
 
@@ -513,9 +504,9 @@ export function MusicPlayer({ className }: { className?: string }) {
                                 aria-label={isMuted ? "Unmute" : "Mute"}
                             >
                                 {isMuted || volume === 0 ? (
-                                    <VolumeX className="size-3.5" />
+                                    <Icons.freehandVolumeMute className="size-3.5" />
                                 ) : (
-                                    <Volume2 className="size-3.5" />
+                                    <Icons.freehandVolumeUp className="size-3.5" />
                                 )}
                             </button>
                         </div>
@@ -528,7 +519,7 @@ export function MusicPlayer({ className }: { className?: string }) {
                             className="text-white/60 cursor-pointer hover:text-white transition-all duration-300 active:scale-90"
                             aria-label="Previous track"
                         >
-                            <SkipBack className="size-4" fill="currentColor" />
+                            <Icons.freehandSkipBack className="size-4" />
                         </button>
 
                         {/* Play / Pause — glass */}
@@ -557,7 +548,7 @@ export function MusicPlayer({ className }: { className?: string }) {
                                     isPlaying ? "opacity-0 scale-75" : "opacity-100 scale-100"
                                 )}
                             >
-                                <Play className="size-4 ml-0.5" fill="currentColor" />
+                                <Icons.freehandPlay className="size-4 ml-0.5" />
                             </span>
                         </button>
 
@@ -566,7 +557,7 @@ export function MusicPlayer({ className }: { className?: string }) {
                             className="text-white/60 cursor-pointer hover:text-white transition-all duration-300 active:scale-90"
                             aria-label="Next track"
                         >
-                            <SkipForward className="size-4" fill="currentColor" />
+                            <Icons.freehandSkipForward className="size-4" />
                         </button>
                     </div>
 
@@ -626,7 +617,7 @@ export function MusicPlayer({ className }: { className?: string }) {
                                 className="absolute bottom-0 right-0 flex items-center justify-center min-h-8 min-w-8 text-white/70 hover:text-white transition-colors z-10 shrink-0"
                                 aria-label="Change genre"
                             >
-                                <Disc
+                                <Icons.freehandDisc
                                     className={cn(
                                         "size-3.5 transition-transform duration-700",
                                         isPlaying && !genreOpen && "animate-[spin_3s_linear_infinite]",
