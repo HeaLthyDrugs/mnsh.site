@@ -109,20 +109,8 @@ export function BlogsList({
                       {showAll ? "View less" : "View all posts"}
                     </span>
                   </button>
-                  <span className="text-xs text-muted-foreground/40">·</span>
                 </>
               )}
-              <Link
-                href="/blog"
-                onMouseEnter={playHover}
-                onClick={playTap}
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground/60 hover:text-primary transition-colors duration-200 group whitespace-nowrap"
-              >
-                <span className="underline underline-offset-2 decoration-muted-foreground/30 group-hover:decoration-primary">
-                  All articles
-                </span>
-                <ArrowUpRight className="size-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </Link>
             </div>
             <div className="w-px bg-[repeating-linear-gradient(to_bottom,var(--color-muted-foreground)_0,var(--color-muted-foreground)_3px,transparent_3px,transparent_6px)] opacity-20" />
           </div>
