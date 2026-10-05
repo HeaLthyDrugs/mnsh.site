@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { usePathname } from "next/navigation";
-import { Gear, SpeakerHigh, SpeakerX, Pause, Play, X, Terminal } from "@phosphor-icons/react";
 import Image from "next/image";
+import { Icons } from "@/components/icons";
 
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { AnimatePresence, motion } from "motion/react";
@@ -210,7 +210,7 @@ export function FloatingControls() {
                             {isPlaying ? (
                                 <AudioLinesIcon ref={audioLinesRef} size={16} className="text-white drop-shadow-[0_0_8px_rgba(0,0,0,0.8)]" />
                             ) : (
-                                <Play className="size-3 text-white drop-shadow-[0_0_8px_rgba(0,0,0,0.8)]" fill="currentColor" />
+                                <Icons.freehandPlay className="size-3 text-white drop-shadow-[0_0_8px_rgba(0,0,0,0.8)]" />
                             )}
                         </div>
                         
@@ -234,9 +234,9 @@ export function FloatingControls() {
                             >
                                 <div className="flex size-10 items-center justify-center rounded-none bg-white/10 backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-110 hover:bg-white/20 active:scale-90">
                                     {isPlaying ? (
-                                        <Pause className="size-5 text-white" />
+                                        <Icons.freehandPause className="size-5 text-white" />
                                     ) : (
-                                        <Play className="size-5 text-white ml-1" fill="currentColor" />
+                                        <Icons.freehandPlay className="size-5 text-white ml-0.5" />
                                     )}
                                 </div>
                             </button>
@@ -256,7 +256,7 @@ export function FloatingControls() {
                             }}
                             aria-label="Remove Mini Player"
                         >
-                            <X className="size-3" />
+                            <Icons.freehandClose className="size-3" />
                         </button>
                     </div>
                 )}
@@ -274,7 +274,7 @@ export function FloatingControls() {
                         )}
                         aria-label={!isSoundEnabled ? "Unmute" : "Mute"}
                     >
-                        {!isSoundEnabled ? <SpeakerX className="size-4" /> : <SpeakerHigh className="size-4" />}
+                        {!isSoundEnabled ? <Icons.freehandVolumeMute className="size-4" /> : <Icons.freehandVolumeUp className="size-4" />}
                     </button>
 
                     <div className="w-px bg-border/40" aria-hidden="true" />
@@ -289,7 +289,7 @@ export function FloatingControls() {
                         aria-label="Open Developer Terminal"
                         title="Open Developer Terminal (CLI Mode)"
                     >
-                        <Terminal className="size-4" />
+                        <Icons.freehandTerminal className="size-4" />
                     </button>
 
                     <div className="w-px bg-border/40" aria-hidden="true" />
@@ -302,7 +302,7 @@ export function FloatingControls() {
                                 className="flex flex-1 cursor-pointer items-center justify-center text-muted-foreground/70 transition-all duration-300 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-0"
                                 aria-label="Open Gear"
                             >
-                                <Gear className="size-4" />
+                                <Icons.freehandSettings className="size-4" />
                             </button>
                         </FamilyDrawerTrigger>
                         <FamilyDrawerPortal>
