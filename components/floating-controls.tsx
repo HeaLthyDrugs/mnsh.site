@@ -20,10 +20,8 @@ import { AudioLinesIcon, type AudioLinesIconHandle } from "@/components/animated
 import { useSound } from "@/hooks/use-sound";
 import { useAnimatedThemeToggle } from "@/hooks/use-animated-theme-toggle";
 import {
-    FONT_THEME_COOKIE_MAX_AGE,
     type FontThemeId,
     FONT_THEME_OPTIONS,
-    FONT_THEME_STORAGE_KEY,
     getNextFontTheme,
 } from "@/lib/font-theme";
 
@@ -93,7 +91,6 @@ export function FloatingControls() {
 
     React.useEffect(() => {
         document.documentElement.dataset.fontTheme = fontTheme;
-        document.cookie = `${FONT_THEME_STORAGE_KEY}=${fontTheme}; path=/; max-age=${FONT_THEME_COOKIE_MAX_AGE}; samesite=lax`;
     }, [fontTheme]);
 
     React.useEffect(() => {
