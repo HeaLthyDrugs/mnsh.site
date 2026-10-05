@@ -1,15 +1,18 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 
 import { LazyRenderOnView } from "@/components/lazy-render-on-view";
 import { cn } from "@/lib/utils";
 
-const Events = dynamic(() => import("@/features/profile/events"), {
+const loadEvents = () => import("@/features/profile/events");
+
+const Events = dynamic(loadEvents, {
   ssr: false,
   loading: () => (
     <div className="border-x border-edge">
-      <div className="h-[560px] w-full animate-pulse bg-muted/25" />
+      <div className="h-[560px] w-full" />
     </div>
   ),
 });
@@ -28,6 +31,23 @@ function Separator({ className }: { className?: string }) {
 }
 
 export function DeferredEvents() {
+  // Warm the chunk during idle time so it is already loaded by the time the
+  // section scrolls into view.
+  useEffect(() => {
+    const win = window as Window & {
+      requestIdleCallback?: (cb: () => void, options?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+
+    if (typeof win.requestIdleCallback === "function") {
+      const id = win.requestIdleCallback(() => void loadEvents(), { timeout: 4000 });
+      return () => win.cancelIdleCallback?.(id);
+    }
+
+    const id = window.setTimeout(() => void loadEvents(), 2500);
+    return () => window.clearTimeout(id);
+  }, []);
+
   return (
     <LazyRenderOnView
       rootMargin="420px"
@@ -35,7 +55,7 @@ export function DeferredEvents() {
       fallback={
         <>
           <div className="border-x border-edge">
-            <div className="h-[560px] w-full animate-pulse bg-muted/20" />
+            <div className="h-[560px] w-full" />
           </div>
           <Separator />
         </>
