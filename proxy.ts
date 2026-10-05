@@ -32,12 +32,18 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for:
+     * Only run for the cli subdomain (cli.mnsh.site, cli.mnsh.online, cli.localhost),
+     * so regular site navigation never pays the proxy cost.
+     * Skips:
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - static asset files (.png, .jpg, .wav, .svg, .json, etc.)
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|mp3|wav|json|xml|txt)$).*)",
+    {
+      source:
+        "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|mp3|wav|json|xml|txt)$).*)",
+      has: [{ type: "host", value: "cli\\..*" }],
+    },
   ],
 };
