@@ -39,11 +39,12 @@ const sizeToGridClasses: Record<string, string> = {
 // Music player grid placement — full width row-span-4
 const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
 
-// Index in the events array where we insert the music player
-const MUSIC_PLAYER_POSITION = 3;
+// The music player is rendered right before the event with this id.
+// (Anchoring by id instead of array index keeps the layout stable when bentos are added/removed.)
+const MUSIC_PLAYER_BEFORE_ID = "twitter";
 
-// Index in the events array where we insert the GitHub contributions
-const GITHUB_CONTRIBUTIONS_POSITION = 5;
+// The GitHub contributions graph is rendered right after the event with this id.
+const GITHUB_CONTRIBUTIONS_AFTER_ID = "github";
 
 export default function Events() {
     const githubProfileUrl = `https://github.com/${USER.username}`;
@@ -60,14 +61,14 @@ export default function Events() {
                 <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 auto-rows-[minmax(100px,auto)] grid-flow-dense gap-0"
                     style={{ gridAutoFlow: "dense" }}
                 >
-                    {EVENTS.map((event, index) => {
+                    {EVENTS.map((event) => {
                         const size = event.size || "medium";
                         const gridClasses = sizeToGridClasses[size] || sizeToGridClasses.medium;
 
                         const items = [];
 
                         // Insert music player at the designated position
-                        if (index === MUSIC_PLAYER_POSITION) {
+                        if (event.id === MUSIC_PLAYER_BEFORE_ID) {
                             items.push(
                                 <div
                                     key="music-player"
@@ -104,7 +105,7 @@ export default function Events() {
                         );
 
                         // Insert GitHub contributions at the designated position
-                        if (index === GITHUB_CONTRIBUTIONS_POSITION) {
+                        if (event.id === GITHUB_CONTRIBUTIONS_AFTER_ID) {
                             items.push(
                                 <GitHubContributionsCard
                                     key="github-contributions"
