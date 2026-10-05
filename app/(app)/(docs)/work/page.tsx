@@ -4,21 +4,21 @@ import { Suspense } from "react";
 import { WorkList } from "@/features/work/components/work-list";
 import { WorkListWithSearch } from "@/features/work/components/work-list-with-search";
 import { getAllWorks } from "@/features/work/lib/works";
+import { PageHeader } from "@/components/page-header";
 import { SITE_INFO } from "@/config/site";
 
-
+const TITLE = "Works";
+const DESCRIPTION = "Projects, client work, and experiments I've built.";
 
 export const metadata: Metadata = {
-  title: "Works",
-  description:
-    "A showcase of my freelance, personal and collaboration works.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: {
     canonical: "/work",
   },
   openGraph: {
-    title: "Works",
-    description:
-      "A showcase of my freelance, personal and collaboration works.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: `${SITE_INFO.url}/work`,
   },
 };
@@ -28,18 +28,7 @@ export default function Page() {
 
   return (
     <div>
-      <div className="border-b border-edge px-2 py-2">
-        <h1 className="text-3xl font-semibold font-heading">Works</h1>
-      </div>
-
-      <div className="px-2 py-2">
-        <p className="font-heading text-sm text-balance text-muted-foreground">
-          {metadata.description as string}
-        </p>
-      </div>
-
-      <div className="border-t border-edge">
-      </div>
+      <PageHeader title={TITLE} description={DESCRIPTION} />
 
       <Suspense fallback={<WorkList works={allWorks} />}>
         <WorkListWithSearch works={allWorks} />

@@ -1,25 +1,21 @@
 import type { Metadata } from "next";
 
-import { SNAPS, SNAPS_INTRO } from "@/features/snaps/data/snaps";
+import { SNAPS } from "@/features/snaps/data/snaps";
 import { SnapsBentoGrid } from "@/features/snaps/components/snaps-bento-grid";
+import { PageHeader } from "@/components/page-header";
+
+const TITLE = "Snaps";
+const DESCRIPTION = "Photos and moments captured along the way.";
 
 export const metadata: Metadata = {
-  title: "Snaps",
-  description: "A bento wall of photos I have clicked or simply love.",
+  title: TITLE,
+  description: DESCRIPTION,
 };
 
 export default function Page() {
   return (
     <div>
-      <div className="border-b border-edge px-2 py-2">
-        <h1 className="font-heading text-3xl font-semibold">{SNAPS_INTRO.title}</h1>
-      </div>
-
-      <div className="border-b border-edge px-2 py-2">
-        <p className="font-heading text-sm text-balance text-muted-foreground">
-          {SNAPS_INTRO.subtitle}
-        </p>
-      </div>
+      <PageHeader title={TITLE} description={DESCRIPTION} />
 
       <section className="border-b border-edge bg-background p-1 text-foreground">
         <SnapsBentoGrid snaps={SNAPS} />

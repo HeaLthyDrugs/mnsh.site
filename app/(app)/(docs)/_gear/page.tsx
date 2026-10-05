@@ -14,17 +14,21 @@
 import type { Metadata } from "next";
 import { GEAR } from "@/features/gear/data/gear";
 import { GearList } from "@/features/gear/components/gear-list";
+import { PageHeader } from "@/components/page-header";
 import { SITE_INFO } from "@/config/site";
 
+const TITLE = "Gear";
+const DESCRIPTION = "Hardware, tools, and desk setup I use daily.";
+
 export const metadata: Metadata = {
-    title: "Gear",
-    description: "The hardware, gadgets, and desk setup that keeps me productive.",
+    title: TITLE,
+    description: DESCRIPTION,
     alternates: {
         canonical: "/gear",
     },
     openGraph: {
-        title: "Gear",
-        description: "The hardware, gadgets, and desk setup that keeps me productive.",
+        title: TITLE,
+        description: DESCRIPTION,
         url: `${SITE_INFO.url}/gear`,
     },
 };
@@ -32,17 +36,9 @@ export const metadata: Metadata = {
 export default function Page() {
     return (
         <div>
-            <div className="border-b border-edge px-2 py-2">
-                <h1 className="text-3xl font-semibold font-heading">Gear</h1>
-            </div>
+            <PageHeader title={TITLE} description={DESCRIPTION} />
 
-            <div className="px-2 py-2">
-                <p className="font-heading text-sm text-balance text-muted-foreground">
-                    {metadata.description as string}
-                </p>
-            </div>
-
-            <div className="border-t border-edge p-2">
+            <div className="p-2">
                 <GearList items={GEAR} />
             </div>
         </div>

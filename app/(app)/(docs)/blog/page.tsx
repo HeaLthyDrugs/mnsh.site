@@ -4,34 +4,35 @@ import { Suspense } from "react";
 import { BlogList } from "@/features/blog/components/blog-list";
 import { BlogListWithSearch } from "@/features/blog/components/blog-list-with-search";
 import { getAllBlogs } from "@/features/blog/lib/blogs";
+import { PageHeader } from "@/components/page-header";
 import { SITE_INFO } from "@/config/site";
 
+const TITLE = "Blog";
+const DESCRIPTION = "Thoughts, tutorials, and notes on software and design.";
+
 export const metadata: Metadata = {
-    title: "Blog",
-    description:
-        "Thoughts, tutorials, and insights on technology, design, and development.",
+    title: TITLE,
+    description: DESCRIPTION,
     alternates: {
         canonical: "/blog",
     },
     openGraph: {
-        title: "Blog",
-        description:
-            "Thoughts, tutorials, and insights on technology, design, and development.",
+        title: TITLE,
+        description: DESCRIPTION,
         url: `${SITE_INFO.url}/blog`,
         images: [
             {
                 url: "https://assets.mnsh.site/blog-covers/blog-headline.png",
                 width: 1200,
                 height: 630,
-                alt: "Blog",
+                alt: TITLE,
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Blog",
-        description:
-            "Thoughts, tutorials, and insights on technology, design, and development.",
+        title: TITLE,
+        description: DESCRIPTION,
         images: ["https://assets.mnsh.site/blog-covers/blog-headline.png"],
     },
 };
@@ -41,15 +42,7 @@ export default function Page() {
 
     return (
         <div>
-            <div className="border-b border-edge px-2 py-2">
-                <h1 className="text-3xl font-semibold font-heading">Blog</h1>
-            </div>
-
-            <div className="px-2 py-2 border-b border-edge">
-                <p className="font-heading text-sm text-balance text-muted-foreground">
-                    {metadata.description as string}
-                </p>
-            </div>
+            <PageHeader title={TITLE} description={DESCRIPTION} />
 
             <Suspense fallback={<BlogList posts={allBlogs} />}>
                 <BlogListWithSearch posts={allBlogs} />

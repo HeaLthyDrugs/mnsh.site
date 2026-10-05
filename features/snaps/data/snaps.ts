@@ -2,9 +2,8 @@ import type { Snap } from "@/features/snaps/types/snap";
 
 export const SNAPS_INTRO = {
   title: "Snaps",
-  subtitle: "Collection of snaps",
-  description:
-    "A collection of snaps served from my Cloudflare-hosted image library.",
+  subtitle: "Photos and moments captured along the way.",
+  description: "Photos and moments captured along the way.",
 };
 
 export const SNAPS: Snap[] = [
