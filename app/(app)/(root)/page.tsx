@@ -26,15 +26,13 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const blogs = getAllBlogs();
-  const latestBlog = blogs[0]
-    ? {
-        slug: blogs[0].slug,
-        title: blogs[0].metadata.title,
-        description: blogs[0].metadata.description,
-        createdAt: blogs[0].metadata.createdAt,
-        category: blogs[0].metadata.category,
-      }
-    : undefined;
+  const blogItems = blogs.map((b) => ({
+    slug: b.slug,
+    title: b.metadata.title,
+    image: b.metadata.image,
+    readTime: b.metadata.readTime ? `${b.metadata.readTime} min read` : "5 min read",
+  }));
+  const latestBlog = blogItems[0];
   return (
     <>
       <script
@@ -70,7 +68,7 @@ export default function Page() {
         <Separator /> */}
 
         {/* Events  */}
-        <DeferredEvents latestBlog={latestBlog} />
+        <DeferredEvents blogs={blogItems} latestBlog={latestBlog} />
 
         {/* FAQ  */}
         <Faq />

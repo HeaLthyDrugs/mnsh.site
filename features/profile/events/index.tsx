@@ -11,22 +11,16 @@ import { SnapsCarouselCard } from "./snaps-carousel-card";
 import { USER } from "../data/user";
 import { cn } from "@/lib/utils";
 
-// Doubled resolution grid system:
-// Mobile: 4 cols | Tablet: 8 cols | Desktop: 12 cols
+import type { BlogItem } from "./latest-blog-card";
+
 const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
 
 export interface EventsProps {
-  latestBlog?: {
-    slug: string;
-    title: string;
-    description: string;
-    createdAt?: string;
-    category?: string;
-    readTime?: string;
-  };
+  blogs?: BlogItem[];
+  latestBlog?: BlogItem;
 }
 
-export default function Events({ latestBlog }: EventsProps) {
+export default function Events({ blogs, latestBlog }: EventsProps) {
   const githubProfileUrl = `https://github.com/${USER.username}`;
 
   return (
@@ -36,19 +30,19 @@ export default function Events({ latestBlog }: EventsProps) {
           className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 auto-rows-[minmax(100px,auto)] grid-flow-dense gap-0"
           style={{ gridAutoFlow: "dense" }}
         >
-          {/* Card 1: IST Time & Availability Bento (Compact 4 cols) */}
-          <div className="col-span-4 md:col-span-4 lg:col-span-4 row-span-2 overflow-hidden border-b md:border-r border-edge">
-            <IstTimeCard />
+          {/* Bento 1 (Left): Big Blog Bento (2 bentos wide = 8 cols, 4 rows high) */}
+          <div className="col-span-4 md:col-span-8 lg:col-span-8 row-span-3 md:row-span-4 lg:row-span-4 overflow-hidden border-b lg:border-r border-edge">
+            <LatestBlogCard posts={blogs} post={latestBlog} />
           </div>
 
-          {/* Card 2: Latest Blog Teaser Bento (Compact 4 cols) */}
-          <div className="col-span-4 md:col-span-4 lg:col-span-4 row-span-2 overflow-hidden border-b lg:border-r border-edge">
-            <LatestBlogCard post={latestBlog} />
-          </div>
-
-          {/* Card 3: Snaps Carousel / Memories Bento (Compact 4 cols on desktop, 8 on tablet, 4 on mobile) */}
-          <div className="col-span-4 md:col-span-8 lg:col-span-4 row-span-2 overflow-hidden border-b border-edge">
+          {/* Bento 2 (Right Top): Snaps Carousel Bento (4 cols, 2 rows high) */}
+          <div className="col-span-4 md:col-span-4 lg:col-span-4 row-span-2 overflow-hidden border-b md:border-r lg:border-r-0 border-edge">
             <SnapsCarouselCard />
+          </div>
+
+          {/* Bento 3 (Right Bottom): Time Bento (4 cols, 2 rows high, below Snaps) */}
+          <div className="col-span-4 md:col-span-4 lg:col-span-4 row-span-2 overflow-hidden border-b border-edge">
+            <IstTimeCard />
           </div>
 
           {/* Music Player Bento (Full width, row-span-4) */}

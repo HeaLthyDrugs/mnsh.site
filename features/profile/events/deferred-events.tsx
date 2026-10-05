@@ -31,7 +31,7 @@ function Separator({ className }: { className?: string }) {
   );
 }
 
-export function DeferredEvents({ latestBlog }: EventsProps) {
+export function DeferredEvents({ blogs, latestBlog }: EventsProps) {
   // Warm the chunk during idle time so it is already loaded by the time the
   // section scrolls into view.
   useEffect(() => {
@@ -62,7 +62,7 @@ export function DeferredEvents({ latestBlog }: EventsProps) {
         </>
       }
     >
-      <Events latestBlog={latestBlog} />
+      <Events blogs={blogs} latestBlog={latestBlog} />
       <Separator />
     </LazyRenderOnView>
   );
