@@ -25,6 +25,8 @@ import { Kbd } from "@/components/ui/kbd";
 import { PostShareMenu } from "@/features/blog/components/post-share-menu";
 
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
     const blogs = getAllBlogs();
     return blogs.map((blog) => ({

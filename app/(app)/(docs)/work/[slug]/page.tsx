@@ -23,6 +23,8 @@ import { KeyboardNavigation } from "@/components/keyboard-navigation";
 import { LLMCopyButtonWithViewOptions } from "@/components/post-page-actions";
 import { WorkCarousel } from "@/features/work/components/work-carousel";
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const works = getAllWorks();
   return works.map((work) => ({
