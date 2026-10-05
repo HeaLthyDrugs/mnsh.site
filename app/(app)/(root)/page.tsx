@@ -46,6 +46,11 @@ export default function Page() {
         {/* Work I have done  */}
         <Work />
         <Separator />
+
+        {/* Blog  */}
+        <Blog />
+        <Separator />
+
         {/* Services I provide  */}
         {/* <HowIWork />
         <Separator />
@@ -58,10 +63,6 @@ export default function Page() {
 
         {/* FAQ  */}
         <Faq />
-        <Separator />
-
-        {/* Blog  */}
-        <Blog />
         <Separator />
       </div>
     </>
