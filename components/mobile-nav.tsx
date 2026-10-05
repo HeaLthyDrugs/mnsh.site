@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Briefcase, FileText, Envelope, User, X, Lightning, Wrench, DeviceMobile } from "@phosphor-icons/react";
+import { Briefcase, FileText, Envelope, User, X, Lightning, Books } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -19,8 +19,9 @@ const getIconForTitle = (title: string) => {
   if (lowercaseTitle.includes("blog") || lowercaseTitle.includes("post")) return FileText;
   if (lowercaseTitle.includes("contact")) return Envelope;
   if (lowercaseTitle.includes("about")) return User;
-  if (lowercaseTitle.includes("tool")) return Wrench;
-  if (lowercaseTitle.includes("gear")) return DeviceMobile;
+  if (lowercaseTitle.includes("resource")) return Books;
+  // GEAR (disabled)
+  // if (lowercaseTitle.includes("gear")) return DeviceMobile;
   return Lightning;
 };
 

@@ -24,17 +24,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${SITE_INFO.url}/tools`,
+      url: `${SITE_INFO.url}/resources`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    {
-      url: `${SITE_INFO.url}/gear`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    // GEAR (disabled)
+    // {
+    //   url: `${SITE_INFO.url}/gear`,
+    //   lastModified: new Date(),
+    //   changeFrequency: 'monthly',
+    //   priority: 0.7,
+    // },
   ];
 
   const blogUrls: MetadataRoute.Sitemap = blogs.map((blog) => ({

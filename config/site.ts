@@ -56,17 +56,18 @@ export const MAIN_NAV: NavItem[] = [
     description: "Photos I have clicked or love",
   },
   {
-    title: "Tools",
-    href: "/tools",
-    shortcut: "T",
-    description: "Tools I use",
+    title: "Resources",
+    href: "/resources",
+    shortcut: "R",
+    description: "Resources I use",
   },
-  {
-    title: "Gear",
-    href: "/gear",
-    shortcut: "G",
-    description: "My setup & gear",
-  },
+  // GEAR (disabled) — re-enable together with app/(app)/(docs)/_gear
+  // {
+  //   title: "Gear",
+  //   href: "/gear",
+  //   shortcut: "G",
+  //   description: "My setup & gear",
+  // },
 ];
 
 export const GITHUB_USERNAME = "HeaLthyDrugs";

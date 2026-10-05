@@ -1,5 +1,6 @@
-import { GEAR } from "@/features/gear/data/gear";
-import { TOOLS } from "@/features/tools/data/tools";
+// GEAR (disabled)
+// import { GEAR } from "@/features/gear/data/gear";
+import { RESOURCES } from "@/features/resources/data/resources";
 
 export interface TerminalWork {
   slug: string;
@@ -145,4 +146,5 @@ export const TERMINAL_BLOGS: TerminalBlog[] = [
   },
 ];
 
-export { GEAR, TOOLS };
+// GEAR (disabled) — add GEAR back to this export when the gear page returns.
+export { RESOURCES };

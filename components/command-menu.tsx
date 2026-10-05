@@ -11,8 +11,7 @@ import {
   ArrowsDownUp,
   ArrowUpRight,
   Terminal,
-  Wrench,
-  DeviceMobile,
+  Books,
 } from "@phosphor-icons/react";
 import Image from "next/image";
 
@@ -72,15 +71,17 @@ const MENU_LINKS: CommandLinkItem[] = [
     icon: Rss,
   },
   {
-    title: "Tools",
-    href: "/tools",
-    icon: Wrench,
+    title: "Resources",
+    href: "/resources",
+    icon: Books,
+    keywords: ["tools", "apps", "software", "utilities"],
   },
-  {
-    title: "Gear",
-    href: "/gear",
-    icon: DeviceMobile,
-  },
+  // GEAR (disabled)
+  // {
+  //   title: "Gear",
+  //   href: "/gear",
+  //   icon: DeviceMobile,
+  // },
 ];
 
 const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({

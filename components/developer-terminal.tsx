@@ -35,8 +35,8 @@ import { cn } from "@/lib/utils";
 import {
   TERMINAL_WORKS,
   TERMINAL_BLOGS,
-  GEAR,
-  TOOLS,
+  // GEAR (disabled)
+  RESOURCES,
 } from "@/config/terminal-catalog";
 
 export interface TerminalTheme {
@@ -285,8 +285,8 @@ const COMMAND_LIST = [
   "work list",
   "blog",
   "blog list",
-  "gear",
-  "tools",
+  // "gear", // GEAR (disabled)
+  "resources",
   "contact",
   "theme",
   "theme list",
@@ -647,8 +647,7 @@ export function TerminalEngine({
   skills          - Show tech stack & engineering skills
   work [open]     - List all featured works or view detail ('work open leank-p2p')
   blog [open]     - List all blog posts or read article ('blog open lifelog')
-  gear            - List hardware setup & workstation gear
-  tools           - List developer tools & software applications
+  resources       - List software, apps & utilities I use ('resources open')
   contact         - Get contact email & social links
   cat [file]      - Read text file or list available files ('cat list', 'cat bio.md')
   ls              - List readable virtual text files
@@ -944,43 +943,45 @@ TextAa 'blog open ${foundBlog.slug}' to read complete post on website.`,
           }
           break;
 
-        case "gear":
-        case "setup":
-          if (subCmd === "open") {
-            router.push("/gear");
-            if (onClose) onClose();
-          } else {
-            const gearStr = GEAR.map(
-              (g, idx) => `  [${idx + 1}] ${g.name.padEnd(20)} — ${g.description}`
-            ).join("\n");
-            appendOutput(
-              `┌──────────────────────────────────────────────────────────┐
-│ WORKSTATION SETUP & GEAR (${GEAR.length} items)                      │
-└──────────────────────────────────────────────────────────┘
-${gearStr}
+        // GEAR (disabled) — re-enable together with the /gear route.
+        // case "gear":
+        // case "setup":
+        //   if (subCmd === "open") {
+        //     router.push("/gear");
+        //     if (onClose) onClose();
+        //   } else {
+        //     const gearStr = GEAR.map(
+        //       (g, idx) => `  [${idx + 1}] ${g.name.padEnd(20)} — ${g.description}`
+        //     ).join("\n");
+        //     appendOutput(
+        //       `┌──────────────────────────────────────────────────────────┐
+        // │ WORKSTATION SETUP & GEAR (${GEAR.length} items)                      │
+        // └──────────────────────────────────────────────────────────┘
+        // ${gearStr}
+        //
+        // TextAa 'gear open' or click 'Gear' in navigation to view images & links.`,
+        //       "output"
+        //     );
+        //   }
+        //   break;
 
-TextAa 'gear open' or click 'Gear' in navigation to view images & links.`,
-              "output"
-            );
-          }
-          break;
-
+        case "resources":
         case "tools":
         case "apps":
           if (subCmd === "open") {
-            router.push("/tools");
+            router.push("/resources");
             if (onClose) onClose();
           } else {
-            const toolsStr = TOOLS.map(
-              (t) => `  - ${t.name.padEnd(16)} [${t.category.padEnd(12)}] : ${t.description}`
+            const resourcesStr = RESOURCES.map(
+              (r) => `  - ${r.name.padEnd(16)} [${r.category.padEnd(12)}] : ${r.description}`
             ).join("\n");
             appendOutput(
               `┌──────────────────────────────────────────────────────────┐
-│ DEVELOPER TOOLS & SOFTWARE (${TOOLS.length} items)                   │
+│ RESOURCES I USE (${RESOURCES.length} items)                              │
 └──────────────────────────────────────────────────────────┘
-${toolsStr}
+${resourcesStr}
 
-TextAa 'tools open' to view full tools showcase page.`,
+TextAa 'resources open' to view the full resources page.`,
               "output"
             );
           }
@@ -1011,8 +1012,7 @@ ${SOCIAL_LINKS.map((s) => `  - ${s.title.padEnd(12)} : ${s.href}`).join("\n")}`,
 └──────────────────────────────────────────────────────────┘
   📄 bio.md       - Personal background, bio & career summary
   📄 skills.txt   - Tech stack, programming languages & frameworks
-  📄 gear.txt     - Workstation setup, monitor & desk hardware
-  📄 tools.txt    - Developer applications, software & utilities
+  📄 resources.txt - Developer applications, software & utilities
   📄 contact.txt  - Direct email & social media links
   📄 readme.txt   - Terminal CLI features & keyboard hotkeys guide
 
@@ -1032,14 +1032,14 @@ Mobile:   React Native, Expo, Redux Toolkit
 DevOps:   Git, Docker, Cloudflare Workers, Vercel, Neovim, VS Code`,
               "output"
             );
-          } else if (subCmd === "gear.txt" || subCmd === "gear") {
+          } else if (
+            subCmd === "resources.txt" ||
+            subCmd === "resources" ||
+            subCmd === "tools.txt" ||
+            subCmd === "tools"
+          ) {
             appendOutput(
-              GEAR.map((g) => `${g.name}: ${g.description}`).join("\n"),
-              "output"
-            );
-          } else if (subCmd === "tools.txt" || subCmd === "tools") {
-            appendOutput(
-              TOOLS.map((t) => `[${t.category}] ${t.name}: ${t.description}`).join("\n"),
+              RESOURCES.map((r) => `[${r.category}] ${r.name}: ${r.description}`).join("\n"),
               "output"
             );
           } else if (subCmd === "contact.txt" || subCmd === "contact") {

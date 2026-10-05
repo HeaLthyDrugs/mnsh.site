@@ -12,13 +12,14 @@ const navItems = [
         title: "Blog",
         href: "/blog",
     },
+    // GEAR (disabled)
+    // {
+    //     title: "Gear",
+    //     href: "/gear",
+    // },
     {
-        title: "Gear",
-        href: "/gear",
-    },
-    {
-        title: "Tools",
-        href: "/tools",
+        title: "Resources",
+        href: "/resources",
     },
 ];
 

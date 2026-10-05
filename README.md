@@ -20,7 +20,7 @@ The official repository for [mnsh.site](https://mnsh.site), a personal portfolio
 -   **Structured Sections**:
     -   **Works**: Detailed portfolio of professional and personal projects.
     -   **Blog**: Technical articles and personal development logs.
-    -   **Tools & Gear**: Documentation of software environment and hardware setup.
+    -   **Resources**: Curated list of software, apps, and utilities that power my workflow.
 -   **Performance Focused**: Optimized with Next.js font and image optimization systems.
 
 ## Tech Stack

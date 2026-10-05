@@ -6,8 +6,7 @@ description: Personal portfolio and blog focused on web engineering, UI systems,
 preferred-content:
 https://www.mnsh.site/blog
 https://www.mnsh.site/work
-https://www.mnsh.site/gear
-https://www.mnsh.site/tools
+https://www.mnsh.site/resources
 
 ai-usage-policy:
 - Attribution required when referencing content

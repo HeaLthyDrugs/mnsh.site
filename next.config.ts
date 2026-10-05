@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
 	compiler: {
 		removeConsole: process.env.NODE_ENV === 'production',
 	},
+	async redirects() {
+		return [
+			{
+				source: '/tools',
+				destination: '/resources',
+				permanent: true,
+			},
+		];
+	},
 	async rewrites() {
 		const rewrites = [
 			{
