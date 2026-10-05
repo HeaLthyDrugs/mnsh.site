@@ -5,120 +5,92 @@ import { EVENTS } from "../data/events";
 import { EventItem } from "./event-item";
 import { MusicPlayer } from "./music-player";
 import { GitHubContributionsCard } from "./github-contributions-card";
+import { IstTimeCard } from "./ist-time-card";
+import { LatestBlogCard } from "./latest-blog-card";
+import { SnapsCarouselCard } from "./snaps-carousel-card";
 import { USER } from "../data/user";
 import { cn } from "@/lib/utils";
 
-// Map sizes to CSS grid classes for responsive bento layout
-// Doubled resolution for finer control: 1 normal unit = 2 grid units
-// Mobile: 4 cols, Tablet: 8 cols, Desktop: 12 cols
-const sizeToGridClasses: Record<string, string> = {
-    // xxs: 1/4 of a normal card (2x2 grid units -> perfect square)
-    xxs: "col-span-2 row-span-2",
-    // xs: 2x2 grid units
-    xs: "col-span-2 row-span-2",
-    // small: 2x2 grid units
-    small: "col-span-2 row-span-2",
-    // medium: 2x2 mobile, 4x2 tablet+
-    medium: "col-span-2 md:col-span-4 row-span-2",
-    // large: 4x2 mobile, 4x2 tablet, 6x2 desktop
-    large: "col-span-4 lg:col-span-6 row-span-2",
-    // wide: full width (thin strip)
-    wide: "col-span-4 md:col-span-8 lg:col-span-12 row-span-2",
-    // video: full width, spans 1 fluid row to automatically match its intrinsic aspect ratio!
-    video: "col-span-4 md:col-span-8 lg:col-span-12",
-    // tall: 2x4 (Double height)
-    tall: "col-span-2 md:col-span-4 lg:col-span-6 row-span-4",
-    // xl: 4x4 mobile/tablet, 6x4 desktop
-    xl: "col-span-4 md:col-span-4 lg:col-span-6 row-span-4",
-    // hero: 4x4 mobile, 8x4 tablet/desktop
-    hero: "col-span-4 md:col-span-8 lg:col-span-8 row-span-4",
-    // social: 1/3 width on desktop (4 cols), 1/2 on tablet (4 cols), full width on mobile (4 cols)
-    social: "col-span-4 row-span-1 md:col-span-4 md:row-span-1 lg:col-span-4 lg:row-span-1",
-};
-
-// Music player grid placement — full width row-span-4
+// Doubled resolution grid system:
+// Mobile: 4 cols | Tablet: 8 cols | Desktop: 12 cols
 const MUSIC_PLAYER_CLASSES = "col-span-4 md:col-span-8 lg:col-span-12 row-span-4";
 
-// The music player is rendered right before the event with this id.
-// (Anchoring by id instead of array index keeps the layout stable when bentos are added/removed.)
-const MUSIC_PLAYER_BEFORE_ID = "twitter";
+export interface EventsProps {
+  latestBlog?: {
+    slug: string;
+    title: string;
+    description: string;
+    createdAt?: string;
+    category?: string;
+    readTime?: string;
+  };
+}
 
-// The GitHub contributions graph is rendered right after the event with this id.
-const GITHUB_CONTRIBUTIONS_AFTER_ID = "github";
+export default function Events({ latestBlog }: EventsProps) {
+  const githubProfileUrl = `https://github.com/${USER.username}`;
 
-export default function Events() {
-    const githubProfileUrl = `https://github.com/${USER.username}`;
+  return (
+    <Panel id="events">
+      <div className="w-full">
+        <div
+          className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 auto-rows-[minmax(100px,auto)] grid-flow-dense gap-0"
+          style={{ gridAutoFlow: "dense" }}
+        >
+          {/* Card 1: IST Time & Availability Bento (Compact 4 cols) */}
+          <div className="col-span-4 md:col-span-4 lg:col-span-4 row-span-2 overflow-hidden border-b md:border-r border-edge">
+            <IstTimeCard />
+          </div>
 
-    return (
-        <Panel id="events">
+          {/* Card 2: Latest Blog Teaser Bento (Compact 4 cols) */}
+          <div className="col-span-4 md:col-span-4 lg:col-span-4 row-span-2 overflow-hidden border-b lg:border-r border-edge">
+            <LatestBlogCard post={latestBlog} />
+          </div>
 
-            <div className="w-full">
-                {/* 
-                    Responsive Bento Grid:
-                    - Doubled resolution for more granular sizing
-                    - auto-rows-[100px] instead of 200px
-                */}
-                <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 auto-rows-[minmax(100px,auto)] grid-flow-dense gap-0"
-                    style={{ gridAutoFlow: "dense" }}
-                >
-                    {EVENTS.map((event) => {
-                        const size = event.size || "medium";
-                        const gridClasses = sizeToGridClasses[size] || sizeToGridClasses.medium;
+          {/* Card 3: Snaps Carousel / Memories Bento (Compact 4 cols on desktop, 8 on tablet, 4 on mobile) */}
+          <div className="col-span-4 md:col-span-8 lg:col-span-4 row-span-2 overflow-hidden border-b border-edge">
+            <SnapsCarouselCard />
+          </div>
 
-                        const items = [];
+          {/* Music Player Bento (Full width, row-span-4) */}
+          <div
+            className={cn(
+              "overflow-hidden border-b border-edge",
+              MUSIC_PLAYER_CLASSES
+            )}
+          >
+            <MusicPlayer className="h-full" />
+          </div>
 
-                        // Insert music player at the designated position
-                        if (event.id === MUSIC_PLAYER_BEFORE_ID) {
-                            items.push(
-                                <div
-                                    key="music-player"
-                                    className={cn(
-                                        "overflow-hidden border-t border-edge",
-                                        MUSIC_PLAYER_CLASSES
-                                    )}
-                                >
-                                    <MusicPlayer className="h-full" />
-                                </div>
-                            );
-                        }
-
-                        items.push(
-                            <div
-                                key={event.id}
-                                className={cn(
-                                    "overflow-hidden",
-                                    gridClasses
-                                )}
-                            >
-                                <EventItem
-                                    event={event}
-                                    className={cn(
-                                        "h-full",
-                                        event.id === "blog" && "border-b lg:border-b-0 lg:border-r border-edge",
-                                        event.id === "tools" && "border-r lg:border-r-0 lg:border-b border-edge",
-                                        event.id === "twitter" && "border-t border-edge md:border-r",
-                                        event.id === "linkedin" && "border-t border-edge lg:border-r",
-                                        event.id === "github" && "border-t border-edge"
-                                    )}
-                                />
-                            </div>
-                        );
-
-                        // Insert GitHub contributions at the designated position
-                        if (event.id === GITHUB_CONTRIBUTIONS_AFTER_ID) {
-                            items.push(
-                                <GitHubContributionsCard
-                                    key="github-contributions"
-                                    username={USER.username}
-                                    githubProfileUrl={githubProfileUrl}
-                                />
-                            );
-                        }
-
-                        return items;
-                    })}
-                </div>
+          {/* Social Bentos (Twitter, LinkedIn, GitHub) */}
+          {EVENTS.map((event) => (
+            <div
+              key={event.id}
+              className={cn(
+                "overflow-hidden",
+                event.id === "github"
+                  ? "col-span-4 md:col-span-8 lg:col-span-4 row-span-1"
+                  : "col-span-4 md:col-span-4 lg:col-span-4 row-span-1"
+              )}
+            >
+              <EventItem
+                event={event}
+                className={cn(
+                  "h-full",
+                  event.id === "twitter" && "border-b md:border-r border-edge",
+                  event.id === "linkedin" && "border-b lg:border-r border-edge",
+                  event.id === "github" && "border-b border-edge"
+                )}
+              />
             </div>
-        </Panel>
-    );
+          ))}
+
+          {/* GitHub Contributions Card */}
+          <GitHubContributionsCard
+            username={USER.username}
+            githubProfileUrl={githubProfileUrl}
+          />
+        </div>
+      </div>
+    </Panel>
+  );
 }

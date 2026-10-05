@@ -13,6 +13,7 @@ import { DeferredEvents } from "@/features/profile/events/deferred-events";
 import Faq from "@/features/profile/faq";
 import Blog from "@/features/profile/blog";
 import AnimatedScene from "@/features/Scene/page";
+import { getAllBlogs } from "@/features/blog/lib/blogs";
 
 export const metadata: Metadata = {
   alternates: {
@@ -24,6 +25,16 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  const blogs = getAllBlogs();
+  const latestBlog = blogs[0]
+    ? {
+        slug: blogs[0].slug,
+        title: blogs[0].metadata.title,
+        description: blogs[0].metadata.description,
+        createdAt: blogs[0].metadata.createdAt,
+        category: blogs[0].metadata.category,
+      }
+    : undefined;
   return (
     <>
       <script
@@ -59,7 +70,7 @@ export default function Page() {
         <Separator /> */}
 
         {/* Events  */}
-        <DeferredEvents />
+        <DeferredEvents latestBlog={latestBlog} />
 
         {/* FAQ  */}
         <Faq />

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 import { LazyRenderOnView } from "@/components/lazy-render-on-view";
 import { cn } from "@/lib/utils";
+import type { EventsProps } from "@/features/profile/events";
 
 const loadEvents = () => import("@/features/profile/events");
 
@@ -30,7 +31,7 @@ function Separator({ className }: { className?: string }) {
   );
 }
 
-export function DeferredEvents() {
+export function DeferredEvents({ latestBlog }: EventsProps) {
   // Warm the chunk during idle time so it is already loaded by the time the
   // section scrolls into view.
   useEffect(() => {
@@ -61,7 +62,7 @@ export function DeferredEvents() {
         </>
       }
     >
-      <Events />
+      <Events latestBlog={latestBlog} />
       <Separator />
     </LazyRenderOnView>
   );
