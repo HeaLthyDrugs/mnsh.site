@@ -51,6 +51,6 @@ For inquiries or connections:
 
 ---
 
-Inspired by [Chanh Dai](https://chanhdai.com/)
+Heavily Inspired by [Chanh Dai](https://chanhdai.com/)
 
 

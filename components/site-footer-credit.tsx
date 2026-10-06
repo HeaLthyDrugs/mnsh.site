@@ -58,7 +58,7 @@ export function SiteFooterCredit() {
 
             <div className="space-y-1 text-xs md:text-sm text-muted-foreground font-heading">
               <p className="text-balance">
-                Inspired by{" "}
+                Heavily Inspired by{" "}
                 <FooterCreditLink href={INSPIRATION_URL}>Chánh Đại</FooterCreditLink>.
               </p>
               <p className="text-balance">
