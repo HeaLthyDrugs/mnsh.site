@@ -528,7 +528,7 @@ export const Icons = {
 
   freehandMoon: (props: IconProps) => (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <g transform="translate(-8.5, -0.8) scale(1.4)" fill="currentColor" fillRule="evenodd" clipRule="evenodd">
+      <g transform="translate(-14.64, -7.71) scale(1.5)" fill="currentColor" fillRule="evenodd" clipRule="evenodd">
         <path d="M22.062 10.45a3.93 3.93 0 0 0-2.89-2.16a.393.393 0 1 0-.1.78a3 3 0 0 1 2.15 1.77a3.999 3.999 0 0 1-5.999 4.999a2.6 2.6 0 0 1-1.24-1.54a4.46 4.46 0 0 0 5.429-4.769a.35.35 0 0 0-.69 0c0 2.92-2.4 4.48-5.098 3.5c-.35-.12-.81 0-.86.67c.041.655.176 1.301.4 1.919a5.22 5.22 0 0 0 2.999 2.11a4.998 4.998 0 0 0 5.898-7.279" />
       </g>
     </svg>

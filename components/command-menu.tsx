@@ -280,7 +280,7 @@ export function CommandMenu({ blogs = [], works = [] }: { blogs?: BlogPost[], wo
               }}
             >
               <Icons.freehandTerminal className="size-5 opacity-50 transition-opacity group-hover:opacity-100" />
-              Terminal 
+              Terminal
             </CommandItem>
           </CommandGroup>
 
