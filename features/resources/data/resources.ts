@@ -13,7 +13,7 @@ export const RESOURCES: Resource[] = [
         description: "Autonomous coding agent for large-scale software engineering tasks.",
         url: "https://antigravity.im",
         category: "Development",
-        image: "https://assets.mnsh.site/icons/antigravity.png",
+        image: "https://assets.mnsh.site/icons/antigravity.svg",
         invertInDark: false,
     },
     {
@@ -28,7 +28,7 @@ export const RESOURCES: Resource[] = [
         description: "Conversational AI for research, ideation, and reasoning.",
         url: "https://chatgpt.com",
         category: "Productivity",
-        image: "https://assets.mnsh.site/icons/openai.png",
+        image: "https://assets.mnsh.site/icons/openai.svg",
         invertInDark: true,
     },
     {
@@ -36,7 +36,7 @@ export const RESOURCES: Resource[] = [
         description: "AI assistant specialized in deep reasoning, coding, and long-context analysis.",
         url: "https://claude.ai",
         category: "Productivity",
-        image: "https://assets.mnsh.site/icons/claude.png",
+        image: "https://assets.mnsh.site/icons/claude.svg",
         invertInDark: false,
     },
     {
@@ -51,7 +51,7 @@ export const RESOURCES: Resource[] = [
         description: "AI-first code editor with codebase indexing and inline generation.",
         url: "https://cursor.com",
         category: "Development",
-        image: "https://assets.mnsh.site/icons/cursor.png",
+        image: "https://assets.mnsh.site/icons/cursor.svg",
         invertInDark: true,
     },
     {
@@ -59,7 +59,7 @@ export const RESOURCES: Resource[] = [
         description: "Universal React framework and tooling for native iOS and Android apps.",
         url: "https://expo.dev",
         category: "Development",
-        image: "https://assets.mnsh.site/icons/expo.png",
+        image: "https://assets.mnsh.site/icons/expo.svg",
         invertInDark: true,
     },
     {
@@ -67,21 +67,21 @@ export const RESOURCES: Resource[] = [
         description: "Multimodal AI model for text, code, audio, and visual reasoning.",
         url: "https://gemini.google.com",
         category: "Productivity",
-        image: "https://assets.mnsh.site/icons/gemini.png",
+        image: "https://assets.mnsh.site/icons/gemini.svg",
     },
     {
         name: "Google Cloud",
         description: "Suite of cloud computing services for scalable infrastructure and data storage.",
         url: "https://cloud.google.com",
         category: "Development",
-        image: "https://assets.mnsh.site/icons/googlecloud.png",
+        image: "https://assets.mnsh.site/icons/googlecloud.svg",
     },
     {
         name: "Grok",
         description: "Real-time AI search and reasoning with live web access.",
         url: "https://x.ai",
         category: "Productivity",
-        image: "https://assets.mnsh.site/icons/grok.png",
+        image: "https://assets.mnsh.site/icons/grok.svg",
         invertInDark: true,
     },
     {
@@ -103,7 +103,7 @@ export const RESOURCES: Resource[] = [
         description: "Connected workspace for notes, documentation, tasks, and project wikis.",
         url: "https://www.notion.so/",
         category: "Productivity",
-        image: "https://assets.mnsh.site/icons/notion.png",
+        image: "https://assets.mnsh.site/icons/notion.svg",
         invertInDark: true,
     },
     {
@@ -134,7 +134,7 @@ export const RESOURCES: Resource[] = [
         description: "Visual design tool for creating social graphics, banners, and mockups.",
         url: "https://postspark.app",
         category: "Design",
-        image: "https://assets.mnsh.site/icons/postspark.png",
+        image: "https://assets.mnsh.site/icons/postspark.svg",
         invertInDark: false,
     },
     {
@@ -142,7 +142,7 @@ export const RESOURCES: Resource[] = [
         description: "Application performance monitoring and real-time error tracking.",
         url: "https://sentry.io",
         category: "Development",
-        image: "https://assets.mnsh.site/icons/sentry.png",
+        image: "https://assets.mnsh.site/icons/sentry.svg",
         invertInDark: true,
     },
     {
@@ -158,20 +158,20 @@ export const RESOURCES: Resource[] = [
         description: "Digital music streaming service with millions of songs and podcasts.",
         url: "https://spotify.com",
         category: "Other",
-        image: "https://assets.mnsh.site/icons/spotify.png",
+        image: "https://assets.mnsh.site/icons/spotify.svg",
     },
     {
         name: "Streamline",
         description: "Extensive design library of vector icons, illustrations, and UI elements.",
         url: "https://www.streamlinehq.com",
         category: "Design",
-        image: "https://assets.mnsh.site/icons/streamline.png",
+        image: "https://assets.mnsh.site/icons/streamline.svg",
     },
     {
         name: "Supabase",
         description: "Open-source Firebase alternative with PostgreSQL, authentication, and storage.",
         url: "https://supabase.com",
         category: "Development",
-        image: "https://assets.mnsh.site/icons/supabase.png",
+        image: "https://assets.mnsh.site/icons/supabase.svg",
     },
 ];
