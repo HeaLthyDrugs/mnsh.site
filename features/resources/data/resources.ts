@@ -1,4 +1,3 @@
-
 export interface Resource {
     name: string;
     description: string;
@@ -18,19 +17,13 @@ export const RESOURCES: Resource[] = [
         invertInDark: false,
     },
     {
-        name: "Appwrite",
-        description: "Handles my backend and auth so I don't have to.",
-        url: "https://appwrite.io",
-        category: "Development",
-        image: "https://assets.mnsh.site/icons/appwrite.png",
+        name: "ChatGPT",
+        description: "My daily conversational AI for brainstorming, research, and coding.",
+        url: "https://chatgpt.com",
+        category: "Productivity",
+        image: "https://assets.mnsh.site/icons/openai.png",
+        invertInDark: true,
     },
-    // {
-    //     name: "Atlas",
-    //     description: "Scalable and reliable database for all my production data.",
-    //     url: "https://www.mongodb.com/atlas",
-    //     category: "Development",
-    //     image: "https://assets.mnsh.site/icons/atlas.png",
-    // },
     {
         name: "Claude",
         description: "The best AI for long-context reasoning and writing.",
@@ -40,12 +33,11 @@ export const RESOURCES: Resource[] = [
         invertInDark: false,
     },
     {
-        name: "Codex",
-        description: "Helps me explore and build on existing codebases.",
-        url: "https://openai.com/codex",
+        name: "Cloudflare",
+        description: "Global edge network, DNS, security, and serverless hosting.",
+        url: "https://cloudflare.com",
         category: "Development",
-        image: "https://assets.mnsh.site/icons/codex.png",
-        invertInDark: false,
+        image: "/icons/cloudflare.svg",
     },
     {
         name: "Cursor",
@@ -62,20 +54,6 @@ export const RESOURCES: Resource[] = [
         category: "Development",
         image: "https://assets.mnsh.site/icons/expo.png",
         invertInDark: true,
-    },
-    {
-        name: "Figma",
-        description: "Where I brainstorm and polish every pixel of my designs.",
-        url: "https://www.figma.com/",
-        category: "Design",
-        image: "https://assets.mnsh.site/icons/figma.png",
-    },
-    {
-        name: "Firebase",
-        description: "Go-to for quick prototyping and real-time features.",
-        url: "https://firebase.google.com/",
-        category: "Development",
-        image: "https://assets.mnsh.site/icons/firebase.png",
     },
     {
         name: "Gemini",
@@ -108,11 +86,11 @@ export const RESOURCES: Resource[] = [
         invertInDark: true,
     },
     {
-        name: "OpenAI",
-        description: "Powers my most advanced AI integrations and tools.",
-        url: "https://openai.com",
-        category: "Productivity",
-        image: "https://assets.mnsh.site/icons/openai.png",
+        name: "OpenCode",
+        description: "Open-source AI coding agent built for the terminal.",
+        url: "https://opencode.ai",
+        category: "Development",
+        image: "/icons/opencode.svg",
         invertInDark: true,
     },
     {
@@ -122,13 +100,6 @@ export const RESOURCES: Resource[] = [
         category: "Design",
         image: "https://assets.mnsh.site/icons/postspark.png",
         invertInDark: false,
-    },
-    {
-        name: "React",
-        description: "The foundation for everything I build on the web.",
-        url: "https://react.dev",
-        category: "Development",
-        image: "https://assets.mnsh.site/icons/react.png",
     },
     {
         name: "Sentry",
@@ -152,12 +123,4 @@ export const RESOURCES: Resource[] = [
         category: "Development",
         image: "https://assets.mnsh.site/icons/supabase.png",
     },
-    {
-        name: "Trae",
-        description: "Adaptive AI IDE I use for high-speed development experiments.",
-        url: "https://trae.ai",
-        category: "Development",
-        image: "https://assets.mnsh.site/icons/trae.png",
-        invertInDark: false,
-    }
 ];
