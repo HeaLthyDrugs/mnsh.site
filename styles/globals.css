@@ -5,6 +5,7 @@
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant hoverable (@media (hover: hover) and (pointer: fine));
 
 @theme inline {
   --color-background: var(--background);

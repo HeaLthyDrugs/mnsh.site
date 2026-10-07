@@ -245,7 +245,7 @@ export function SnapsBentoGrid({
                 quality={68}
                 priority={index < 2}
                 maxOptimizedWidth={640}
-                className="block h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.015]"
+                className="block h-auto w-full object-cover transition-all duration-500 group-hover:scale-[1.015] hoverable:grayscale hoverable:group-hover:grayscale-0"
               />
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 border-t border-white/20 bg-black/48 opacity-0 backdrop-blur-lg transition-opacity duration-200 group-hover:opacity-100 dark:border-white/12 dark:bg-black/36">
