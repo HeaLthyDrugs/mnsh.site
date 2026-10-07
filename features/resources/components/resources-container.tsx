@@ -53,9 +53,10 @@ export function ResourcesContainer({ resources }: ResourcesContainerProps) {
                             onClick={() => setSelectedCategory(category)}
                             style={{ borderRightStyle: "dashed" }}
                             className={cn(
-                                "relative flex items-center justify-center gap-2 px-3.5 py-2 text-xs font-medium transition-colors hover:text-primary focus:outline-none rounded-none",
+                                "relative flex items-center justify-center gap-1.5 py-2 text-xs font-medium transition-colors hover:text-primary focus:outline-none rounded-none",
                                 "border-r border-edge",
                                 "border-b border-edge", // Solid bottom border
+                                category === "All" ? "w-16 shrink-0 px-0" : "px-3.5 gap-2",
                                 selectedCategory === category
                                     ? "text-primary bg-muted/30"
                                     : "text-muted-foreground/60 hover:bg-muted/10",
