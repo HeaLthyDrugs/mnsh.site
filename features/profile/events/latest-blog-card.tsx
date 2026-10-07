@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/hooks/use-sound";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 
 export interface BlogItem {
   slug: string;
@@ -93,11 +94,11 @@ export function LatestBlogCard({ posts, post, className }: LatestBlogCardProps) 
       onMouseLeave={() => setIsHovered(false)}
       onClick={playTap}
       className={cn(
-        "group relative flex h-full w-full flex-col justify-between overflow-hidden bg-black p-5 sm:p-7 select-none cursor-pointer",
+        "group relative block h-full w-full overflow-hidden bg-black select-none cursor-pointer",
         className
       )}
     >
-      {/* Background Cover Image - Strictly only the current post's image is rendered to prevent any overlapping */}
+      {/* Background Cover Image */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
         <div
           key={currentPost.slug}
@@ -112,30 +113,35 @@ export function LatestBlogCard({ posts, post, className }: LatestBlogCardProps) 
             priority
           />
         </div>
-
-        {/* Faded dark gradient overlay on top of the image so direct text is crisp & readable */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/70 via-black/45 to-black/80 pointer-events-none" />
       </div>
 
-      {/* Top: Title directly on card (no background / box) */}
-      <div className="relative z-20">
-        <h3 className="font-heading font-semibold text-xl sm:text-2xl lg:text-3xl leading-snug text-white line-clamp-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
-          {currentPost.title}
-        </h3>
-      </div>
+      {/* Progressive Blur (NO black fade) covering bottom 25% */}
+      <ProgressiveBlur
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[25%] min-h-[76px] w-full"
+        direction="bottom"
+        blurLayers={8}
+        blurIntensity={6}
+      />
 
-      {/* Center spacer */}
-      <div className="flex-1 min-h-6" />
+      {/* Bottom 25% Text Content: Title at bottom left, small & compact */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex h-[25%] min-h-[76px] flex-col justify-end px-4 py-3 sm:px-6 sm:py-3.5">
+        <div className="flex flex-col gap-1 w-full">
+          {/* Title at bottom left */}
+          <h3 className="font-heading font-medium sm:font-semibold text-xs sm:text-sm md:text-base leading-snug text-white line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+            {currentPost.title}
+          </h3>
 
-      {/* Bottom: Read time on left, Read post on right directly on card (no background / box) */}
-      <div className="relative z-20 flex items-center justify-between text-white/90">
-        <span className="font-mono text-xs font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-          {currentPost.readTime || "5 min read"}
-        </span>
+          {/* Metadata bar: Read time on left, Read post on right */}
+          <div className="flex items-center justify-between font-mono text-[11px] sm:text-xs text-white/90">
+            <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+              {currentPost.readTime || "5 min read"}
+            </span>
 
-        <div className="flex items-center gap-1.5 font-mono text-xs font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] group-hover:text-white transition-colors">
-          <span>Read post</span>
-          <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <div className="flex items-center gap-1 font-medium text-white group-hover:text-white transition-colors drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+              <span>Read post</span>
+              <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
+          </div>
         </div>
       </div>
     </Link>
