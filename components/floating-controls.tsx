@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Icons } from "@/components/icons";
 
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { isSoundEnabledAtom } from "@/store/sound-store";
@@ -13,7 +13,6 @@ import {
     fontThemeAtom,
     isGalleryExpandedAtom,
     showLabelsAtom,
-    isTerminalOpenAtom,
 } from "@/store/ui-store";
 import { isPlayingAtom, genreIdxAtom, currentTrackIdxAtom, shuffledGenresAtom } from "@/store/music-store";
 import { AudioLinesIcon, type AudioLinesIconHandle } from "@/components/animated-icons/audio-lines";
@@ -54,7 +53,6 @@ export function FloatingControls() {
     const [isGalleryExpanded] = useAtom(isGalleryExpandedAtom);
     const [showLabels, setShowLabels] = useAtom(showLabelsAtom);
     const [fontTheme, setFontTheme] = useAtom(fontThemeAtom);
-    const setIsTerminalOpen = useSetAtom(isTerminalOpenAtom);
     const { toggleTheme, isDark } = useAnimatedThemeToggle();
 
     const [isPlaying, setIsPlaying] = useAtom(isPlayingAtom);
@@ -173,7 +171,7 @@ export function FloatingControls() {
                     <div 
                         className={cn(
                             "relative w-full transition-all duration-300 ease-out overflow-hidden border-b border-border/50 bg-neutral-900 cursor-pointer group/player",
-                            isPlayerExpanded ? "h-[81px]" : "h-6"
+                            isPlayerExpanded ? "h-[80px]" : "h-6"
                         )}
                         onMouseEnter={() => {
                             playHover();
@@ -189,15 +187,16 @@ export function FloatingControls() {
                             }
                         }}
                         aria-label="Music Controls"
+                        title={`${track.title} • ${track.artist}`}
                     >
                         <Image
                             src={track.cover}
                             alt={`${track.title} Cover`}
                             fill
-                            sizes="48px"
+                            sizes="80px"
                             className={cn(
                                 "object-cover transition-all duration-700 ease-in-out",
-                                isPlayerExpanded ? "opacity-80 scale-110" : "opacity-40 blur-[2px] brightness-75 scale-100"
+                                isPlayerExpanded ? "opacity-85 scale-105" : "opacity-40 blur-[2px] brightness-75 scale-100"
                             )}
                         />
                         
@@ -220,7 +219,7 @@ export function FloatingControls() {
                                 isPlayerExpanded ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
                             )}
                         >
-                            <div className="absolute inset-0 bg-black/10 group-hover/player:bg-black/20 transition-colors duration-500 pointer-events-none" />
+                            <div className="absolute inset-0 bg-black/20 group-hover/player:bg-black/30 transition-colors duration-500 pointer-events-none" />
                             <button 
                                 className="relative z-10 flex size-full items-center justify-center outline-none focus-visible:ring-0"
                                 onClick={(e) => {
@@ -232,11 +231,11 @@ export function FloatingControls() {
                                 }}
                                 aria-label={isPlaying ? "Pause Music" : "Play Music"}
                             >
-                                <div className="flex size-10 items-center justify-center rounded-none bg-white/10 backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-110 hover:bg-white/20 active:scale-90">
+                                <div className="flex size-7 items-center justify-center rounded-none bg-black/40 hover:bg-black/60 border border-white/20 backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 text-white shadow-sm">
                                     {isPlaying ? (
-                                        <Icons.freehandPause className="size-5 text-white" />
+                                        <Icons.freehandPause className="size-3.5 text-white" />
                                     ) : (
-                                        <Icons.freehandPlay className="size-5 text-white ml-0.5" />
+                                        <Icons.freehandPlay className="size-3.5 text-white ml-0.5" />
                                     )}
                                 </div>
                             </button>
@@ -244,7 +243,7 @@ export function FloatingControls() {
 
                         <button
                             className={cn(
-                                "absolute top-1.5 right-1.5 z-20 flex size-5 items-center justify-center rounded-none bg-black/40 hover:bg-black/60 text-white/70 hover:text-white backdrop-blur-md transition-all duration-300 ease-out",
+                                "absolute top-1 right-1 z-20 flex size-4 items-center justify-center rounded-none bg-black/50 hover:bg-black/80 text-white/70 hover:text-white backdrop-blur-md transition-all duration-200 ease-out",
                                 isPlayerExpanded ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"
                             )}
                             onClick={(e) => {
@@ -256,12 +255,12 @@ export function FloatingControls() {
                             }}
                             aria-label="Remove Mini Player"
                         >
-                            <Icons.freehandClose className="size-3" />
+                            <Icons.freehandClose className="size-2.5" />
                         </button>
                     </div>
                 )}
                 
-                <div className="flex h-10 items-stretch w-[120px]">
+                <div className="flex h-10 items-stretch w-[80px]">
                     <button
                         onClick={() => {
                             playTap();
@@ -275,21 +274,6 @@ export function FloatingControls() {
                         aria-label={!isSoundEnabled ? "Unmute" : "Mute"}
                     >
                         {!isSoundEnabled ? <Icons.freehandVolumeMute className="size-4" /> : <Icons.freehandVolumeUp className="size-4" />}
-                    </button>
-
-                    <div className="w-px bg-border/40" aria-hidden="true" />
-
-                    <button
-                        onClick={() => {
-                            playTap();
-                            setIsTerminalOpen(true);
-                        }}
-                        onMouseEnter={playHover}
-                        className="flex flex-1 cursor-pointer items-center justify-center text-muted-foreground/70 transition-all duration-300 hover:bg-muted hover:text-emerald-500 focus-visible:outline-none focus-visible:ring-0"
-                        aria-label="Open Developer Terminal"
-                        title="Open Developer Terminal (CLI Mode)"
-                    >
-                        <Icons.freehandTerminal className="size-4" />
                     </button>
 
                     <div className="w-px bg-border/40" aria-hidden="true" />
