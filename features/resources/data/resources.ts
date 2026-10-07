@@ -21,7 +21,7 @@ export const RESOURCES: Resource[] = [
         description: "Social media management toolkit for scheduling, publishing, and analytics.",
         url: "https://buffer.com",
         category: "Productivity",
-        image: "/icons/buffer.svg",
+        image: "https://assets.mnsh.site/icons/buffer.svg",
     },
     {
         name: "ChatGPT",
@@ -44,7 +44,7 @@ export const RESOURCES: Resource[] = [
         description: "Global edge network providing DNS, CDN, security, and serverless compute.",
         url: "https://cloudflare.com",
         category: "Development",
-        image: "/icons/cloudflare.svg",
+        image: "https://assets.mnsh.site/icons/cloudflare.svg",
     },
     {
         name: "Cursor",
@@ -89,14 +89,14 @@ export const RESOURCES: Resource[] = [
         description: "Stroke-based icon library with over 60,000 icons crafted for modern interfaces.",
         url: "https://hugeicons.com",
         category: "Design",
-        image: "/icons/hugeicons.svg",
+        image: "https://assets.mnsh.site/icons/hugeicons.svg",
     },
     {
         name: "Lucide",
         description: "Lightweight, consistent open-source icon toolkit for modern web applications.",
         url: "https://lucide.dev",
         category: "Design",
-        image: "/icons/lucide.svg",
+        image: "https://assets.mnsh.site/icons/lucide.svg",
     },
     {
         name: "Notion",
@@ -111,7 +111,7 @@ export const RESOURCES: Resource[] = [
         description: "Open-source AI coding agent built for the terminal.",
         url: "https://opencode.ai",
         category: "Development",
-        image: "/icons/opencode.svg",
+        image: "https://assets.mnsh.site/icons/opencode.svg",
         invertInDark: true,
     },
     {
@@ -119,7 +119,7 @@ export const RESOURCES: Resource[] = [
         description: "Flexible icon family for interfaces, diagrams, and digital products.",
         url: "https://phosphoricons.com",
         category: "Design",
-        image: "/icons/phosphor.svg",
+        image: "https://assets.mnsh.site/icons/phosphor.svg",
         invertInDark: true,
     },
     {
@@ -127,14 +127,14 @@ export const RESOURCES: Resource[] = [
         description: "Developer platform for product analytics, session replay, and feature flags.",
         url: "https://posthog.com",
         category: "Development",
-        image: "/icons/posthog.svg",
+        image: "https://assets.mnsh.site/icons/posthog.svg",
     },
     {
         name: "PostSpark",
         description: "Visual design tool for creating social graphics, banners, and mockups.",
         url: "https://postspark.app",
         category: "Design",
-        image: "/icons/postspark.png",
+        image: "https://assets.mnsh.site/icons/postspark.png",
         invertInDark: false,
     },
     {
@@ -150,7 +150,7 @@ export const RESOURCES: Resource[] = [
         description: "Accessible, customizable component system built on Radix UI and Tailwind CSS.",
         url: "https://ui.shadcn.com",
         category: "Development",
-        image: "/icons/shadcn.svg",
+        image: "https://assets.mnsh.site/icons/shadcn.svg",
         invertInDark: true,
     },
     {
@@ -165,7 +165,7 @@ export const RESOURCES: Resource[] = [
         description: "Extensive design library of vector icons, illustrations, and UI elements.",
         url: "https://www.streamlinehq.com",
         category: "Design",
-        image: "/icons/streamline.png",
+        image: "https://assets.mnsh.site/icons/streamline.png",
     },
     {
         name: "Supabase",
