@@ -615,10 +615,52 @@ export const Icons = {
     </svg>
   ),
 
+  freehandFlameColor: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <defs>
+        <linearGradient id="freehandFlameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#F59E0B" />
+          <stop offset="100%" stopColor="#EF4444" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#freehandFlameGrad)"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12.5 2.1c-.2.5-.5 1.1-.7 1.6a9.5 9.5 0 0 0-.8 2.7c-.1.9-.1 1.8 0 2.7c.1.9.3 1.8.8 2.5a2.5 2.5 0 0 0 2.1 1.2c.8 0 1.5-.4 2-.9c.5-.6.8-1.3.8-2.1c0-.4-.1-.8-.2-1.2a6.8 6.8 0 0 1 2.3 2.7c.6 1.3.8 2.7.6 4.1a8.4 8.4 0 0 1-2.5 5.3c-1.3 1.2-2.9 2-4.6 2.2a9.3 9.3 0 0 1-5.6-1.1c-1.6-1-2.9-2.5-3.6-4.3a9.4 9.4 0 0 1 .5-7.7c.9-1.6 2.2-2.9 3.7-3.8c.8-.5 1.7-.9 2.6-1.1c.9-.2 1.8-.2 2.5.2l.5.3-.2.8c-.3 1-.3 2.1 0 3.1c.2.8.6 1.5 1.2 2c.4.4.9.6 1.5.5c.6-.1 1.1-.5 1.4-1c.4-.7.5-1.5.3-2.3a7.4 7.4 0 0 0-1.8-3.4c-.6-.7-1.3-1.4-1.9-2.2l-.2-.3.3-.2z"
+      />
+    </svg>
+  ),
+
   freehandGlobe: (props: IconProps) => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <circle cx="12" cy="12" r="9.2" />
       <path d="M3.2 12c3-.6 6-.7 8.8-.7s5.8.1 8.8.7M12 2.8c-2.4 2.8-3.7 5.9-3.7 9.2s1.3 6.4 3.7 9.2M12 2.8c2.4 2.8 3.7 5.9 3.7 9.2s-1.3 6.4-3.7 9.2M4.8 7.2c2.2-.4 4.5-.6 7.2-.6s5 .2 7.2.6M4.8 16.8c2.2.4 4.5.6 7.2.6s5-.2 7.2-.6" />
+    </svg>
+  ),
+
+  freehandGlobeColor: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <defs>
+        <linearGradient id="freehandGlobeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#38BDF8" />
+          <stop offset="100%" stopColor="#0284C7" />
+        </linearGradient>
+      </defs>
+      <circle cx="12" cy="12" r="9.2" stroke="url(#freehandGlobeGrad)" />
+      <path stroke="url(#freehandGlobeGrad)" d="M3.2 12c3-.6 6-.7 8.8-.7s5.8.1 8.8.7M12 2.8c-2.4 2.8-3.7 5.9-3.7 9.2s1.3 6.4 3.7 9.2M12 2.8c2.4 2.8 3.7 5.9 3.7 9.2s-1.3 6.4-3.7 9.2M4.8 7.2c2.2-.4 4.5-.6 7.2-.6s5 .2 7.2.6M4.8 16.8c2.2.4 4.5.6 7.2.6s5-.2 7.2-.6" />
+    </svg>
+  ),
+
+  freehandHeartColor: (props: IconProps) => (
+    <svg viewBox="11.8 12.8 10.4 10.4" fill="none" {...props}>
+      <defs>
+        <linearGradient id="freehandHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FB7185" />
+          <stop offset="100%" stopColor="#E11D48" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#freehandHeartGrad)" d="M18.953 13.577a1.83 1.83 0 0 0-1.15.39a2.9 2.9 0 0 0-.71.78a2.24 2.24 0 0 0-1.601-1a2.74 2.74 0 0 0-2.22 1a3.6 3.6 0 0 0-.771 1.57a5 5 0 0 0-.04 1.681c.1.706.398 1.369.86 1.91c.9 1.081 2.35 1.661 3.201 2.842c.15.24.83.24.91 0q.401-.546.9-1q.532-.449 1.11-.83a5.5 5.5 0 0 0 1.511-1.681a5.8 5.8 0 0 0 .76-2.101a3.78 3.78 0 0 0-.49-2.43a2.58 2.58 0 0 0-2.27-1.131m1.63 3.42a4.7 4.7 0 0 1-.57 1.721a4.9 4.9 0 0 1-1.06 1.49q-.589.465-1.11 1.001a6 6 0 0 0-.89 1.06c-.771-1.17-2.081-1.88-2.882-3a2.8 2.8 0 0 1-.57-1.43a4.6 4.6 0 0 1 0-1.331c.065-.42.23-.818.48-1.16a1.85 1.85 0 0 1 1.41-.84a1.67 1.67 0 0 1 1.361.84a.25.25 0 0 0 .14.25a.25.25 0 0 0 .31-.07s.05 0 .07-.06a2.5 2.5 0 0 1 .69-.83a1.23 1.23 0 0 1 .87-.29a1.83 1.83 0 0 1 1.421.87a2.8 2.8 0 0 1 .33 1.78" />
     </svg>
   ),
 
