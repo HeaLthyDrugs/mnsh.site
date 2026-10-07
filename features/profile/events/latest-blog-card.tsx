@@ -115,32 +115,33 @@ export function LatestBlogCard({ posts, post, className }: LatestBlogCardProps) 
         </div>
       </div>
 
-      {/* Progressive Blur covering bottom 25% with subtle blackish tone for contrast on white backgrounds */}
+      {/* Progressive Blur covering bottom 35% with subtle U-shape arch and blackish tone */}
       <ProgressiveBlur
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[25%] min-h-[76px] w-full"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[35%] min-h-[96px] w-full"
         direction="bottom"
+        shape="u-shape"
         blurLayers={8}
         blurIntensity={6}
-        tint="linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.2) 35%, rgba(0, 0, 0, 0.5) 100%)"
+        tint="linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.45) 100%)"
       />
 
-      {/* Bottom 25% Text Content: Title at bottom left, small & compact */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex h-[25%] min-h-[76px] flex-col justify-end px-4 py-3 sm:px-6 sm:py-3.5">
-        <div className="flex flex-col gap-1 w-full">
-          {/* Title at bottom left */}
-          <h3 className="font-heading font-medium sm:font-semibold text-xs sm:text-sm md:text-base leading-snug text-white line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+      {/* Bottom 35% Text Content: Reverted to clean original typography */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex h-[35%] min-h-[96px] flex-col justify-end px-5 py-4 sm:px-7 sm:py-5">
+        <div className="flex flex-col gap-1.5 sm:gap-2 w-full">
+          {/* Title at bottom left - clean font-heading, prominent & readable */}
+          <h3 className="font-heading font-semibold text-lg sm:text-xl lg:text-2xl leading-snug text-white line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]">
             {currentPost.title}
           </h3>
 
-          {/* Metadata bar: Read time on left, Read post on right */}
-          <div className="flex items-center justify-between font-mono text-[11px] sm:text-xs text-white/90">
-            <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+          {/* Metadata bar: clean font-mono */}
+          <div className="flex items-center justify-between font-mono text-xs sm:text-sm text-white/90">
+            <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
               {currentPost.readTime || "5 min read"}
             </span>
 
-            <div className="flex items-center gap-1 font-medium text-white group-hover:text-white transition-colors drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+            <div className="flex items-center gap-1.5 font-medium text-white group-hover:text-white transition-colors drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
               <span>Read post</span>
-              <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="size-3.5 sm:size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </div>
           </div>
         </div>
