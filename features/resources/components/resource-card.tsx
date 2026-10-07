@@ -37,7 +37,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
                             fill
                             sizes="32px"
                             className={cn(
-                                "object-contain",
+                                "object-contain grayscale transition-all duration-300 group-hover:grayscale-0 hover:grayscale-0",
                                 resource.invertInDark && "dark:invert"
                             )}
                         />
