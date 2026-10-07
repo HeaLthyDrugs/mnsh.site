@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ArrowSquareOut, Rss } from "@phosphor-icons/react";
+import { Check, ArrowSquareOut } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 
 import { SITE_INFO } from "@/config/site";
@@ -126,7 +126,7 @@ export function SiteFooter() {
                 onMouseEnter={playHover}
                 onClick={playTap}
               >
-                <Rss className="size-4" />
+                <Icons.freehandRss className="size-4" />
                 <span className="sr-only">RSS</span>
               </a>
             </SimpleTooltip>
