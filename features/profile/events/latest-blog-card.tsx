@@ -115,12 +115,13 @@ export function LatestBlogCard({ posts, post, className }: LatestBlogCardProps) 
         </div>
       </div>
 
-      {/* Progressive Blur (NO black fade) covering bottom 25% */}
+      {/* Progressive Blur covering bottom 25% with subtle blackish tone for contrast on white backgrounds */}
       <ProgressiveBlur
         className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[25%] min-h-[76px] w-full"
         direction="bottom"
         blurLayers={8}
         blurIntensity={6}
+        tint="linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.2) 35%, rgba(0, 0, 0, 0.5) 100%)"
       />
 
       {/* Bottom 25% Text Content: Title at bottom left, small & compact */}
