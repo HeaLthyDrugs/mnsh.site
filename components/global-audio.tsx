@@ -47,18 +47,17 @@ export function GlobalAudio() {
     useEffect(() => {
         if (hasShuffled.current) return;
         
-        const shuffled = shuffleArray(GENRES).map(genre => ({
+        const shuffled = GENRES.map(genre => ({
             ...genre,
             tracks: shuffleArray(genre.tracks)
         }));
 
         setShuffledGenres(shuffled);
         
-        // Randomize initial positions
-        const randomGenreIdx = Math.floor(Math.random() * shuffled.length);
-        const randomTrackIdx = Math.floor(Math.random() * shuffled[randomGenreIdx].tracks.length);
+        // Start on the top playlist ("I like") with a random track
+        const randomTrackIdx = Math.floor(Math.random() * (shuffled[0]?.tracks.length || 1));
         
-        setGenreIdx(randomGenreIdx);
+        setGenreIdx(0);
         setCurrentTrack(randomTrackIdx);
         
         hasShuffled.current = true;
