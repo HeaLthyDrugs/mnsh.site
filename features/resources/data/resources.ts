@@ -123,6 +123,13 @@ export const RESOURCES: Resource[] = [
         invertInDark: true,
     },
     {
+        name: "Playwright",
+        description: "Reliable end-to-end testing and browser automation framework for modern web apps.",
+        url: "https://playwright.dev",
+        category: "Development",
+        image: "https://assets.mnsh.site/icons/playwright.svg",
+    },
+    {
         name: "PostHog",
         description: "Developer platform for product analytics, session replay, and feature flags.",
         url: "https://posthog.com",
