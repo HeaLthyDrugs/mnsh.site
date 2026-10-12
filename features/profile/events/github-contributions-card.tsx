@@ -30,6 +30,7 @@ type CachedContributions = {
 interface GitHubContributionsCardProps {
   username: string;
   githubProfileUrl: string;
+  className?: string;
 }
 
 function GitHubContributionsFallback() {
@@ -231,12 +232,14 @@ function GitHubContributionsContent({
 export function GitHubContributionsCard({
   username,
   githubProfileUrl,
+  className,
 }: GitHubContributionsCardProps) {
   return (
     <div
       className={cn(
-        "bg-card overflow-hidden border-t border-edge",
-        GITHUB_CONTRIBUTIONS_CLASSES
+        "bg-card overflow-hidden",
+        GITHUB_CONTRIBUTIONS_CLASSES,
+        className
       )}
     >
       <GitHubContributionsContent

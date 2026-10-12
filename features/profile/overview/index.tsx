@@ -143,13 +143,10 @@ function InfoCell({
         className
       )}
     >
-      {/* Icon column with standardized fixed width */}
-      <div className="flex w-11 shrink-0 items-center justify-center text-muted-foreground">
+      {/* Icon column with standardized fixed width and crisp 1px border */}
+      <div className="flex w-11 shrink-0 items-center justify-center text-muted-foreground border-r border-edge">
         {icon}
       </div>
-
-      {/* Vertical separator - full height */}
-      <div className="w-px self-stretch bg-edge/60" />
 
       {/* Content column */}
       <div className="flex flex-1 items-center px-3.5 py-2.5">
@@ -162,15 +159,12 @@ function InfoCell({
 function GreetingAboutSection() {
   return (
     <div className="flex items-stretch font-sans text-sm transition-colors hover:bg-muted/10 border-b border-edge">
-      {/* Left Column matching InfoCell Icon Column Width */}
-      <div className="flex w-11 shrink-0 items-center justify-center py-4">
+      {/* Left Column matching InfoCell Icon Column Width and crisp 1px border */}
+      <div className="flex w-11 shrink-0 items-center justify-center py-4 border-r border-edge">
         <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] font-medium uppercase tracking-[0.4em] text-muted-foreground/80 whitespace-nowrap select-none">
           About Me
         </span>
       </div>
-
-      {/* Vertical separator - full height */}
-      <div className="w-px self-stretch bg-edge/60" />
 
       {/* Content column */}
       <div className="flex flex-1 flex-col justify-center px-4 py-5 md:px-5 space-y-3 leading-relaxed text-muted-foreground">

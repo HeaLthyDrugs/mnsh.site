@@ -78,6 +78,10 @@ export type PostMetadata = {
    * URL to the Play Store page.
    */
   playstoreUrl?: string;
+  /**
+   * URL to download the release APK.
+   */
+  apkUrl?: string;
 };
 
 export type Post = {

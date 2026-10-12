@@ -6,7 +6,7 @@ import Link from "next/link";
 import type { Post } from "../types/work-post";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
-import { ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowUpRight, AndroidLogo } from "@phosphor-icons/react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { useSound } from "@/hooks/use-sound";
 
@@ -144,7 +144,7 @@ export function WorkItem({
         </div>
       </div>
 
-      {(metadata.liveUrl || metadata.repoUrl || metadata.productHuntUrl || metadata.playstoreUrl || metadata.status) && (
+      {(metadata.liveUrl || metadata.repoUrl || metadata.productHuntUrl || metadata.playstoreUrl || metadata.apkUrl || metadata.status) && (
         <div className="mt-auto flex w-fit items-center gap-0 divide-x divide-edge border border-edge bg-background">
           {metadata.status && (() => {
             const statusConfig = getStatusConfig(metadata.status);
@@ -217,6 +217,25 @@ export function WorkItem({
               >
                 <Icons.playstore className="size-4" />
                 <span className="sr-only">View on Google Play Store for {metadata.title}</span>
+              </button>
+            </SimpleTooltip>
+          )}
+
+          {metadata.apkUrl && (
+            <SimpleTooltip content="Download Release APK">
+              <button
+                type="button"
+                className="flex h-8 items-center px-3 text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground cursor-pointer outline-none"
+                onMouseEnter={playHover}
+                onClick={(e) => {
+                  playTap();
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(metadata.apkUrl, "_blank", "noopener,noreferrer");
+                }}
+              >
+                <AndroidLogo className="size-4" />
+                <span className="sr-only">Download APK for {metadata.title}</span>
               </button>
             </SimpleTooltip>
           )}
