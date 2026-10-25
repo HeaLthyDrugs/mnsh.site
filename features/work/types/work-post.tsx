@@ -6,6 +6,8 @@ export type PostMetadata = {
    * Use an absolute URL or a path under /public. Recommended size: 1200x630.
    */
   image?: string;
+  /** How the cover fits within the work card's image frame. */
+  imageFit?: "cover" | "contain";
   /**
    * Image/Video gallery array for the work.
    */

@@ -94,17 +94,18 @@ export function WorkItem({
   const innerContent = (
     <>
       {metadata.image && (
-        <div className="relative select-none block overflow-hidden">
+        <div className="relative block aspect-1200/630 select-none overflow-hidden">
           <Image
             src={metadata.image}
             alt={metadata.title}
-            width={1200}
-            height={630}
+            fill
+            sizes="(max-width: 640px) 100vw, 600px"
             priority={shouldPreloadImage}
             loading={shouldPreloadImage ? "eager" : "lazy"}
             decoding="async"
             className={cn(
-              "rounded-none aspect-1200/630 w-full object-cover transition-all duration-300",
+              "rounded-none transition-all duration-300",
+              metadata.imageFit === "contain" ? "object-contain" : "object-cover",
               working && "blur-sm scale-[1.02] opacity-80"
             )}
           />
