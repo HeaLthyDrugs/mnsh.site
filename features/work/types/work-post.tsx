@@ -21,10 +21,6 @@ export type PostMetadata = {
    */
   category?: string;
   /**
-   * Flag to show a "New" badge/highlight in the UI.
-   */
-  new?: boolean;
-  /**
    * Work creation/start date as an ISO date string (e.g. YYYY-MM-DD). Used for sorting.
    */
   createdAt: string;
