@@ -88,7 +88,7 @@ export const EVENTS: Event[] = [
         showTitle: false,
         showImageFullSize: true,
         backgroundColor: "bg-white",
-        username: "manishvv",
+        username: "@manishvv",
     },
     {
         id: "github",
@@ -102,7 +102,7 @@ export const EVENTS: Event[] = [
         showTitle: false,
         showImageFullSize: true,
         backgroundColor: "bg-white",
-        username: "HeaLthyDrugs",
+        username: "@HeaLthyDrugs",
     },
     // {
     //     id: "video-loop",
