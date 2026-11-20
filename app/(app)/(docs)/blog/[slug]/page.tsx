@@ -269,7 +269,10 @@ export default async function Page({
                                 height={630}
                                 quality={75}
                                 priority
-                                className="w-full h-auto object-cover aspect-[1200/630]"
+                                className={cn(
+                                    "w-full h-auto object-cover aspect-[1200/630]",
+                                    blog.slug !== "lifelog" && "dark:invert"
+                                )}
                             />
                         </div>
                     </div>

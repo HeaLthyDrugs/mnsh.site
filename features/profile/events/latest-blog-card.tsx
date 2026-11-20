@@ -109,7 +109,10 @@ export function LatestBlogCard({ posts, post, className }: LatestBlogCardProps) 
             alt={currentPost.title}
             fill
             sizes="(max-width: 768px) 100vw, 800px"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className={cn(
+              "object-cover transition-transform duration-700 ease-out group-hover:scale-105",
+              currentPost.slug !== "lifelog" && "dark:invert"
+            )}
             priority
           />
         </div>

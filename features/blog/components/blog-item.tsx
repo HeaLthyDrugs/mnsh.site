@@ -49,6 +49,7 @@ export function BlogItem({
                         height={630}
                         quality={75}
                         priority={shouldPreloadImage}
+                        className={post.slug !== "lifelog" ? "dark:invert" : undefined}
                     />
 
                     <div className="pointer-events-none absolute inset-0 rounded-none ring-1 ring-black/10 ring-inset dark:ring-white/10" />
