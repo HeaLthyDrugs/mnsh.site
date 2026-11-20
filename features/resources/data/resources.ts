@@ -17,6 +17,13 @@ export const RESOURCES: Resource[] = [
         invertInDark: false,
     },
     {
+        name: "Brave Browser",
+        description: "My browser of choice for an ad-free browsing experience.",
+        url: "https://brave.com",
+        category: "Utilities",
+        image: "https://assets.mnsh.site/icons/brave.svg?v=1",
+    },
+    {
         name: "Buffer",
         description: "What I use to schedule and publish my updates across social platforms.",
         url: "https://buffer.com",
@@ -180,5 +187,13 @@ export const RESOURCES: Resource[] = [
         url: "https://supabase.com",
         category: "Development",
         image: "https://assets.mnsh.site/icons/supabase.svg",
+    },
+    {
+        name: "Wispr Flow",
+        description: "Makes prompting and messaging easier with voice dictation.",
+        url: "https://wisprflow.ai",
+        category: "Productivity",
+        image: "https://assets.mnsh.site/icons/wisprflow.svg?v=1",
+        invertInDark: true,
     },
 ];
