@@ -28,14 +28,14 @@ export async function SiteHeader() {
     >
       <div
         className={cn(
-          "mx-auto flex h-12 items-center justify-between border-x border-t border-b border-border md:max-w-3xl",
+          "mx-auto flex h-12 items-center justify-between border-x border-t border-b border-edge md:max-w-3xl",
           "transition-shadow duration-300",
           "[header[data-affix='true']_&]:shadow-[0_8px_16px_-8px_black]/8 dark:[header[data-affix='true']_&]:shadow-[0_8px_16px_-8px_black]/80"
         )}
         data-header-container
       >
 
-        <div className="flex h-full w-[53px] shrink-0 items-center justify-center border-r border-border">
+        <div className="flex h-full w-[53px] shrink-0 items-center justify-center border-r border-edge">
           <HomeLink />
         </div>
 
@@ -45,11 +45,11 @@ export async function SiteHeader() {
           <DesktopNav items={MAIN_NAV} />
         </div>
 
-        <div className="flex h-full items-center border-border">
+        <div className="flex h-full items-center">
           <div className="hidden sm:flex h-full items-center px-4">
             <CommandMenu blogs={blogs} works={works} />
           </div>
-          <div className="flex h-full w-12 items-center justify-center border-l border-border sm:hidden">
+          <div className="flex h-full w-12 items-center justify-center border-l border-edge sm:hidden">
             <MobileNav items={MAIN_NAV} />
           </div>
         </div>
