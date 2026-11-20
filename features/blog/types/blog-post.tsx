@@ -44,6 +44,8 @@ export type BlogMetadata = {
      * Featured flag for highlighting on homepage/listings.
      */
     featured?: boolean;
+    /** Hide this post from public listings while keeping its direct URL available. */
+    hidden?: boolean;
 };
 
 export type BlogPost = {

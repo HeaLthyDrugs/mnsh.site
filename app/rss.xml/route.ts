@@ -3,12 +3,14 @@ import { getAllBlogPosts } from "@/features/blog/data/posts";
 import { getAllPosts as getAllWorkPosts } from "@/features/work/data/posts";
 
 export async function GET() {
-    const blogPosts = getAllBlogPosts().map((post) => ({
-        title: post.metadata.title,
-        description: post.metadata.description || "",
-        link: `${SITE_INFO.url}/blog/${post.slug}`,
-        pubDate: new Date(post.metadata.createdAt).toUTCString(),
-    }));
+    const blogPosts = getAllBlogPosts()
+        .filter((post) => !post.metadata.hidden)
+        .map((post) => ({
+            title: post.metadata.title,
+            description: post.metadata.description || "",
+            link: `${SITE_INFO.url}/blog/${post.slug}`,
+            pubDate: new Date(post.metadata.createdAt).toUTCString(),
+        }));
 
     const workPosts = getAllWorkPosts().map((post) => ({
         title: post.metadata.title,

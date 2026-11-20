@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { BlogList } from "@/features/blog/components/blog-list";
 import { BlogListWithSearch } from "@/features/blog/components/blog-list-with-search";
-import { getAllBlogs } from "@/features/blog/lib/blogs";
+import { getVisibleBlogs } from "@/features/blog/lib/blogs";
 import { PageHeader } from "@/components/page-header";
 import { SITE_INFO } from "@/config/site";
 
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-    const allBlogs = getAllBlogs();
+    const allBlogs = getVisibleBlogs();
 
     return (
         <div>

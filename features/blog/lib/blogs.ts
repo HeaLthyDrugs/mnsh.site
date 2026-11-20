@@ -41,6 +41,10 @@ export function getAllBlogs(): BlogPost[] {
         }));
 }
 
+export function getVisibleBlogs(): BlogPost[] {
+    return getAllBlogs().filter((blog) => !blog.metadata.hidden);
+}
+
 export function getBlogBySlug(slug: string): BlogPost | null {
     try {
         const fullPath = path.join(blogsDirectory, `${slug}.mdx`);

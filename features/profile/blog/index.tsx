@@ -1,5 +1,5 @@
 import { Panel, PanelHeader, PanelTitle } from "../components/panel";
-import { getAllBlogs } from "@/features/blog/lib/blogs";
+import { getVisibleBlogs } from "@/features/blog/lib/blogs";
 import { BlogsList } from "./blogs-list";
 import type { BlogPost } from "@/features/blog/types/blog-post";
 
@@ -20,7 +20,7 @@ export default function Blog({
     showToggle = true,
     className,
 }: BlogSectionProps = {}) {
-    const allBlogs = posts ?? getAllBlogs();
+    const allBlogs = (posts ?? getVisibleBlogs()).filter((blog) => !blog.metadata.hidden);
 
     if (allBlogs.length === 0) return null;
 

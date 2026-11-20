@@ -35,12 +35,6 @@ const DEFAULT_POSTS: BlogItem[] = [
     image: "https://assets.mnsh.site/blog-covers/migrating-next-js-project-to-astrojs.png",
   },
   {
-    slug: "recreate-petr-knolls-glass-button-in-nextjs-and-astro",
-    title: "Recreate Petr Knoll's Glass Button in Next.js and Astro",
-    readTime: "5 min read",
-    image: "https://assets.mnsh.site/blog-covers/glass-button.png",
-  },
-  {
     slug: "how-to-dockerize-any-app",
     title: "How to Dockerize Any App",
     readTime: "8 min read",
@@ -49,7 +43,11 @@ const DEFAULT_POSTS: BlogItem[] = [
 ];
 
 export function LatestBlogCard({ posts, post, className }: LatestBlogCardProps) {
-  const allPosts = posts && posts.length > 0 ? posts : post ? [post] : DEFAULT_POSTS;
+  const providedPosts = posts && posts.length > 0 ? posts : post ? [post] : DEFAULT_POSTS;
+  const visiblePosts = providedPosts.filter(
+    (blog) => blog.slug !== "recreate-petr-knolls-glass-button-in-nextjs-and-astro"
+  );
+  const allPosts = visiblePosts.length > 0 ? visiblePosts : DEFAULT_POSTS;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);

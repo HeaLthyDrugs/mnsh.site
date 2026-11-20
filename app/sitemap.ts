@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next'
-import { getAllBlogs } from '@/features/blog/lib/blogs';
+import { getVisibleBlogs } from '@/features/blog/lib/blogs';
 import { SITE_INFO } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const blogs = getAllBlogs();
+  const blogs = getVisibleBlogs();
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: SITE_INFO.url,

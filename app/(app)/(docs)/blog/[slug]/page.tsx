@@ -8,7 +8,7 @@ import { getTableOfContents } from "fumadocs-core/content/toc";
 import type { BlogPosting as PageSchema, WithContext } from "schema-dts";
 
 import { Button } from "@/components/ui/button";
-import { getAllBlogs, getBlogBySlug } from "@/features/blog/lib/blogs";
+import { getAllBlogs, getVisibleBlogs, getBlogBySlug } from "@/features/blog/lib/blogs";
 import { findBlogNeighbour, getBlogPostBySlug } from "@/features/blog/data/posts";
 import { Prose } from "@/components/ui/typography";
 import { InlineTOC } from "@/components/inline-toc";
@@ -155,8 +155,7 @@ export default async function Page({
 
     const toc = getTableOfContents(blog.content);
 
-    const allBlogs = getAllBlogs();
-    const { previous, next } = findBlogNeighbour(allBlogs, slug);
+    const { previous, next } = findBlogNeighbour(getVisibleBlogs(), slug);
 
     return (
         <>
