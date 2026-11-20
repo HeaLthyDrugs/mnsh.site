@@ -73,7 +73,7 @@ export const EVENTS: Event[] = [
         showActionButton: false,
         showTitle: false,
         showImageFullSize: true,
-        backgroundColor: "bg-white",
+        backgroundColor: "bg-background",
         username: "@mnshsshh",
     },
     {
@@ -87,7 +87,7 @@ export const EVENTS: Event[] = [
         showActionButton: false,
         showTitle: false,
         showImageFullSize: true,
-        backgroundColor: "bg-white",
+        backgroundColor: "bg-background",
         username: "@manishvv",
     },
     {
@@ -101,7 +101,7 @@ export const EVENTS: Event[] = [
         showActionButton: false,
         showTitle: false,
         showImageFullSize: true,
-        backgroundColor: "bg-white",
+        backgroundColor: "bg-background",
         username: "@HeaLthyDrugs",
     },
     // {

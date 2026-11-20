@@ -28,7 +28,7 @@ export function EventItem({
                 className={cn(
                     "group/event relative flex h-full w-full items-center overflow-hidden select-none",
                     event.link && "cursor-pointer",
-                    event.backgroundColor || "bg-white",
+                    event.backgroundColor || "bg-background",
                     className
                 )}
                 onClick={() => {
@@ -40,25 +40,25 @@ export function EventItem({
                 {/* Horizontal rules frame the logo and username across the card. */}
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-x-0 inset-y-5 z-10 border-y border-dashed border-zinc-900/15"
+                    className="pointer-events-none absolute inset-x-0 inset-y-5 z-10 border-y border-dashed border-edge"
                 />
                 {/* Left: Logo */}
-                <div className="relative flex h-full w-[72px] shrink-0 items-center justify-center border-r border-dashed border-zinc-900/15 md:w-20">
+                <div className="relative flex h-full w-[72px] shrink-0 items-center justify-center border-r border-dashed border-edge md:w-20">
                     <img
                         src={event.backgroundImage!}
                         alt={event.title}
                         className={cn(
                             "h-11 w-11 object-contain p-0.5 md:h-12 md:w-12",
-                            "grayscale transition-all duration-300 group-hover/event:grayscale-0"
+                            "grayscale transition-all duration-300 group-hover/event:grayscale-0 dark:invert"
                         )}
                     />
                 </div>
                 {/* Right: Username */}
                 <div className="flex min-w-0 flex-1 flex-col justify-center px-3.5">
-                    <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-bold leading-none mb-1">
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground font-bold leading-none mb-1">
                         {event.title}
                     </span>
-                    <span className="text-xs md:text-sm font-bold truncate text-zinc-900 leading-tight">
+                    <span className="text-xs md:text-sm font-bold truncate text-foreground leading-tight">
                         {event.username || event.tagline || event.title}
                     </span>
                 </div>
